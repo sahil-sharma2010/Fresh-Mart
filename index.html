@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FreshMart - Premium Daily Needs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: { 
+                    colors: { primary: { 50: '#ecfdf5', 100: '#d1fae5', 500: '#10b981', 600: '#059669', 700: '#047857' } }, 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] } 
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-900 pb-20 md:pb-0 relative overflow-x-hidden">
+
+    <div id="toast-container" class="fixed bottom-24 md:bottom-10 left-1/2 z-[100] flex flex-col gap-2 pointer-events-none"></div>
+
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
+        <div class="max-w-[1400px] mx-auto px-4 h-16 flex items-center justify-between">
+            <!-- UPDATED PREMIUM LOGO PATH: images/logo.png -->
+            <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
+                <img src="images/logo.png" alt="FreshMart Logo" class="h-12 md:h-14 w-auto object-contain rounded-full drop-shadow-sm" onerror="this.onerror=null; this.outerHTML='<span class=\'text-xl md:text-2xl font-extrabold text-primary-600 tracking-tight\'>Fresh<span class=\'text-gray-900\'>Mart</span></span>';">
+            </a>
+            
+            <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
+                <div class="w-full relative flex items-center">
+                    <div class="absolute left-1.5 w-9 h-9 rounded-full bg-primary-50 flex items-center justify-center text-primary-600">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                    </div>
+                    <input type="text" id="desktop-search" onkeyup="handleSearch(this.value)" placeholder="Search groceries, snacks, beverages..." class="w-full bg-gray-100 rounded-full py-3 pl-12 pr-10 text-sm font-medium outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition border border-transparent shadow-inner">
+                    <button onclick="document.getElementById('desktop-search').value=''; handleSearch('');" class="absolute right-3 text-gray-400 hover:text-gray-600 hidden" id="clear-search-btn">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <div id="search-results-container" class="absolute top-14 left-0 w-full bg-white rounded-3xl shadow-2xl border border-gray-100 hidden max-h-80 overflow-y-auto z-50"></div>
+            </div>
+
+            <div class="flex items-center gap-3 flex-shrink-0">
+                <button onclick="toggleFSModal('settings-modal')" class="w-11 h-11 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 flex items-center justify-center text-gray-700 transition active:scale-95">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                </button>
+                <button onclick="toggleFSModal('cart-drawer')" class="relative h-11 px-5 rounded-full bg-primary-600 hover:bg-primary-700 text-white flex items-center gap-2 transition active:scale-95 shadow-md shadow-primary-500/20">
+                    <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                    <span id="header-cart-total" class="text-sm font-bold">₹0</span>
+                    <span id="settings-dot" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] h-5 w-5 rounded-full flex items-center justify-center font-bold border-2 border-white hidden">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="md:hidden px-4 py-2.5 bg-white border-b border-gray-100 relative z-40">
+        <div class="relative flex items-center">
+            <div class="absolute left-1.5 w-9 h-9 rounded-full bg-primary-50 flex items-center justify-center text-primary-600">
+                <i data-lucide="search" class="w-4 h-4"></i>
+            </div>
+            <input type="text" id="mobile-search" onkeyup="handleSearch(this.value)" placeholder="Search products..." class="w-full bg-gray-100 rounded-full py-3 pl-12 pr-4 text-sm font-medium outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition border border-transparent shadow-inner">
+        </div>
+    </div>
+
+    <section class="bg-gradient-to-br from-primary-50 via-emerald-50/40 to-white border-b border-primary-100/60">
+        <div class="max-w-[1400px] mx-auto px-4 py-8 md:py-12 flex flex-col md:flex-row items-center gap-6">
+            <div class="flex-1 space-y-4">
+                <span class="inline-block px-4 py-1.5 bg-white text-primary-700 rounded-full text-xs font-bold border border-primary-200/60 shadow-sm">🛒 Your Everyday Store</span>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-[1.1] tracking-tight">Daily Needs.<br><span class="text-primary-600">Delivered to Your Door.</span></h1>
+                <p class="text-gray-600 text-sm md:text-base max-w-lg font-medium leading-relaxed">From everyday essentials to little indulgences, everything your home needs is just a few clicks away.</p>
+                <div class="flex gap-3 pt-2">
+                    <button onclick="scrollToProducts()" class="bg-primary-600 text-white px-8 py-3.5 rounded-full text-sm font-bold shadow-lg shadow-primary-500/30 hover:bg-primary-700 transition active:scale-95 flex items-center gap-2">
+                        Shop Now <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="hidden md:block w-1/3 opacity-95">
+                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=600" alt="Groceries" class="rounded-3xl object-cover h-64 w-full shadow-xl border border-gray-100">
+            </div>
+        </div>
+    </section>
+
+    <section class="hidden md:block max-w-[1400px] mx-auto px-4 py-5 border-b border-gray-100 bg-white">
+        <div class="flex overflow-x-auto hide-scrollbar gap-3 pb-1" id="quick-categories"></div>
+    </section>
+
+    <main id="products-section" class="max-w-[1400px] mx-auto px-4 py-6 md:py-10 flex flex-col md:flex-row gap-6">
+        
+        <aside class="hidden md:block w-[250px] flex-shrink-0">
+            <div class="sticky top-24 bg-white rounded-3xl border border-gray-200/80 shadow-sm p-5">
+                <h3 class="font-bold text-gray-900 mb-4 border-b pb-3 text-sm flex items-center gap-2">
+                    <i data-lucide="grid" class="w-4 h-4 text-primary-600"></i> Shop by Category
+                </h3>
+                <ul class="space-y-1.5 text-sm" id="desktop-sidebar-categories"></ul>
+
+                <h3 class="font-bold text-gray-900 mt-6 mb-4 border-b pb-3 text-sm flex items-center gap-2">
+                    <i data-lucide="sliders" class="w-4 h-4 text-primary-600"></i> Filters
+                </h3>
+                <div class="space-y-3 text-sm text-gray-600 font-medium">
+                    <label class="flex items-center gap-3 cursor-pointer hover:text-gray-900"><input type="checkbox" class="rounded text-primary-600 focus:ring-primary-500 w-4 h-4"> In Stock Only</label>
+                    <label class="flex items-center gap-3 cursor-pointer hover:text-gray-900"><input type="checkbox" class="rounded text-primary-600 focus:ring-primary-500 w-4 h-4"> On Sale</label>
+                </div>
+            </div>
+        </aside>
+
+        <div class="flex-1">
+            <div class="flex justify-between items-center mb-6 bg-white p-3.5 rounded-3xl border border-gray-200/80 shadow-sm">
+                <h2 class="text-base md:text-xl font-extrabold text-gray-900 ml-2" id="grid-title">All Products</h2>
+                <div class="flex items-center gap-3">
+                    <select onchange="sortProducts(this.value)" class="premium-select bg-gray-50 border border-gray-200 rounded-full pl-5 pr-10 py-2.5 text-xs md:text-sm font-bold text-gray-700 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition cursor-pointer">
+                        <option value="recommended">Sort: Recommended</option>
+                        <option value="priceLow">Price: Low to High</option>
+                        <option value="priceHigh">Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="products-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5"></div>
+        </div>
+    </main>
+    
+    <section class="bg-white py-12 border-t border-gray-200">
+        <div class="max-w-[1400px] mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-900">Why Shop With FreshMart?</h2>
+                    <p class="text-sm text-gray-500 mt-1 font-medium">Reliable daily-needs shopping</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="slideSlider('why-shop-slider', -1)" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition"><i data-lucide="chevron-left" class="w-5 h-5 text-gray-600"></i></button>
+                    <button onclick="slideSlider('why-shop-slider', 1)" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition"><i data-lucide="chevron-right" class="w-5 h-5 text-gray-600"></i></button>
+                </div>
+            </div>
+            
+            <div id="why-shop-slider" class="slider-container hide-scrollbar">
+                <div class="slider-item slider-item-4 p-6 bg-gray-50 rounded-3xl border border-gray-100 flex flex-col items-center text-center">
+                    <div class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl mb-4">🚚</div><h4 class="font-bold text-sm text-gray-900">Fast Local Delivery</h4><p class="text-xs text-gray-500 mt-1 font-medium">Direct to your doorstep in minutes</p>
+                </div>
+                <div class="slider-item slider-item-4 p-6 bg-gray-50 rounded-3xl border border-gray-100 flex flex-col items-center text-center">
+                    <div class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl mb-4">✨</div><h4 class="font-bold text-sm text-gray-900">Quality Products</h4><p class="text-xs text-gray-500 mt-1 font-medium">100% genuine & fresh essentials</p>
+                </div>
+                <div class="slider-item slider-item-4 p-6 bg-gray-50 rounded-3xl border border-gray-100 flex flex-col items-center text-center">
+                    <div class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl mb-4">💰</div><h4 class="font-bold text-sm text-gray-900">Best Daily Prices</h4><p class="text-xs text-gray-500 mt-1 font-medium">Guaranteed savings on groceries</p>
+                </div>
+                <div class="slider-item slider-item-4 p-6 bg-gray-50 rounded-3xl border border-gray-100 flex flex-col items-center text-center">
+                    <div class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl mb-4">🔒</div><h4 class="font-bold text-sm text-gray-900">Instant COD & UPI</h4><p class="text-xs text-gray-500 mt-1 font-medium">Pay smoothly on delivery</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-primary-50/60 py-12 border-t border-primary-100">
+        <div class="max-w-[1400px] mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-900">What Our Customers Say</h2>
+                    <p class="text-sm text-gray-500 mt-1 font-medium">Real feedback from verified shoppers</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="slideSlider('reviews-slider', -1)" class="w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-100 transition"><i data-lucide="chevron-left" class="w-5 h-5 text-gray-600"></i></button>
+                    <button onclick="slideSlider('reviews-slider', 1)" class="w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-100 transition"><i data-lucide="chevron-right" class="w-5 h-5 text-gray-600"></i></button>
+                </div>
+            </div>
+
+            <div id="reviews-slider" class="slider-container hide-scrollbar">
+                <div class="slider-item slider-item-3 bg-white p-6 rounded-3xl border border-gray-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-yellow-500 mb-3"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
+                        <p class="text-sm text-gray-600 leading-relaxed font-medium">"Good products and quick delivery. Very convenient for daily grocery shopping."</p>
+                    </div>
+                    <p class="text-xs font-bold text-gray-900 mt-5 uppercase tracking-wider">— Rahul S., Verified</p>
+                </div>
+                <div class="slider-item slider-item-3 bg-white p-6 rounded-3xl border border-gray-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-yellow-500 mb-3"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
+                        <p class="text-sm text-gray-600 leading-relaxed font-medium">"I get all my daily needs here. Prices are much better than local market shops."</p>
+                    </div>
+                    <p class="text-xs font-bold text-gray-900 mt-5 uppercase tracking-wider">— Priya K., Verified</p>
+                </div>
+                <div class="slider-item slider-item-3 bg-white p-6 rounded-3xl border border-gray-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-yellow-500 mb-3"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
+                        <p class="text-sm text-gray-600 leading-relaxed font-medium">"Very smooth ordering process on WhatsApp. Total order was accurate and packed well."</p>
+                    </div>
+                    <p class="text-xs font-bold text-gray-900 mt-5 uppercase tracking-wider">— Amit V., Verified</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PREMIUM FOOTER -->
+    <footer class="bg-gray-900 text-gray-300 py-10 md:py-14 text-sm pb-28 md:pb-10">
+        <div class="max-w-[1400px] mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-8 border-b border-gray-800 pb-10">
+                <div class="md:col-span-1">
+                    <!-- FOOTER LOGO -->
+                    <a href="index.html" class="flex items-center gap-2 mb-4">
+                        <img src="images/logo.png" alt="FreshMart Logo" class="h-12 md:h-14 w-auto object-contain bg-white rounded-full p-1 shadow-sm" onerror="this.onerror=null; this.outerHTML='<h3 class=\'text-2xl font-bold text-white flex items-center gap-2 tracking-tight\'><i data-lucide=\'shopping-basket\' class=\'text-primary-500\'></i> FreshMart</h3>';">
+                    </a>
+                    <p class="text-gray-400 text-xs md:text-sm mb-4 leading-relaxed font-medium">Your everyday grocery & essentials store. Shop Local • Shop Smart • Shop Fresh.</p>
+                    <div class="flex gap-2">
+                        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-primary-600 transition flex items-center justify-center text-white"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-pink-600 transition flex items-center justify-center text-white"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-500 transition flex items-center justify-center text-white"><i data-lucide="message-circle" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-xs">Shop</h4>
+                    <ul class="space-y-2 text-xs md:text-sm font-medium">
+                        <li><a href="#" class="hover:text-primary-400 transition">All Products</a></li>
+                        <li><a href="#" class="hover:text-primary-400 transition">Water & Drinks</a></li>
+                        <li><a href="#" class="hover:text-primary-400 transition">Snacks</a></li>
+                        <li><a href="#" class="hover:text-primary-400 transition">Grocery</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-xs">Customer Care</h4>
+                    <ul class="space-y-2 text-xs md:text-sm font-medium">
+                        <li><a href="help.html" class="hover:text-primary-400 transition">Help & Support</a></li>
+                        <li><a href="help.html" class="hover:text-primary-400 transition">Shipping & Delivery</a></li>
+                        <li><a href="help.html" class="hover:text-primary-400 transition">Refund Policy</a></li>
+                        <li><a href="terms.html" class="hover:text-primary-400 transition">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-xs">My Account</h4>
+                    <ul class="space-y-2 text-xs md:text-sm font-medium">
+                        <li><a href="#" onclick="toggleFSModal('settings-modal')" class="hover:text-primary-400 transition">My Profile</a></li>
+                        <li><a href="#" onclick="toggleFSModal('orders-modal')" class="hover:text-primary-400 transition">My Orders</a></li>
+                        <li><a href="#" onclick="toggleFSModal('wishlist-modal')" class="hover:text-primary-400 transition">Wishlist</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-xs">Stay Updated</h4>
+                    <p class="text-xs text-gray-400 mb-3 font-medium">Official email address for support & offers:</p>
+                    
+                    <div class="bg-gray-800/80 border border-gray-700 rounded-2xl p-3 mb-5 flex items-center gap-3 hover:bg-gray-800 transition cursor-pointer" onclick="window.location.href='mailto:FreshMart@gmail.com'">
+                        <div class="w-9 h-9 rounded-full bg-primary-500/10 text-primary-400 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="mail" class="w-4 h-4"></i>
+                        </div>
+                        <div class="truncate">
+                            <div class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Official Email</div>
+                            <div class="text-white font-bold text-xs md:text-sm truncate block">FreshMart@gmail.com</div>
+                        </div>
+                    </div>
+
+                    <ul class="space-y-2 text-xs text-gray-400 font-medium">
+                        <li class="flex items-center gap-2"><i data-lucide="phone" class="w-3.5 h-3.5 text-gray-500"></i> +91 79883 00872</li>
+                        <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-gray-500"></i> Hisar, Haryana</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-medium">
+                <div class="flex gap-4">
+                    <span class="flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-primary-500"></i> Secure Shopping</span>
+                    <span class="flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-primary-500"></i> Local Delivery</span>
+                </div>
+                <p>© 2026 FreshMart. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 z-40 flex justify-around items-center h-16 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] px-2">
+        <a href="#" class="flex flex-col items-center text-primary-600">
+            <div class="nav-circle-btn bg-primary-50 text-primary-600"><i data-lucide="home" class="w-5 h-5"></i></div>
+            <span class="text-[10px] font-bold mt-0.5">Home</span>
+        </a>
+        <button onclick="toggleFSModal('category-modal')" class="flex flex-col items-center text-gray-500 hover:text-primary-600">
+            <div class="nav-circle-btn"><i data-lucide="grid" class="w-5 h-5"></i></div>
+            <span class="text-[10px] font-semibold mt-0.5">Category</span>
+        </button>
+        <button onclick="toggleFSModal('cart-drawer')" class="flex flex-col items-center text-gray-500 hover:text-primary-600 relative">
+            <div class="nav-circle-btn"><i data-lucide="shopping-bag" class="w-5 h-5"></i></div>
+            <span id="nav-cart-badge" class="absolute top-1 right-2 bg-red-500 h-2.5 w-2.5 rounded-full hidden border border-white"></span>
+            <span class="text-[10px] font-semibold mt-0.5">Cart</span>
+        </button>
+        <button onclick="toggleFSModal('settings-modal')" class="flex flex-col items-center text-gray-500 hover:text-primary-600 relative">
+            <div class="nav-circle-btn"><i data-lucide="user" class="w-5 h-5"></i></div>
+            <span id="nav-settings-dot" class="absolute top-1 right-2 bg-red-500 h-2.5 w-2.5 rounded-full hidden border border-white"></span>
+            <span class="text-[10px] font-semibold mt-0.5">Profile</span>
+        </button>
+    </nav>
+
+    <!-- WHATSAPP RETURN POPUP -->
+    <div id="whatsapp-popup" class="fixed inset-0 bg-black/60 z-[110] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity opacity-0">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col items-center text-center relative border border-gray-100">
+            <button onclick="closeWAPopup()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition"><i data-lucide="x" class="w-4 h-4 text-gray-600"></i></button>
+            <div class="w-16 h-16 bg-[#25D366]/10 text-[#25D366] rounded-full flex items-center justify-center mb-4 mt-2">
+                <i data-lucide="message-circle" class="w-8 h-8"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2 tracking-tight">Thanks for reaching out! 💚</h3>
+            <p id="wa-popup-subtitle" class="text-sm text-gray-500 mb-6 font-medium px-2">Your message has been sent to FreshMart on WhatsApp.</p>
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Need anything else?</p>
+            <div class="w-full space-y-3">
+                <button onclick="closeWAPopup()" class="w-full bg-primary-600 text-white font-bold py-3.5 rounded-full hover:bg-primary-700 transition shadow-lg shadow-primary-500/30 active:scale-95">Continue Shopping</button>
+                <button onclick="closeWAPopup(); setTimeout(()=>{toggleFSModal('cart-drawer')},300);" class="w-full bg-gray-100 text-gray-800 font-bold py-3.5 rounded-full hover:bg-gray-200 transition active:scale-95">View My Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALL EXISTING FULL-SCREEN MODALS -->
+
+    <div id="category-modal" class="full-screen-modal fixed inset-0 bg-white z-[90] flex flex-col swipeable md:hidden">
+        <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
+            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="filter" class="w-5 h-5 text-primary-600"></i> Categories</h2>
+            <button onclick="toggleFSModal('category-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="x" class="w-4 h-4"></i></button>
+        </div>
+        <div id="fs-categories-container" class="flex-1 overflow-y-auto p-4 flex flex-col gap-2 bg-gray-50"></div>
+    </div>
+
+    <div id="settings-modal" class="full-screen-modal fixed inset-0 bg-gray-50 z-[90] flex flex-col swipeable overflow-y-auto pb-10">
+        <div class="sticky top-0 z-10 p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
+            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="user" class="text-primary-600"></i> My Profile</h2>
+            <button onclick="toggleFSModal('settings-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+        </div>
+        
+        <div class="p-4">
+            <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-4 mb-2">
+                <div class="w-14 h-14 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-xl font-bold">SM</div>
+                <div class="flex-1">
+                    <h3 class="font-bold text-lg text-gray-900">Sahil Sharma</h3>
+                    <p class="text-sm text-gray-500 font-medium">+91 79883 00872</p>
+                </div>
+                <button class="text-primary-600 font-bold text-xs bg-primary-50 px-4 py-2 rounded-full hover:bg-primary-100 transition">Edit</button>
+            </div>
+
+            <div class="settings-group-title">Shopping</div>
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 flex flex-col overflow-hidden">
+                <div onclick="openSubModal('cart-drawer', 'settings-modal')" class="settings-item">
+                    <div class="settings-icon-wrapper"><i data-lucide="shopping-bag" class="text-primary-600"></i> My Cart</div>
+                    <div class="flex items-center gap-2"><span id="settings-cart-count" class="bg-red-500 text-white px-2 py-0.5 rounded-full text-xs font-bold">0</span><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i></div>
+                </div>
+                <div onclick="openSubModal('wishlist-modal', 'settings-modal')" class="settings-item">
+                    <div class="settings-icon-wrapper"><i data-lucide="heart" class="text-red-500"></i> Wishlist</div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
+                </div>
+                <div onclick="openSubModal('orders-modal', 'settings-modal')" class="settings-item">
+                    <div class="settings-icon-wrapper"><i data-lucide="package" class="text-blue-500"></i> My Orders</div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
+                </div>
+                <div onclick="openSubModal('saved-later-modal', 'settings-modal')" class="settings-item">
+                    <div class="settings-icon-wrapper"><i data-lucide="bookmark" class="text-yellow-500"></i> Saved for Later</div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
+                </div>
+            </div>
+
+            <div class="settings-group-title">Preferences</div>
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 flex flex-col overflow-hidden">
+                <div onclick="openSubModal('address-modal', 'settings-modal')" class="settings-item">
+                    <div class="settings-icon-wrapper"><i data-lucide="map-pin" class="text-pink-500"></i> My Addresses</div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
+                </div>
+                <div onclick="openSubModal('appearance-modal', 'settings-modal')" class="settings-item">
+                    <div class="settings-icon-wrapper"><i data-lucide="moon" class="text-slate-600"></i> Appearance</div>
+                    <div class="text-xs font-bold text-gray-400 flex items-center gap-1"><span id="theme-status">System Default</span> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
+                </div>
+            </div>
+
+            <div class="settings-group-title">Support & Security</div>
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 flex flex-col overflow-hidden">
+                <a href="help.html" class="settings-item">
+                    <div class="settings-icon-wrapper"><i data-lucide="headphones" class="text-teal-500"></i> Help & Support</div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
+                </a>
+                <div onclick="openSubModal('security-modal', 'settings-modal')" class="settings-item">
+                    <div class="settings-icon-wrapper"><i data-lucide="shield-check" class="text-green-600"></i> Account Security</div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
+                </div>
+                <a href="terms.html" class="settings-item">
+                    <div class="settings-icon-wrapper"><i data-lucide="file-text" class="text-gray-600"></i> Terms & Conditions</div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
+                </a>
+            </div>
+
+            <div class="settings-group-title text-red-500">Danger Zone</div>
+            <div class="bg-white rounded-3xl shadow-sm border border-red-100 flex flex-col mb-8 overflow-hidden">
+                <div class="settings-item"><div class="settings-icon-wrapper text-red-500"><i data-lucide="log-out"></i> Logout</div></div>
+            </div>
+            
+            <div class="text-center text-gray-400 text-xs pb-4 font-medium">Version 1.0.0 (FreshMart Premium)<br>Swipe right to close</div>
+        </div>
+    </div>
+
+    <!-- SUB-MODALS (WITH 1-STEP BACK) -->
+    <div id="orders-modal" class="full-screen-modal fixed inset-0 bg-gray-50 z-[95] flex flex-col swipeable">
+        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
+            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="package" class="text-blue-500"></i> My Orders</h2>
+            <button onclick="closeSubModal('orders-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4 space-y-4">
+            <div class="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm">
+                <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-50">
+                    <div>
+                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Order #FM-9082</div>
+                        <div class="text-sm font-bold text-gray-900 mt-1">Delivered on 05 Oct 2026</div>
+                    </div>
+                    <span class="bg-green-50 text-green-600 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Delivered</span>
+                </div>
+                <div class="flex gap-3 mb-5">
+                    <img src="https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=100&q=80" class="w-14 h-14 rounded-2xl border border-gray-100 bg-gray-50 object-contain p-1">
+                    <img src="https://images.unsplash.com/photo-1599507593499-a3f7d1d94260?w=100&q=80" class="w-14 h-14 rounded-2xl border border-gray-100 bg-gray-50 object-contain p-1">
+                    <div class="w-14 h-14 rounded-2xl border border-gray-100 bg-gray-50 flex items-center justify-center text-xs font-bold text-gray-500">+2</div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="font-black text-gray-900 text-lg">₹350</div>
+                    <button class="text-primary-600 font-bold text-xs uppercase tracking-wider bg-primary-50 px-5 py-2.5 rounded-full hover:bg-primary-100 transition">Reorder</button>
+                </div>
+            </div>
+            
+            <div class="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm opacity-80">
+                <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-50">
+                    <div>
+                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Order #FM-8810</div>
+                        <div class="text-sm font-bold text-gray-900 mt-1">Delivered on 12 Sep 2026</div>
+                    </div>
+                    <span class="bg-green-50 text-green-600 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Delivered</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="font-black text-gray-900 text-lg">₹820</div>
+                    <button class="text-primary-600 font-bold text-xs uppercase tracking-wider bg-primary-50 px-5 py-2.5 rounded-full hover:bg-primary-100 transition">Reorder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="appearance-modal" class="full-screen-modal fixed inset-0 bg-gray-50 z-[95] flex flex-col swipeable">
+        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
+            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="moon" class="text-slate-600"></i> Appearance</h2>
+            <button onclick="closeSubModal('appearance-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+        </div>
+        <div class="p-4 space-y-3">
+            <div class="bg-white rounded-3xl border border-gray-100 p-2 shadow-sm">
+                <label class="flex items-center justify-between p-3.5 cursor-pointer hover:bg-gray-50 rounded-2xl transition">
+                    <div class="flex items-center gap-3 font-bold text-gray-800"><i data-lucide="sun" class="w-5 h-5 text-orange-500"></i> Light Mode</div>
+                    <input type="radio" name="theme" value="Light Mode" onchange="updateThemeText(this)" class="w-5 h-5 text-primary-600 focus:ring-primary-500">
+                </label>
+                <div class="w-full h-px bg-gray-50 my-1"></div>
+                <label class="flex items-center justify-between p-3.5 cursor-pointer hover:bg-gray-50 rounded-2xl transition">
+                    <div class="flex items-center gap-3 font-bold text-gray-800"><i data-lucide="moon" class="w-5 h-5 text-slate-500"></i> Dark Mode</div>
+                    <input type="radio" name="theme" value="Dark Mode" onchange="updateThemeText(this)" class="w-5 h-5 text-primary-600 focus:ring-primary-500">
+                </label>
+                <div class="w-full h-px bg-gray-50 my-1"></div>
+                <label class="flex items-center justify-between p-3.5 cursor-pointer hover:bg-gray-50 rounded-2xl transition">
+                    <div class="flex items-center gap-3 font-bold text-gray-800"><i data-lucide="monitor" class="w-5 h-5 text-blue-500"></i> System Default</div>
+                    <input type="radio" name="theme" value="System Default" checked onchange="updateThemeText(this)" class="w-5 h-5 text-primary-600 focus:ring-primary-500">
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div id="saved-later-modal" class="full-screen-modal fixed inset-0 bg-gray-50 z-[95] flex flex-col swipeable">
+        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
+            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="bookmark" class="text-yellow-500"></i> Saved for Later</h2>
+            <button onclick="closeSubModal('saved-later-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+        </div>
+        <div id="saved-later-container" class="flex-1 overflow-y-auto p-4 space-y-3">
+            <div class="text-center text-gray-400 mt-10 text-sm font-medium">No items saved for later.</div>
+        </div>
+    </div>
+
+    <div id="security-modal" class="full-screen-modal fixed inset-0 bg-gray-50 z-[95] flex flex-col swipeable overflow-y-auto">
+        <div class="sticky top-0 z-10 p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
+            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="shield-check" class="text-green-600"></i> Account Security</h2>
+            <button onclick="closeSubModal('security-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+        </div>
+        
+        <div class="p-4 space-y-6 pb-20">
+            <div class="bg-white p-5 rounded-3xl border border-green-200 shadow-sm flex items-center gap-4">
+                <div class="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center text-green-600 flex-shrink-0"><i data-lucide="shield-check" class="w-7 h-7"></i></div>
+                <div><h3 class="font-bold text-gray-900">Security Status</h3><p class="text-sm font-bold text-green-600 mt-0.5">Your account is secure</p></div>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-[10px] text-gray-400 uppercase tracking-wider mb-3 px-2">Login Details</h3>
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+                    <div class="p-4 border-b border-gray-50 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition">
+                        <div>
+                            <div class="text-xs font-bold text-gray-500 mb-1">Mobile Number</div>
+                            <div class="font-bold text-gray-900 flex items-center gap-2">******0872 <span class="bg-green-50 text-green-600 text-[10px] font-bold px-2 py-0.5 rounded-full"><i data-lucide="check" class="w-3 h-3 inline"></i> Verified</span></div>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-gray-400 w-5 h-5"></i>
+                    </div>
+                    <div class="p-4 border-b border-gray-50 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition">
+                        <div>
+                            <div class="text-xs font-bold text-gray-500 mb-1">Email Address</div>
+                            <div class="font-bold text-gray-900 flex items-center gap-2">fr****@gmail.com <span class="bg-green-50 text-green-600 text-[10px] font-bold px-2 py-0.5 rounded-full"><i data-lucide="check" class="w-3 h-3 inline"></i> Verified</span></div>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-gray-400 w-5 h-5"></i>
+                    </div>
+                    <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition">
+                        <div><div class="font-bold text-gray-900">Change Password</div><div class="text-xs font-medium text-gray-500 mt-1">Updated 2 months ago</div></div>
+                        <i data-lucide="chevron-right" class="text-gray-400 w-5 h-5"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-[10px] text-gray-400 uppercase tracking-wider mb-3 px-2">Advanced Protection</h3>
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+                    <div class="p-4 border-b border-gray-50 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition">
+                        <div class="pr-4"><div class="font-bold text-gray-900">Two-Factor Authentication</div><div class="text-xs font-medium text-gray-500 mt-1">Add an extra layer of protection to your account</div></div>
+                        <span class="bg-gray-100 text-gray-500 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Coming Soon</span>
+                    </div>
+                    <div class="p-4 border-b border-gray-50 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition">
+                        <div><div class="font-bold text-gray-900">Login Alerts</div><div class="text-xs font-medium text-gray-500 mt-1">Get notified of new logins</div></div>
+                        <span class="bg-green-50 text-green-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">ON</span>
+                    </div>
+                    <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition">
+                        <div><div class="font-bold text-gray-900">Active Sessions</div><div class="text-xs font-medium text-gray-500 mt-1">Where you're logged in</div></div>
+                        <i data-lucide="chevron-right" class="text-gray-400 w-5 h-5"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-blue-50/50 p-5 rounded-3xl border border-blue-100">
+                <h4 class="font-bold text-blue-900 mb-3 flex items-center gap-2"><i data-lucide="info" class="w-5 h-5"></i> Keep Your Account Safe</h4>
+                <ul class="text-xs text-blue-800 space-y-2 font-medium">
+                    <li>✓ Never share your password or OTP.</li>
+                    <li>✓ Use a strong, unique password.</li>
+                    <li>✓ Review unfamiliar login activity.</li>
+                    <li>✓ Keep your email and mobile number verified.</li>
+                </ul>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-red-100 shadow-sm overflow-hidden">
+                <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-red-50 transition">
+                    <div><div class="font-bold text-red-600">Delete Account</div><div class="text-xs font-medium text-red-400 mt-1">Permanently remove your account data</div></div>
+                    <i data-lucide="chevron-right" class="text-red-400 w-5 h-5"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Screen Cart -->
+    <div id="cart-drawer" class="full-screen-modal fixed inset-y-0 right-0 w-full md:w-[420px] bg-gray-50 z-[95] flex flex-col swipeable border-l border-gray-200 shadow-2xl">
+        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
+            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="shopping-bag" class="text-primary-600"></i> Your Cart</h2>
+            <button onclick="closeSubModal('cart-drawer')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="x" class="w-4 h-4"></i></button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+        <div class="p-4 border-t border-gray-200 bg-white pb-safe">
+            <div class="space-y-2 mb-5 text-sm text-gray-600 font-medium">
+                <div class="flex justify-between"><span>Subtotal:</span><span id="cart-subtotal" class="font-bold text-gray-900">₹0</span></div>
+                <div class="flex justify-between border-b border-gray-100 pb-3"><span>Delivery:</span><span class="font-bold text-gray-900">₹20</span></div>
+                <div class="flex justify-between font-extrabold text-lg text-gray-900 pt-2"><span>Total:</span><span id="cart-total">₹0</span></div>
+            </div>
+            <div class="mb-5 bg-gray-50 p-4 rounded-3xl border border-gray-200 text-sm">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="font-bold text-gray-700 text-xs uppercase tracking-wider">Delivery To</span>
+                    <button onclick="openSubModal('address-modal', 'cart-drawer')" class="text-primary-600 font-bold text-xs bg-primary-50 px-3 py-1.5 rounded-full hover:bg-primary-100 transition">Change</button>
+                </div>
+                <div id="selected-address-text" class="text-gray-500 truncate text-xs font-semibold mt-1">No address selected</div>
+            </div>
+            <button onclick="checkoutWhatsApp()" class="w-full bg-[#25D366] text-white py-4 rounded-full font-bold shadow-lg hover:bg-[#20bd5a] transition active:scale-95 flex justify-center items-center gap-2 text-base">
+                <i data-lucide="message-circle" class="w-5 h-5"></i> Place Order via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <!-- Full Screen Wishlist -->
+    <div id="wishlist-modal" class="full-screen-modal fixed inset-0 bg-gray-50 z-[95] flex flex-col swipeable">
+        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
+            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="heart" class="text-red-500"></i> My Wishlist</h2>
+            <button onclick="closeSubModal('wishlist-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+        </div>
+        <div id="wishlist-container" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+    </div>
+
+    <!-- Product Details Modal -->
+    <div id="product-modal" class="full-screen-modal fixed inset-0 bg-white/60 backdrop-blur-md z-[100] flex items-center justify-center swipeable md:p-10" onclick="if(event.target===this) toggleFSModal('product-modal')">
+        <div id="product-modal-content" class="bg-white w-full h-full md:h-auto md:max-h-[90vh] md:max-w-4xl md:rounded-3xl shadow-2xl flex flex-col relative overflow-hidden border border-gray-200">
+            <!-- Content injected by JS -->
+        </div>
+    </div>
+
+    <!-- Address Modal -->
+    <div id="address-modal" class="full-screen-modal fixed inset-0 bg-gray-50 z-[105] flex flex-col swipeable overflow-y-auto">
+        <div class="sticky top-0 z-10 p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
+            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="map-pin" class="text-pink-500"></i> Delivery Address</h2>
+            <button onclick="closeSubModal('address-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+        </div>
+        <div class="p-4 md:p-6 bg-gray-50 flex-1">
+            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Address Type</label>
+                    <div class="flex gap-3">
+                        <div class="relative">
+                            <input type="radio" name="addr_type" id="type_home" value="Home" class="peer sr-only address-type-radio" checked>
+                            <label for="type_home" class="flex items-center gap-2 px-5 py-2.5 border border-gray-200 rounded-full cursor-pointer hover:bg-gray-50 transition text-sm font-bold text-gray-600 shadow-sm"><i data-lucide="home" class="w-4 h-4"></i> Home</label>
+                        </div>
+                        <div class="relative">
+                            <input type="radio" name="addr_type" id="type_work" value="Work" class="peer sr-only address-type-radio">
+                            <label for="type_work" class="flex items-center gap-2 px-5 py-2.5 border border-gray-200 rounded-full cursor-pointer hover:bg-gray-50 transition text-sm font-bold text-gray-600 shadow-sm"><i data-lucide="briefcase" class="w-4 h-4"></i> Work</label>
+                        </div>
+                        <div class="relative">
+                            <input type="radio" name="addr_type" id="type_other" value="Other" class="peer sr-only address-type-radio">
+                            <label for="type_other" class="flex items-center gap-2 px-5 py-2.5 border border-gray-200 rounded-full cursor-pointer hover:bg-gray-50 transition text-sm font-bold text-gray-600 shadow-sm"><i data-lucide="map-pin" class="w-4 h-4"></i> Other</label>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Full Name</label>
+                    <input type="text" id="addr-name" placeholder="Receiver's name" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-primary-500 focus:bg-white text-sm font-bold transition">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Mobile Number</label>
+                    <input type="tel" id="addr-phone" placeholder="Delivery contact number" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-primary-500 focus:bg-white text-sm font-bold transition">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">House / Flat / Landmark</label>
+                    <input type="text" id="addr-house" placeholder="e.g. Flat 101, Near Metro" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-primary-500 focus:bg-white text-sm font-bold transition">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">City / Town</label>
+                        <input type="text" id="addr-city" placeholder="City name" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-primary-500 focus:bg-white text-sm font-bold transition">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Pin Code</label>
+                        <input type="number" id="addr-pin" placeholder="000000" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-primary-500 focus:bg-white text-sm font-bold transition">
+                    </div>
+                </div>
+                <button onclick="saveAddress()" class="w-full bg-primary-600 text-white font-bold py-4 rounded-full shadow-lg shadow-primary-500/30 active:scale-95 transition text-base mt-4">Save Address</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
