@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Account Security - FreshMart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = { 
+            theme: { 
+                extend: { 
+                    colors: { primary: { 50: '#ecfdf5', 100: '#d1fae5', 500: '#10b981', 600: '#059669', 700: '#047857' } }, 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] } 
+                } 
+            } 
+        }
+    </script>
+    <style>
+        .btn-3d { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-3d:active { transform: scale(0.95) translateY(2px); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans pb-10 relative z-0">
+
+    <!-- Subtle Premium Background Watermark -->
+    <div class="fixed inset-0 z-[-1] opacity-[0.04] pointer-events-none" style="background-image: url('images/background.png'); background-size: cover; background-position: center; background-attachment: fixed;"></div>
+
+    <!-- COMPACT MOBILE-FIRST HEADER -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 px-4 py-3 flex items-center shadow-sm">
+        <a href="index.html" class="btn-3d p-2 mr-2 bg-gray-100 hover:bg-gray-200 rounded-full transition text-gray-600">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+        </a>
+        <img src="images/logo.png" alt="FreshMart" class="h-8 md:h-10 w-auto object-contain rounded-full shadow-sm border border-gray-100" onerror="this.style.display='none'">
+        <h1 class="text-lg md:text-xl font-extrabold text-gray-900 ml-2.5 tracking-tight">Account Security</h1>
+    </header>
+
+    <main class="max-w-[1200px] mx-auto px-4 mt-6 space-y-8">
+        
+        <!-- HEADER OVERVIEW SECTION -->
+        <div class="bg-white rounded-[2rem] p-6 md:p-8 text-center shadow-sm border border-gray-100">
+            <div class="w-14 h-14 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+                <i data-lucide="shield-check" class="w-7 h-7"></i>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2 tracking-tight">Your Account Security Matters</h2>
+            <p class="text-gray-500 text-sm md:text-base max-w-lg mx-auto font-medium">At FreshMart, we take reasonable steps to help protect your account and personal information. We encourage you to keep your login details private and use a strong password.</p>
+        </div>
+
+        <!-- MAIN SECURITY OPTIONS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            
+            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="p-3 bg-gray-50 rounded-full text-gray-600 shadow-inner flex-shrink-0"><i data-lucide="key" class="w-5 h-5"></i></div>
+                    <div>
+                        <h3 class="font-extrabold text-lg text-gray-900">Change Password</h3>
+                        <p class="text-sm font-medium text-gray-500 mt-1">Keep your account credentials up to date.</p>
+                    </div>
+                </div>
+                <!-- Connected to JS function for future backend integration -->
+                <button onclick="handleSecurityAction('password')" class="btn-3d w-full mt-2 bg-gray-100 text-gray-800 font-bold py-3.5 rounded-full hover:bg-gray-200 transition text-sm">Change Password</button>
+            </div>
+
+            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="p-3 bg-blue-50 rounded-full text-blue-500 shadow-inner flex-shrink-0"><i data-lucide="smartphone" class="w-5 h-5"></i></div>
+                    <div>
+                        <h3 class="font-extrabold text-lg text-gray-900">Mobile & Email</h3>
+                        <p class="text-sm font-medium text-gray-500 mt-1">Manage your contact information and verification.</p>
+                    </div>
+                </div>
+                <button onclick="handleSecurityAction('contact')" class="btn-3d w-full mt-2 bg-gray-100 text-gray-800 font-bold py-3.5 rounded-full hover:bg-gray-200 transition text-sm">Manage Details</button>
+            </div>
+
+            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="p-3 bg-indigo-50 rounded-full text-indigo-500 shadow-inner flex-shrink-0"><i data-lucide="lock" class="w-5 h-5"></i></div>
+                    <div>
+                        <h3 class="font-extrabold text-lg text-gray-900">Login & Account Access</h3>
+                        <p class="text-sm font-medium text-gray-500 mt-1">Manage your account access and available security options.</p>
+                    </div>
+                </div>
+                <button onclick="handleSecurityAction('access')" class="btn-3d w-full mt-2 bg-gray-100 text-gray-800 font-bold py-3.5 rounded-full hover:bg-gray-200 transition text-sm">View Access Settings</button>
+            </div>
+
+            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="p-3 bg-orange-50 rounded-full text-orange-500 shadow-inner flex-shrink-0"><i data-lucide="life-buoy" class="w-5 h-5"></i></div>
+                    <div>
+                        <h3 class="font-extrabold text-lg text-gray-900">Account Recovery</h3>
+                        <p class="text-sm font-medium text-gray-500 mt-1">Get help if you cannot access your account.</p>
+                    </div>
+                </div>
+                <button onclick="handleSecurityAction('recovery')" class="btn-3d w-full mt-2 bg-gray-100 text-gray-800 font-bold py-3.5 rounded-full hover:bg-gray-200 transition text-sm">Recover Account</button>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="bg-white p-6 rounded-[2rem] border border-red-100 shadow-sm hover:shadow-md transition md:col-span-2">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="p-3 bg-red-50 rounded-full text-red-500 shadow-inner flex-shrink-0"><i data-lucide="trash-2" class="w-5 h-5"></i></div>
+                    <div>
+                        <h3 class="font-extrabold text-lg text-red-600">Delete Account</h3>
+                        <p class="text-sm font-medium text-gray-500 mt-1">Request the deletion of your account and associated personal information, subject to applicable requirements.</p>
+                    </div>
+                </div>
+                <button onclick="handleDeleteRequest()" class="btn-3d w-full md:w-auto md:px-10 mt-2 bg-red-50 text-red-600 font-bold py-3.5 rounded-full border border-red-100 hover:bg-red-100 transition text-sm">Request Account Deletion</button>
+            </div>
+        </div>
+
+        <!-- SECURITY TIPS -->
+        <div class="bg-blue-50/80 p-6 md:p-8 rounded-[2.5rem] border border-blue-100 shadow-sm">
+            <h4 class="font-extrabold text-blue-900 mb-4 flex items-center gap-2 text-lg"><i data-lucide="info" class="w-6 h-6 text-blue-600"></i> Keep Your Account Safe</h4>
+            <ul class="text-sm text-blue-800 space-y-3 font-semibold">
+                <li class="flex gap-3"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5"></i> Use a strong, unique password.</li>
+                <li class="flex gap-3"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5"></i> Never share your password or verification codes.</li>
+                <li class="flex gap-3"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5"></i> Sign out when using a shared device.</li>
+                <li class="flex gap-3"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5"></i> Keep your contact information up to date.</li>
+                <li class="flex gap-3"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5"></i> Contact FreshMart if you notice unusual account activity.</li>
+            </ul>
+        </div>
+
+        <!-- PRIVACY & SUPPORT LINKS -->
+        <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-gray-100 text-center">
+            <h3 class="font-extrabold text-lg text-gray-900 mb-4">Need More Information?</h3>
+            <div class="flex flex-wrap justify-center gap-3 mb-8">
+                <a href="privacy.html" class="btn-3d bg-gray-50 border border-gray-200 px-5 py-2.5 rounded-full text-sm font-bold text-gray-700 hover:text-primary-600 transition shadow-sm">Privacy Policy</a>
+                <a href="terms.html" class="btn-3d bg-gray-50 border border-gray-200 px-5 py-2.5 rounded-full text-sm font-bold text-gray-700 hover:text-primary-600 transition shadow-sm">Terms & Conditions</a>
+                <a href="help.html" class="btn-3d bg-gray-50 border border-gray-200 px-5 py-2.5 rounded-full text-sm font-bold text-gray-700 hover:text-primary-600 transition shadow-sm">Help & Support</a>
+            </div>
+
+            <div class="pt-6 border-t border-gray-100">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Contact FreshMart Support</p>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 text-sm font-bold text-gray-700">
+                    <a href="tel:7988300872" class="flex items-center gap-2 hover:text-primary-600 transition"><div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"><i data-lucide="phone" class="w-4 h-4"></i></div> +91 79883 00872</a>
+                    <a href="mailto:FreshMart@gmail.com" class="flex items-center gap-2 hover:text-primary-600 transition"><div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"><i data-lucide="mail" class="w-4 h-4"></i></div> FreshMart@gmail.com</a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Custom Script for basic UI interactions (Not storing sensitive info) -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if(typeof lucide !== 'undefined') { lucide.createIcons(); }
+        });
+
+        function handleSecurityAction(action) {
+            // Note: Backend integration required. Showing standard alert for now.
+            alert("This feature requires backend authentication setup. It will be available soon.");
+        }
+
+        function handleDeleteRequest() {
+            if(confirm("Are you sure you want to request account deletion? This action may permanently remove your account data according to our policies.")) {
+                alert("Account deletion request initiated. Our support team will process it shortly.");
+            }
+        }
+    </script>
+</body>
+</html>

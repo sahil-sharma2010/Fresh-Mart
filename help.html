@@ -2,170 +2,256 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Help & Support - FreshMart</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script>tailwind.config = { theme: { extend: { colors: { primary: { 50: '#ecfdf5', 500: '#10b981', 600: '#059669', 700: '#047857' } }, fontFamily: { sans: ['Inter', 'sans-serif'] } } } }</script>
+    <script>
+        tailwind.config = { 
+            theme: { 
+                extend: { 
+                    colors: { primary: { 50: '#ecfdf5', 100: '#d1fae5', 500: '#10b981', 600: '#059669', 700: '#047857' } }, 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] } 
+                } 
+            } 
+        }
+    </script>
+    <style>
+        /* Smooth FAQ Accordion Animations */
+        .faq-answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+        .faq-answer > div { overflow: hidden; }
+        .faq-open .faq-answer { grid-template-rows: 1fr; }
+        .faq-icon { transition: transform 0.3s ease; }
+        .faq-open .faq-icon { transform: rotate(180deg); }
+        .btn-3d { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-3d:active { transform: scale(0.95) translateY(2px); }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans pb-10">
+<body class="bg-gray-50 text-gray-800 font-sans pb-10 relative z-0">
 
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-10 px-4 py-3 flex items-center shadow-sm">
-        <a href="index.html" class="p-2 mr-2 hover:bg-gray-100 rounded-full transition"><i data-lucide="arrow-left" class="w-5 h-5 text-gray-600"></i></a>
-        <!-- Logo Added in Help Header -->
-        <img src="images/logo.png" alt="FreshMart" class="h-8 md:h-10 w-auto object-contain rounded-full" onerror="this.style.display='none'">
-        <h1 class="text-xl font-bold text-gray-900 ml-2">Help & Support</h1>
+    <!-- Subtle Premium Background Watermark -->
+    <div class="fixed inset-0 z-[-1] opacity-[0.04] pointer-events-none" style="background-image: url('images/background.png'); background-size: cover; background-position: center; background-attachment: fixed;"></div>
+
+    <!-- COMPACT MOBILE-FIRST HEADER -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 px-4 py-3 flex items-center shadow-sm">
+        <a href="index.html" class="btn-3d p-2 mr-2 bg-gray-100 hover:bg-gray-200 rounded-full transition text-gray-600">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+        </a>
+        <img src="images/logo.png" alt="FreshMart" class="h-8 md:h-10 w-auto object-contain rounded-full shadow-sm border border-gray-100" onerror="this.style.display='none'">
+        <h1 class="text-lg md:text-xl font-extrabold text-gray-900 ml-2.5 tracking-tight">Help & Support</h1>
     </header>
 
-    <main class="max-w-[1200px] mx-auto px-4 mt-8 space-y-10">
+    <main class="max-w-[1200px] mx-auto px-4 mt-6 space-y-8">
         
-        <div class="text-center">
-            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-3">Need a little help? We're here for you.</h2>
-            <p class="text-gray-500 text-sm md:text-base max-w-xl mx-auto font-medium">We're always happy to help. Get quick assistance with your orders, payments, delivery, returns, and more.</p>
-        </div>
-
-        <div class="relative max-w-2xl mx-auto">
-            <i data-lucide="search" class="absolute left-5 top-4 text-gray-400 w-5 h-5"></i>
-            <input type="text" placeholder="Search for help... (Try refund, delivery, cancel order...)" class="w-full bg-white border border-gray-200 shadow-sm rounded-full py-4 pl-14 pr-6 text-sm font-bold outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition">
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition">
-                <h3 class="font-bold text-lg text-gray-900 mb-4 flex items-center gap-2"><i data-lucide="shopping-bag" class="text-primary-600"></i> Order Support</h3>
-                <ul class="space-y-4 text-sm font-semibold text-gray-600">
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="package" class="w-4 h-4"></i> Track My Order</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="x-circle" class="w-4 h-4"></i> Cancel an Order</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="map-pin" class="w-4 h-4"></i> Change Delivery Address</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Order Not Received</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="clipboard-list" class="w-4 h-4"></i> Modify My Order</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="search-x" class="w-4 h-4"></i> Report a Missing Item</li>
-                </ul>
-            </div>
-
-            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition">
-                <h3 class="font-bold text-lg text-gray-900 mb-4 flex items-center gap-2"><i data-lucide="credit-card" class="text-blue-500"></i> Payments & Refunds</h3>
-                <ul class="space-y-4 text-sm font-semibold text-gray-600">
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="alert-circle" class="w-4 h-4"></i> Payment Failed</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="help-circle" class="w-4 h-4"></i> Payment Charged but Order Not Placed</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Refund Status</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="credit-card" class="w-4 h-4"></i> Payment Methods</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="banknote" class="w-4 h-4"></i> Cash on Delivery</li>
-                </ul>
-            </div>
-
-            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition">
-                <h3 class="font-bold text-lg text-gray-900 mb-4 flex items-center gap-2"><i data-lucide="truck" class="text-orange-500"></i> Delivery Support</h3>
-                <ul class="space-y-4 text-sm font-semibold text-gray-600">
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="info" class="w-4 h-4"></i> Delivery Information</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="map" class="w-4 h-4"></i> Check Delivery Area</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="indian-rupee" class="w-4 h-4"></i> Delivery Charges</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="clock" class="w-4 h-4"></i> Delivery Time</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="timer" class="w-4 h-4"></i> Delayed Order</li>
-                </ul>
-            </div>
-
-            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition">
-                <h3 class="font-bold text-lg text-gray-900 mb-4 flex items-center gap-2"><i data-lucide="rotate-ccw" class="text-red-500"></i> Returns & Refunds</h3>
-                <ul class="space-y-4 text-sm font-semibold text-gray-600">
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="corner-up-left" class="w-4 h-4"></i> Return / Replacement Request</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="package-minus" class="w-4 h-4"></i> Damaged Product</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="x-square" class="w-4 h-4"></i> Wrong Product Received</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="search-x" class="w-4 h-4"></i> Missing Product</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="file-text" class="w-4 h-4"></i> Refund Policy</li>
-                </ul>
-            </div>
-
-            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition">
-                <h3 class="font-bold text-lg text-gray-900 mb-4 flex items-center gap-2"><i data-lucide="user" class="text-purple-500"></i> Account Help</h3>
-                <ul class="space-y-4 text-sm font-semibold text-gray-600">
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="log-in" class="w-4 h-4"></i> Login / Signup Help</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="key" class="w-4 h-4"></i> Forgot Password</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="smartphone" class="w-4 h-4"></i> Change Mobile Number</li>
-                    <li class="flex items-center gap-3 hover:text-primary-600 cursor-pointer"><i data-lucide="map-pin" class="w-4 h-4"></i> Manage Addresses</li>
-                    <li class="flex items-center gap-3 hover:text-red-500 cursor-pointer"><i data-lucide="trash-2" class="w-4 h-4"></i> Delete Account</li>
-                </ul>
-            </div>
+        <!-- WELCOME SECTION -->
+        <div class="bg-white rounded-3xl p-6 md:p-8 text-center shadow-sm border border-gray-100">
+            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2 tracking-tight">How Can We Help You?</h2>
+            <p class="text-gray-500 text-sm md:text-base max-w-lg mx-auto font-medium">Find answers, solve order issues, and get support for your FreshMart shopping.</p>
             
-            <div class="bg-gray-900 p-6 rounded-3xl shadow-sm text-white flex flex-col justify-center">
-                <h3 class="font-bold text-lg mb-2"><i data-lucide="clock" class="inline w-5 h-5 mr-1 text-primary-400"></i> Support Hours</h3>
-                <p class="text-sm text-gray-300 font-medium mb-3">We are available during these hours:</p>
-                <div class="bg-gray-800 p-3 rounded-xl mb-2 text-sm font-bold text-gray-200 flex justify-between">
-                    <span>Monday – Saturday</span><span>9:00 AM – 8:00 PM</span>
+            <!-- SMART HELP SEARCH -->
+            <div class="relative mt-6 max-w-xl mx-auto">
+                <i data-lucide="search" class="absolute left-4 top-3.5 text-primary-500 w-5 h-5"></i>
+                <input type="text" id="help-search-input" onkeyup="filterHelp(this.value)" placeholder="Search orders, payments, delivery or refunds..." class="w-full bg-gray-50 border border-gray-200 shadow-inner rounded-full py-3.5 pl-12 pr-12 text-sm font-bold outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition focus:bg-white text-gray-800">
+                <button id="clear-help-search" onclick="clearSearch()" class="absolute right-4 top-3.5 text-gray-400 hover:text-gray-600 hidden btn-3d bg-gray-200 rounded-full p-0.5">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <p id="no-results-msg" class="text-red-500 text-sm font-bold mt-4 hidden">No matching help topics found. Please try another word or contact support below.</p>
+        </div>
+
+        <!-- QUICK HELP CATEGORIES -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="help-categories-container">
+            <!-- Card 1 -->
+            <div class="bg-white p-5 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition">
+                <h3 class="font-extrabold text-gray-900 mb-4 flex items-center gap-3"><div class="p-2 bg-primary-50 rounded-full text-primary-600"><i data-lucide="shopping-bag" class="w-5 h-5"></i></div> Orders & Tracking</h3>
+                <ul class="space-y-3 text-sm font-bold text-gray-600">
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="package" class="w-4 h-4 text-gray-400"></i> Track My Order</li>
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="x-circle" class="w-4 h-4 text-gray-400"></i> Cancel an Order</li>
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="map-pin" class="w-4 h-4 text-gray-400"></i> Change Delivery Address</li>
+                </ul>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-white p-5 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition">
+                <h3 class="font-extrabold text-gray-900 mb-4 flex items-center gap-3"><div class="p-2 bg-blue-50 rounded-full text-blue-500"><i data-lucide="credit-card" class="w-5 h-5"></i></div> Payments & Refunds</h3>
+                <ul class="space-y-3 text-sm font-bold text-gray-600">
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="alert-circle" class="w-4 h-4 text-gray-400"></i> Payment Failed</li>
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="refresh-cw" class="w-4 h-4 text-gray-400"></i> Refund Status</li>
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="banknote" class="w-4 h-4 text-gray-400"></i> Cash on Delivery</li>
+                </ul>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-white p-5 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition">
+                <h3 class="font-extrabold text-gray-900 mb-4 flex items-center gap-3"><div class="p-2 bg-orange-50 rounded-full text-orange-500"><i data-lucide="truck" class="w-5 h-5"></i></div> Delivery Help</h3>
+                <ul class="space-y-3 text-sm font-bold text-gray-600">
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="indian-rupee" class="w-4 h-4 text-gray-400"></i> Delivery Charges</li>
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="timer" class="w-4 h-4 text-gray-400"></i> Delivery Delay</li>
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="map" class="w-4 h-4 text-gray-400"></i> Check Delivery Availability</li>
+                </ul>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="bg-white p-5 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition">
+                <h3 class="font-extrabold text-gray-900 mb-4 flex items-center gap-3"><div class="p-2 bg-red-50 rounded-full text-red-500"><i data-lucide="rotate-ccw" class="w-5 h-5"></i></div> Products & Returns</h3>
+                <ul class="space-y-3 text-sm font-bold text-gray-600">
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="search-x" class="w-4 h-4 text-gray-400"></i> Missing Item</li>
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="package-minus" class="w-4 h-4 text-gray-400"></i> Wrong or Damaged Product</li>
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="file-text" class="w-4 h-4 text-gray-400"></i> Return & Refund Policy</li>
+                </ul>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="bg-white p-5 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition">
+                <h3 class="font-extrabold text-gray-900 mb-4 flex items-center gap-3"><div class="p-2 bg-purple-50 rounded-full text-purple-500"><i data-lucide="user" class="w-5 h-5"></i></div> Account Help</h3>
+                <ul class="space-y-3 text-sm font-bold text-gray-600">
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="key" class="w-4 h-4 text-gray-400"></i> Login & Password</li>
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="user-check" class="w-4 h-4 text-gray-400"></i> Update Profile</li>
+                    <li class="help-search-item flex items-center gap-3 hover:text-primary-600 cursor-pointer transition"><i data-lucide="map-pin" class="w-4 h-4 text-gray-400"></i> Manage Saved Addresses</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- FREQUENTLY ASKED QUESTIONS -->
+        <div class="bg-white rounded-[2.5rem] p-6 md:p-8 border border-gray-100 shadow-sm">
+            <h2 class="text-xl font-extrabold text-gray-900 mb-6 flex items-center gap-2"><i data-lucide="help-circle" class="text-primary-600"></i> Frequently Asked Questions</h2>
+            <div class="space-y-3" id="faq-container">
+                
+                <div class="help-search-item border border-gray-100 rounded-2xl overflow-hidden shadow-sm" onclick="toggleFaq(this)">
+                    <button class="w-full text-left p-4 font-extrabold text-sm text-gray-800 bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition">How can I track my order? <i data-lucide="chevron-down" class="w-5 h-5 faq-icon text-gray-400"></i></button>
+                    <div class="faq-answer bg-white"><div class="p-4 text-sm font-medium text-gray-600 border-t border-gray-100 leading-relaxed">You can easily track your order by going to the "My Orders" section in your Profile and selecting your current order.</div></div>
                 </div>
-                <div class="bg-gray-800 p-3 rounded-xl text-sm font-bold text-gray-200 flex justify-between">
-                    <span>Sunday</span><span>10:00 AM – 6:00 PM</span>
+
+                <div class="help-search-item border border-gray-100 rounded-2xl overflow-hidden shadow-sm" onclick="toggleFaq(this)">
+                    <button class="w-full text-left p-4 font-extrabold text-sm text-gray-800 bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition">How can I cancel my order? <i data-lucide="chevron-down" class="w-5 h-5 faq-icon text-gray-400"></i></button>
+                    <div class="faq-answer bg-white"><div class="p-4 text-sm font-medium text-gray-600 border-t border-gray-100 leading-relaxed">If your order hasn't been dispatched, you can cancel it from the "My Orders" section or by contacting our WhatsApp support team instantly.</div></div>
+                </div>
+
+                <div class="help-search-item border border-gray-100 rounded-2xl overflow-hidden shadow-sm" onclick="toggleFaq(this)">
+                    <button class="w-full text-left p-4 font-extrabold text-sm text-gray-800 bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition">How long does delivery take? <i data-lucide="chevron-down" class="w-5 h-5 faq-icon text-gray-400"></i></button>
+                    <div class="faq-answer bg-white"><div class="p-4 text-sm font-medium text-gray-600 border-t border-gray-100 leading-relaxed">Local deliveries are typically completed within the estimated time shown at checkout, usually on the very same day.</div></div>
+                </div>
+
+                <div class="help-search-item border border-gray-100 rounded-2xl overflow-hidden shadow-sm" onclick="toggleFaq(this)">
+                    <button class="w-full text-left p-4 font-extrabold text-sm text-gray-800 bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition">How can I request a refund? <i data-lucide="chevron-down" class="w-5 h-5 faq-icon text-gray-400"></i></button>
+                    <div class="faq-answer bg-white"><div class="p-4 text-sm font-medium text-gray-600 border-t border-gray-100 leading-relaxed">For eligible issues, simply send us a message on WhatsApp or Email with your Order ID and photo of the issue. Our team will process it as per our Refund Policy.</div></div>
+                </div>
+
+                <div class="help-search-item border border-gray-100 rounded-2xl overflow-hidden shadow-sm" onclick="toggleFaq(this)">
+                    <button class="w-full text-left p-4 font-extrabold text-sm text-gray-800 bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition">What should I do if I receive a damaged product? <i data-lucide="chevron-down" class="w-5 h-5 faq-icon text-gray-400"></i></button>
+                    <div class="faq-answer bg-white"><div class="p-4 text-sm font-medium text-gray-600 border-t border-gray-100 leading-relaxed">Please contact us immediately via WhatsApp or Email with a clear photo of the damaged product. We will quickly arrange a replacement or refund.</div></div>
+                </div>
+
+                <div class="help-search-item border border-gray-100 rounded-2xl overflow-hidden shadow-sm" onclick="toggleFaq(this)">
+                    <button class="w-full text-left p-4 font-extrabold text-sm text-gray-800 bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition">Do you offer Cash on Delivery? <i data-lucide="chevron-down" class="w-5 h-5 faq-icon text-gray-400"></i></button>
+                    <div class="faq-answer bg-white"><div class="p-4 text-sm font-medium text-gray-600 border-t border-gray-100 leading-relaxed">Yes! We fully support Cash on Delivery (COD) for our customers. You can pay when your order arrives.</div></div>
+                </div>
+
+                <div class="help-search-item border border-gray-100 rounded-2xl overflow-hidden shadow-sm" onclick="toggleFaq(this)">
+                    <button class="w-full text-left p-4 font-extrabold text-sm text-gray-800 bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition">How can I change my delivery address? <i data-lucide="chevron-down" class="w-5 h-5 faq-icon text-gray-400"></i></button>
+                    <div class="faq-answer bg-white"><div class="p-4 text-sm font-medium text-gray-600 border-t border-gray-100 leading-relaxed">You can securely add or edit your address by going to "My Addresses" located in your Profile Settings.</div></div>
                 </div>
             </div>
         </div>
 
-        <div class="bg-primary-50 rounded-3xl p-6 md:p-10 border border-primary-100 mt-10">
+        <!-- CONTACT FRESHMART -->
+        <div class="bg-primary-50 rounded-[2.5rem] p-6 md:p-10 border border-primary-100 shadow-sm">
             <div class="text-center mb-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-2">Still need help?</h2>
-                <p class="text-gray-600 text-sm max-w-lg mx-auto font-medium">Our support team is just a message away. We're here to make your FreshMart experience simple, smooth, and hassle-free.</p>
+                <h2 class="text-2xl font-extrabold text-gray-900 mb-2">Still Need Help?</h2>
+                <p class="text-gray-600 text-sm max-w-lg mx-auto font-medium">We're here to help with your FreshMart experience. Our support team is just a message away.</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-white p-6 rounded-2xl text-center shadow-sm border border-gray-100 hover:shadow-md transition">
-                    <div class="w-14 h-14 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="phone" class="w-6 h-6"></i></div>
-                    <h4 class="font-bold text-gray-900 mb-1">Call FreshMart</h4>
-                    <p class="text-xs text-gray-500 mb-5 font-medium">Speak directly with our support team for quick assistance.</p>
-                    <a href="tel:7988300872" class="block w-full bg-green-600 text-white font-bold py-3.5 rounded-full hover:bg-green-700 transition active:scale-95">Call Now</a>
+                
+                <div class="bg-white p-6 rounded-[2rem] text-center border border-gray-100 shadow-sm">
+                    <div class="w-14 h-14 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner"><i data-lucide="phone" class="w-6 h-6"></i></div>
+                    <h4 class="font-extrabold text-gray-900 mb-1">Call Support</h4>
+                    <p class="text-xs text-gray-500 mb-5 font-bold">Speak directly with our team.</p>
+                    <a href="tel:7988300872" class="btn-3d block w-full bg-gray-900 text-white font-extrabold py-3.5 rounded-full hover:bg-gray-800 transition shadow-lg text-sm">Call 7988300872</a>
                 </div>
                 
-                <div class="bg-white p-6 rounded-2xl text-center shadow-sm border border-gray-100 hover:shadow-md transition">
-                    <div class="w-14 h-14 bg-[#25D366]/10 text-[#25D366] rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="message-circle" class="w-6 h-6"></i></div>
-                    <h4 class="font-bold text-gray-900 mb-1">WhatsApp Support</h4>
-                    <p class="text-xs text-gray-500 mb-5 font-medium">Chat with our support team for quick assistance.</p>
-                    <a href="https://wa.me/917988300872?text=Hello%20FreshMart%20Support,%20I%20need%20help%20with%20my%20order." target="_blank" class="block w-full bg-[#25D366] text-white font-bold py-3.5 rounded-full hover:bg-[#20bd5a] transition active:scale-95">Chat on WhatsApp</a>
+                <div class="bg-white p-6 rounded-[2rem] text-center border border-gray-100 shadow-sm">
+                    <div class="w-14 h-14 bg-[#25D366]/10 text-[#25D366] rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner"><i data-lucide="message-circle" class="w-6 h-6"></i></div>
+                    <h4 class="font-extrabold text-gray-900 mb-1">WhatsApp Support</h4>
+                    <p class="text-xs text-gray-500 mb-5 font-bold">Chat for quick assistance.</p>
+                    <a href="https://wa.me/917988300872?text=Hello%20FreshMart%20Support%2C%20I%20need%20help." target="_blank" class="btn-3d block w-full bg-[#25D366] text-white font-extrabold py-3.5 rounded-full hover:bg-[#20bd5a] transition shadow-lg shadow-green-500/30 text-sm">Chat on WhatsApp</a>
                 </div>
                 
-                <div class="bg-white p-6 rounded-2xl text-center shadow-sm border border-gray-100 hover:shadow-md transition">
-                    <div class="w-14 h-14 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="mail" class="w-6 h-6"></i></div>
-                    <h4 class="font-bold text-gray-900 mb-1">Email Support</h4>
-                    <p class="text-xs text-gray-500 mb-5 font-medium">For detailed questions or assistance, contact us by email.</p>
-                    <a href="mailto:FreshMart@gmail.com" class="block w-full bg-blue-600 text-white font-bold py-3.5 rounded-full hover:bg-blue-700 transition active:scale-95">Send Email</a>
+                <div class="bg-white p-6 rounded-[2rem] text-center border border-gray-100 shadow-sm">
+                    <div class="w-14 h-14 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner"><i data-lucide="mail" class="w-6 h-6"></i></div>
+                    <h4 class="font-extrabold text-gray-900 mb-1">Email Support</h4>
+                    <p class="text-xs text-gray-500 mb-5 font-bold">For detailed questions.</p>
+                    <a href="mailto:FreshMart@gmail.com" class="btn-3d block w-full bg-blue-600 text-white font-extrabold py-3.5 rounded-full hover:bg-blue-700 transition shadow-lg shadow-blue-500/30 text-sm">Send Email</a>
                 </div>
+
             </div>
         </div>
 
-        <div class="bg-white rounded-3xl p-6 md:p-8 border border-gray-100 shadow-sm mt-10">
-            <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2"><i data-lucide="help-circle" class="text-primary-600"></i> Frequently Asked Questions</h2>
-            <div class="space-y-3">
-                <div class="border border-gray-100 rounded-2xl overflow-hidden" onclick="this.classList.toggle('faq-open')">
-                    <button class="w-full text-left p-4 font-bold text-sm bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition">How can I track my order? <i data-lucide="chevron-down" class="w-4 h-4 faq-icon transition-transform"></i></button>
-                    <div class="faq-answer p-4 text-sm text-gray-600 border-t border-gray-100 bg-white font-medium">You can track your order by going to "My Orders" in your profile and clicking on the specific order to view its status.</div>
-                </div>
-                <div class="border border-gray-100 rounded-2xl overflow-hidden" onclick="this.classList.toggle('faq-open')">
-                    <button class="w-full text-left p-4 font-bold text-sm bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition">How can I cancel my order? <i data-lucide="chevron-down" class="w-4 h-4 faq-icon transition-transform"></i></button>
-                    <div class="faq-answer p-4 text-sm text-gray-600 border-t border-gray-100 bg-white font-medium">If your order is not yet dispatched, you can cancel it from the "My Orders" section or by contacting WhatsApp support.</div>
-                </div>
-                <div class="border border-gray-100 rounded-2xl overflow-hidden" onclick="this.classList.toggle('faq-open')">
-                    <button class="w-full text-left p-4 font-bold text-sm bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition">How long does delivery take? <i data-lucide="chevron-down" class="w-4 h-4 faq-icon transition-transform"></i></button>
-                    <div class="faq-answer p-4 text-sm text-gray-600 border-t border-gray-100 bg-white font-medium">Local deliveries are usually completed within the estimated time shown at checkout, typically on the same day.</div>
-                </div>
-                <div class="border border-gray-100 rounded-2xl overflow-hidden" onclick="this.classList.toggle('faq-open')">
-                    <button class="w-full text-left p-4 font-bold text-sm bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition">What should I do if I receive a damaged product? <i data-lucide="chevron-down" class="w-4 h-4 faq-icon transition-transform"></i></button>
-                    <div class="faq-answer p-4 text-sm text-gray-600 border-t border-gray-100 bg-white font-medium">Please contact us immediately via WhatsApp or Email with a photo of the damaged product. We will arrange a replacement or refund.</div>
-                </div>
-                <div class="border border-gray-100 rounded-2xl overflow-hidden" onclick="this.classList.toggle('faq-open')">
-                    <button class="w-full text-left p-4 font-bold text-sm bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition">What payment methods are available? <i data-lucide="chevron-down" class="w-4 h-4 faq-icon transition-transform"></i></button>
-                    <div class="faq-answer p-4 text-sm text-gray-600 border-t border-gray-100 bg-white font-medium">We accept UPI, Credit/Debit cards, Net Banking, and Cash on Delivery (COD).</div>
-                </div>
-            </div>
-            
-            <div class="mt-8 pt-6 border-t border-gray-100 text-center">
-                <h3 class="font-bold text-gray-900 mb-2">Need help with something else?</h3>
-                <p class="text-sm text-gray-500 mb-5">Tell us what you need and we'll help you find the right solution.</p>
-                <div class="flex flex-wrap justify-center gap-3">
-                    <a href="https://wa.me/917988300872" target="_blank" class="bg-[#25D366] text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-[#20bd5a] transition">Chat on WhatsApp</a>
-                    <a href="tel:7988300872" class="bg-gray-900 text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-gray-800 transition">Call Support</a>
-                    <a href="mailto:FreshMart@gmail.com" class="bg-blue-600 text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-blue-700 transition">Email Us</a>
-                </div>
+        <!-- POLICY SHORTCUTS -->
+        <div class="pb-6">
+            <h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-widest mb-4 ml-2">Quick Links</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <a href="terms.html" class="bg-white border border-gray-200 p-4 rounded-2xl flex items-center gap-3 text-sm font-bold text-gray-700 hover:border-primary-500 hover:text-primary-600 transition btn-3d shadow-sm"><i data-lucide="file-text" class="w-4 h-4 text-gray-400"></i> Terms & Conditions</a>
+                <a href="privacy.html" class="bg-white border border-gray-200 p-4 rounded-2xl flex items-center gap-3 text-sm font-bold text-gray-700 hover:border-primary-500 hover:text-primary-600 transition btn-3d shadow-sm"><i data-lucide="shield" class="w-4 h-4 text-gray-400"></i> Privacy Policy</a>
+                <a href="delivery.html" class="bg-white border border-gray-200 p-4 rounded-2xl flex items-center gap-3 text-sm font-bold text-gray-700 hover:border-primary-500 hover:text-primary-600 transition btn-3d shadow-sm"><i data-lucide="truck" class="w-4 h-4 text-gray-400"></i> Delivery Policy</a>
+                <a href="refund.html" class="bg-white border border-gray-200 p-4 rounded-2xl flex items-center gap-3 text-sm font-bold text-gray-700 hover:border-primary-500 hover:text-primary-600 transition btn-3d shadow-sm"><i data-lucide="refresh-ccw" class="w-4 h-4 text-gray-400"></i> Refund Policy</a>
             </div>
         </div>
+
     </main>
-    <script>lucide.createIcons();</script>
+
+    <!-- INTERNAL SCRIPTS FOR SEARCH & FAQ -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if(typeof lucide !== 'undefined') { lucide.createIcons(); }
+        });
+
+        function toggleFaq(element) {
+            element.classList.toggle('faq-open');
+        }
+
+        function filterHelp(query) {
+            query = query.toLowerCase().trim();
+            const items = document.querySelectorAll('.help-search-item');
+            const clearBtn = document.getElementById('clear-help-search');
+            let hasResults = false;
+
+            if (query.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            items.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    item.style.display = 'flex'; // Reset display to flex for list items
+                    // if it's an FAQ item, we need to show the parent container
+                    if(item.classList.contains('overflow-hidden')) {
+                         item.style.display = 'block';
+                    }
+                    hasResults = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            const noResults = document.getElementById('no-results-msg');
+            if (!hasResults && query.length > 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('help-search-input');
+            searchInput.value = '';
+            filterHelp('');
+            searchInput.focus();
+        }
+    </script>
 </body>
 </html>

@@ -1,0 +1,532 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Read FreshMart's order cancellation policy and learn how to request cancellation and understand eligible refunds.">
+  <meta name="theme-color" content="#059669">
+  <title>Cancellation Policy | FreshMart</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#ecfdf5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857'
+            }
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body { font-family: Inter, sans-serif; }
+
+    .policy-section {
+      background: rgba(255,255,255,.96);
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 22px;
+      scroll-margin-top: 100px;
+    }
+
+    .policy-section h2 {
+      color: #102a43;
+      font-size: 1.08rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .policy-section p,
+    .policy-section li {
+      color: #526174;
+      font-size: .94rem;
+      line-height: 1.85;
+    }
+
+    .policy-section ul {
+      list-style: disc;
+      padding-left: 22px;
+      margin-top: 8px;
+    }
+
+    .policy-link {
+      color: #047857;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .policy-link:hover { text-decoration: underline; }
+
+    .info-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .faq-item {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 17px;
+      text-align: left;
+      font-weight: 700;
+      color: #102a43;
+    }
+
+    .faq-answer {
+      padding: 0 17px 17px;
+      color: #526174;
+      font-size: .92rem;
+      line-height: 1.8;
+    }
+
+    .faq-question:focus-visible,
+    a:focus-visible {
+      outline: 3px solid #10b981;
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 640px) {
+      .policy-section { padding: 17px; border-radius: 14px; }
+      .policy-section h2 { font-size: 1rem; }
+    }
+  </style>
+</head>
+
+<body class="premium-bg min-h-screen text-gray-800">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-200 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+      <a href="index.html"
+         aria-label="Back to FreshMart home"
+         class="p-2 rounded-full bg-gray-100 hover:bg-green-100 transition">
+        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+      </a>
+
+      <img src="images/logo.png"
+           alt="FreshMart logo"
+           class="h-10 w-10 rounded-full object-contain"
+           onerror="this.style.display='none'">
+
+      <div>
+        <h1 class="text-lg sm:text-xl font-extrabold text-gray-900">Cancellation Policy</h1>
+        <p class="text-xs text-gray-500">FreshMart · Order Assistance</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-7 sm:py-10">
+
+    <!-- Hero -->
+    <section class="rounded-3xl p-6 sm:p-9 mb-7 text-white shadow-lg"
+      style="background:linear-gradient(135deg,#064e3b,#059669,#10b981)">
+      <div class="flex items-start gap-4">
+        <div class="hidden sm:flex bg-white/15 rounded-2xl p-4">
+          <i data-lucide="clipboard-x" class="w-9 h-9"></i>
+        </div>
+        <div>
+          <p class="text-green-100 text-sm font-semibold mb-2">ORDER CANCELLATION</p>
+          <h2 class="text-2xl sm:text-3xl font-extrabold mb-3">
+            Cancellation Policy
+          </h2>
+          <p class="text-green-50 leading-7">
+            Need to cancel an order? Learn how cancellation requests
+            are handled and what to know about order status and refunds.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-7">
+      <div class="info-card">
+        <div class="bg-green-50 rounded-xl p-3 inline-flex mb-3">
+          <i data-lucide="clipboard-list" class="w-6 h-6 text-green-700"></i>
+        </div>
+        <h2 class="font-extrabold text-gray-900 mb-2">Cancellation Request</h2>
+        <p class="text-sm text-gray-600 leading-6">
+          Contact support with your order details to ask about cancellation.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <div class="bg-green-50 rounded-xl p-3 inline-flex mb-3">
+          <i data-lucide="package" class="w-6 h-6 text-green-700"></i>
+        </div>
+        <h2 class="font-extrabold text-gray-900 mb-2">Order Status</h2>
+        <p class="text-sm text-gray-600 leading-6">
+          Cancellation eligibility may depend on the current order status.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <div class="bg-green-50 rounded-xl p-3 inline-flex mb-3">
+          <i data-lucide="wallet" class="w-6 h-6 text-green-700"></i>
+        </div>
+        <h2 class="font-extrabold text-gray-900 mb-2">Refund Information</h2>
+        <p class="text-sm text-gray-600 leading-6">
+          Eligible refunds follow the applicable refund process.
+        </p>
+      </div>
+    </section>
+
+    <!-- Quick navigation -->
+    <section class="bg-white rounded-2xl border border-gray-200 p-5 mb-7">
+      <h2 class="font-extrabold text-gray-900 mb-3">On this page</h2>
+      <div class="flex flex-wrap gap-2">
+        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#request">How to Cancel</a>
+        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#status">Order Status</a>
+        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#refunds">Refunds</a>
+        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#unavailable">Unavailable Items</a>
+        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#faq">FAQs</a>
+      </div>
+    </section>
+
+    <div class="space-y-4">
+
+      <section class="policy-section">
+        <h2>1. Introduction</h2>
+        <p>
+          This Cancellation Policy explains the general process for
+          requesting cancellation of a FreshMart order. Whether an order
+          can be cancelled depends on its status, the services actually
+          available and applicable law.
+        </p>
+      </section>
+
+      <section id="request" class="policy-section">
+        <h2>2. How to Request Cancellation</h2>
+        <ol class="list-decimal pl-5 space-y-2 text-sm text-gray-600 leading-7">
+          <li>Keep your order number or order details ready, if available.</li>
+          <li>Contact FreshMart through phone, email or WhatsApp.</li>
+          <li>Clearly state that you want to request cancellation.</li>
+          <li>Provide any additional information reasonably needed to identify the order.</li>
+          <li>Wait for confirmation of the actual order status and next steps.</li>
+        </ol>
+        <p class="mt-3">
+          Sending a cancellation request does not by itself mean the order
+          has been cancelled. This page provides instructions and does not
+          submit a cancellation request automatically.
+        </p>
+      </section>
+
+      <section id="status" class="policy-section">
+        <h2>3. Cancellation Based on Order Status</h2>
+        <p>
+          <strong>Before processing:</strong> A request may be easier to
+          accommodate when order preparation has not started, but approval
+          depends on the actual order system and circumstances.
+        </p>
+        <p class="mt-3">
+          <strong>During preparation or packing:</strong> The order may
+          already involve picking and packing products. Contact support
+          as soon as possible to ask whether cancellation is possible.
+        </p>
+        <p class="mt-3">
+          <strong>After dispatch:</strong> Cancellation may be more limited
+          once an order has been dispatched for delivery. Contact FreshMart
+          to understand the available options. Any applicable legal rights
+          remain unaffected.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>4. Cancellation Confirmation</h2>
+        <p>
+          Customers should rely on a genuine confirmation from the actual
+          order system or FreshMart support rather than assuming that a
+          message has completed the cancellation. If an order-status feature
+          is not available, contact support for clarification.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>5. Prepaid Orders and Refunds</h2>
+        <p>
+          If a prepaid order is cancelled and a refund is due, the refund
+          will be handled through the payment process actually supported
+          by FreshMart. Eligibility depends on the circumstances and
+          applicable law.
+        </p>
+        <p class="mt-3">
+          Processing time may depend on the payment provider. This policy
+          does not promise a fixed refund timeline. See the
+          <a href="refund.html" class="policy-link">Return &amp; Refund Policy</a>
+          for additional information.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>6. Cash on Delivery Orders</h2>
+        <p>
+          For Cash on Delivery orders, contact support to ask about
+          cancellation based on the current order status. If no payment
+          was collected, a payment refund may not apply; any other issue
+          will be reviewed according to the actual order circumstances.
+        </p>
+      </section>
+
+      <section id="unavailable" class="policy-section">
+        <h2>7. Out-of-Stock or Unavailable Products</h2>
+        <p>
+          If an item becomes unavailable, FreshMart should communicate
+          the available options where reasonably possible. Depending on
+          the order system, these may include an order update, cancellation
+          or an eligible refund.
+        </p>
+        <p class="mt-3">
+          A substitute product should not be assumed unless it is accepted
+          by the customer where required.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>8. Cancellation by FreshMart</h2>
+        <p>
+          In some circumstances, an order may not be fulfillable because
+          of product availability, service limitations, an unresolved
+          payment issue or another legitimate operational reason. FreshMart
+          should communicate relevant information and handle any eligible
+          refund according to applicable policy and law.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>9. Partial Cancellation</h2>
+        <p>
+          Cancelling only one item from an order depends on whether the
+          ordering system supports partial cancellation. If this feature
+          is unavailable, contact FreshMart to ask about the options for
+          your particular order.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>10. Cancellation Charges</h2>
+        <p>
+          This page does not establish a cancellation fee or penalty.
+          Any charge, if applicable, must be part of the actual disclosed
+          order terms and comply with applicable law.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>11. Customer Rights</h2>
+        <p>
+          This policy must be read consistently with applicable Indian
+          laws and consumer-protection requirements. Nothing in it is
+          intended to remove a right or remedy that cannot lawfully be
+          excluded or restricted.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>12. Policy Updates</h2>
+        <p>
+          FreshMart may update this policy when its services or operational
+          processes change. The current version should be published on
+          this page.
+        </p>
+      </section>
+
+      <section id="contact" class="policy-section">
+        <h2>13. Need Help Cancelling an Order?</h2>
+        <p>
+          Contact FreshMart with your order details to ask about
+          cancellation eligibility and the current order status.
+        </p>
+
+        <div class="grid sm:grid-cols-3 gap-3 mt-5">
+          <a href="tel:7988300872"
+             class="flex items-center gap-3 p-4 rounded-xl bg-green-50 hover:bg-green-100 transition">
+            <i data-lucide="phone" class="w-5 h-5 text-green-700"></i>
+            <div>
+              <p class="text-xs text-gray-500">Call us</p>
+              <p class="font-bold text-gray-900 text-sm">7988300872</p>
+            </div>
+          </a>
+
+          <a href="mailto:FreshMart@gmail.com"
+             class="flex items-center gap-3 p-4 rounded-xl bg-green-50 hover:bg-green-100 transition">
+            <i data-lucide="mail" class="w-5 h-5 text-green-700"></i>
+            <div>
+              <p class="text-xs text-gray-500">Email us</p>
+              <p class="font-bold text-gray-900 text-sm break-all">FreshMart@gmail.com</p>
+            </div>
+          </a>
+
+          <a href="https://wa.me/917988300872?text=Hello%20FreshMart%20Support%2C%20I%20want%20to%20ask%20about%20cancelling%20my%20order."
+             target="_blank" rel="noopener noreferrer"
+             class="flex items-center gap-3 p-4 rounded-xl bg-green-50 hover:bg-green-100 transition">
+            <i data-lucide="message-circle" class="w-5 h-5 text-green-700"></i>
+            <div>
+              <p class="text-xs text-gray-500">WhatsApp</p>
+              <p class="font-bold text-gray-900 text-sm">Get Support</p>
+            </div>
+          </a>
+        </div>
+
+        <p class="mt-5">
+          Visit our <a href="help.html" class="policy-link">Help &amp; Support</a>
+          page for other assistance.
+        </p>
+      </section>
+
+    </div>
+
+    <!-- FAQ -->
+    <section id="faq" class="mt-8">
+      <h2 class="text-xl font-extrabold text-gray-900 mb-4">
+        Frequently Asked Questions
+      </h2>
+
+      <div class="space-y-3">
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
+            <span>Can I cancel an order after placing it?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
+          </button>
+          <div id="faq-answer-1" class="faq-answer hidden">
+            Cancellation depends on the order status and the options
+            available for that order. Contact FreshMart as soon as possible.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
+            <span>Can I cancel an order after dispatch?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
+          </button>
+          <div id="faq-answer-2" class="faq-answer hidden">
+            Cancellation may be limited after dispatch. Contact support
+            to check the available options for your order.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
+            <span>When will my eligible refund arrive?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
+          </button>
+          <div id="faq-answer-3" class="faq-answer hidden">
+            Refund timing depends on the actual payment process and
+            payment provider. Contact support for information about your case.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
+            <span>Can I cancel only one item?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
+          </button>
+          <div id="faq-answer-4" class="faq-answer hidden">
+            Partial cancellation depends on whether FreshMart's order
+            system supports it. Contact support to ask about your order.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-5">
+            <span>Does clicking WhatsApp cancel my order?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
+          </button>
+          <div id="faq-answer-5" class="faq-answer hidden">
+            No. WhatsApp opens a conversation with support. Your order
+            is not cancelled unless the cancellation is actually processed
+            and confirmed.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related policies -->
+    <section class="mt-7 bg-white border border-gray-200 rounded-2xl p-5 sm:p-6">
+      <h2 class="font-extrabold text-gray-900 mb-4">Related Policies</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <a href="terms.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
+          <span class="font-semibold text-gray-700">Terms &amp; Conditions</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </a>
+
+        <a href="privacy.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
+          <span class="font-semibold text-gray-700">Privacy Policy</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </a>
+
+        <a href="delivery.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
+          <span class="font-semibold text-gray-700">Delivery Policy</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </a>
+
+        <a href="refund.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
+          <span class="font-semibold text-gray-700">Return &amp; Refund Policy</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center py-8">
+      <a href="index.html" class="inline-flex items-center gap-2 text-green-700 font-bold hover:text-green-800">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        Back to FreshMart
+      </a>
+      <p class="text-xs text-gray-500 mt-3">FreshMart · Cancellation Policy</p>
+      <p class="text-xs text-gray-400 mt-1">
+        Cancellation requests are subject to order status and applicable policy.
+      </p>
+    </footer>
+
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      document.querySelectorAll(".faq-question").forEach(function (button) {
+        button.addEventListener("click", function () {
+          const answer = document.getElementById(
+            button.getAttribute("aria-controls")
+          );
+          const expanded = button.getAttribute("aria-expanded") === "true";
+
+          button.setAttribute("aria-expanded", String(!expanded));
+          answer.classList.toggle("hidden", expanded);
+
+          const icon = button.querySelector(".faq-icon");
+          if (icon) {
+            icon.style.transform = expanded ? "rotate(0deg)" : "rotate(180deg)";
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

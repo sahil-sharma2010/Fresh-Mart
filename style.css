@@ -2,61 +2,56 @@
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-body { background-color: #f9fafb; font-family: 'Inter', sans-serif; color: #1f2937; overflow-x: hidden; }
+body { background-color: #f9fafb; font-family: 'Inter', sans-serif; color: #1f2937; overflow-x: hidden; perspective: 1000px; }
+
+/* Safe padding for mobile bottom nav to prevent layout clipping */
+.pb-safe { padding-bottom: max(7rem, env(safe-area-inset-bottom)); }
 
 /* Product Cards */
-.product-card { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid #f3f4f6; background: white; }
-.product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 20px -4px rgba(0, 0, 0, 0.06); border-color: #10b981; }
-.product-card img { transition: transform 0.3s ease; object-fit: contain; }
-.product-card:hover img { transform: scale(1.04); }
+.product-card { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #f3f4f6; background: white; border-radius: 2rem; }
+.product-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.15); border-color: #10b981; z-index: 10; }
+.product-card img { transition: transform 0.4s ease; object-fit: contain; }
+.product-card:hover img { transform: scale(1.08); }
 
-.variant-radio:checked + label { background-color: #ecfdf5; border-color: #10b981; color: #047857; font-weight: 600; }
+.variant-radio:checked + label { background-color: #ecfdf5; border-color: #10b981; color: #047857; font-weight: 800; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25); }
 
-/* Full Screen Modals with Ultra-Smooth Animation */
-.full-screen-modal { transform: translateX(100%); opacity: 0; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease; }
-.full-screen-modal.open { transform: translateX(0); opacity: 1; }
+/* FULL SCREEN MODALS ANIMATION */
+.full-screen-modal { transform: translateZ(-100px) translateY(20px) scale(0.95); opacity: 0; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1), opacity 0.3s ease; visibility: hidden; pointer-events: none; z-index: 1000; }
+.full-screen-modal.open { transform: translateZ(0) translateY(0) scale(1); opacity: 1; visibility: visible; pointer-events: auto; }
 
-/* Toast */
-.toast-notification { animation: slideUpFade 0.3s ease forwards, fadeOut 0.3s ease 2.5s forwards; z-index: 9999; }
-@keyframes slideUpFade { from { opacity: 0; transform: translateY(20px) translateX(-50%); } to { opacity: 1; transform: translateY(0) translateX(-50%); } }
-@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; visibility: hidden; } }
+/* Premium Popup Overlay (OK Alerts & Modals) */
+.premium-popup-overlay { opacity: 0; transition: opacity 0.3s ease; visibility: hidden; pointer-events: none; z-index: 9999; }
+.premium-popup-overlay.open { opacity: 1; visibility: visible; pointer-events: auto; }
+.premium-popup-box { transform: scale(0.8) translateY(30px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.premium-popup-overlay.open .premium-popup-box { transform: scale(1) translateY(0); }
 
-/* Sidebar Active State */
-.sidebar-category.active { background-color: #ecfdf5; border-right: 3px solid #10b981; font-weight: 600; color: #047857; }
+.btn-3d { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+.btn-3d:active { transform: scale(0.92) translateY(4px); }
+
+/* Settings Items */
+.settings-group-title { font-size: 0.75rem; font-weight: 800; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin: 1.5rem 1rem 0.5rem 1rem; }
+.settings-item { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 1.2rem; background-color: white; border-bottom: 1px solid #f3f4f6; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1); cursor: pointer; }
+.settings-item:hover { background-color: #f9fafb; padding-left: 1.5rem; border-left: 3px solid #10b981; }
+.settings-item:active { transform: scale(0.96); }
+.settings-item:first-child { border-top-left-radius: 2rem; border-top-right-radius: 2rem; }
+.settings-item:last-child { border-bottom-left-radius: 2rem; border-bottom-right-radius: 2rem; border-bottom: none; }
+.settings-icon-wrapper { display: flex; align-items: center; gap: 1rem; font-weight: 700; color: #374151; font-size: 0.95rem; }
+.settings-icon-circle { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease; }
+.settings-item:hover .settings-icon-circle { transform: rotate(10deg) scale(1.1); }
+
+.nav-circle-btn { width: 50px; height: 50px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1); }
+.nav-circle-btn:active { background-color: #ecfdf5; transform: scale(0.85); }
 
 /* Sliders */
-.slider-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; gap: 1rem; padding-bottom: 0.5rem; }
+.slider-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; gap: 1.5rem; padding-bottom: 0.5rem; }
 .slider-item { scroll-snap-align: start; flex: 0 0 85%; transition: all 0.3s ease; }
-@media (min-width: 768px) { .slider-item { flex: 0 0 calc(50% - 0.5rem); } }
-@media (min-width: 1024px) { 
-    .slider-item-4 { flex: 0 0 calc(25% - 0.75rem); } 
-    .slider-item-3 { flex: 0 0 calc(33.333% - 0.67rem); } 
-}
+@media (min-width: 768px) { .slider-item { flex: 0 0 calc(50% - 0.75rem); } }
+@media (min-width: 1024px) { .slider-item-4 { flex: 0 0 calc(25% - 1.125rem); } .slider-item-3 { flex: 0 0 calc(33.333% - 1rem); } }
 
-/* Premium Settings Menu Styles */
-.settings-group-title { font-size: 0.75rem; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin: 1.5rem 1rem 0.5rem 1rem; }
-.settings-item { display: flex; align-items: center; justify-content: space-between; padding: 1rem; background-color: white; border-bottom: 1px solid #f3f4f6; transition: background-color 0.2s; cursor: pointer; }
-.settings-item:active { background-color: #f9fafb; }
-.settings-item:first-child { border-top-left-radius: 1rem; border-top-right-radius: 1rem; }
-.settings-item:last-child { border-bottom-left-radius: 1rem; border-bottom-right-radius: 1rem; border-bottom: none; }
-.settings-icon-wrapper { display: flex; align-items: center; gap: 0.875rem; font-weight: 600; color: #374151; font-size: 0.95rem; }
+select.premium-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1.2rem center; background-size: 1.2em; }
+.address-type-radio:checked + label { background-color: #10b981; color: white; border-color: #10b981; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.35); }
 
-.nav-circle-btn { width: 44px; height: 44px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
-.nav-circle-btn:active { background-color: #ecfdf5; transform: scale(0.92); }
-
-/* Premium Select Styling */
-select.premium-select {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1em;
-}
-
-/* Custom Radio Buttons for Address Type */
-.address-type-radio:checked + label { background-color: #10b981; color: white; border-color: #10b981; }
-
-/* Help Center FAQ */
-.faq-answer { display: none; } 
-.faq-open .faq-answer { display: block; } 
-.faq-open .faq-icon { transform: rotate(180deg); }
+/* Backgrounds Watermark */
+.premium-bg { position: relative; background-color: #f8fafc; z-index: 1; min-height: 100vh; }
+.premium-bg::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-image: url('images/background.png'); background-size: cover; background-position: center; background-repeat: no-repeat; opacity: 0.15; z-index: -1; pointer-events: none; }
+.glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 15px 35px -5px rgba(0,0,0,0.06); border-radius: 2.5rem; }

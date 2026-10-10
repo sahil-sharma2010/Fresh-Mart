@@ -6,622 +6,382 @@
     <title>FreshMart - Premium Daily Needs</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="style.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: { 
-                    colors: { primary: { 50: '#ecfdf5', 100: '#d1fae5', 500: '#10b981', 600: '#059669', 700: '#047857' } }, 
-                    fontFamily: { sans: ['Inter', 'sans-serif'] } 
-                }
-            }
-        }
-    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>tailwind.config={theme:{extend:{colors:{primary:{50:'#ecfdf5',100:'#d1fae5',500:'#10b981',600:'#059669',700:'#047857'}}}}}</script>
 </head>
-<body class="bg-gray-50 text-gray-900 pb-20 md:pb-0 relative overflow-x-hidden">
+<body id="app-body" class="bg-gray-50 text-gray-900 pb-24 md:pb-0 relative overflow-x-hidden transition-colors duration-300">
 
-    <div id="toast-container" class="fixed bottom-24 md:bottom-10 left-1/2 z-[100] flex flex-col gap-2 pointer-events-none"></div>
-
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
-        <div class="max-w-[1400px] mx-auto px-4 h-16 flex items-center justify-between">
-            <!-- UPDATED PREMIUM LOGO PATH: images/logo.png -->
-            <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
-                <img src="images/logo.png" alt="FreshMart Logo" class="h-12 md:h-14 w-auto object-contain rounded-full drop-shadow-sm" onerror="this.onerror=null; this.outerHTML='<span class=\'text-xl md:text-2xl font-extrabold text-primary-600 tracking-tight\'>Fresh<span class=\'text-gray-900\'>Mart</span></span>';">
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm transition-colors duration-300 header-dark">
+        <div class="max-w-[1400px] mx-auto px-4 h-16 md:h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 flex-shrink-0 btn-3d">
+                <img src="images/logo.png" alt="FreshMart Logo" class="h-10 md:h-12 w-auto object-contain rounded-full shadow-sm border border-gray-100" onerror="this.style.display='none'">
+                <span class="text-xl md:text-2xl font-extrabold text-primary-600 tracking-tight hidden md:block">Fresh<span class="text-gray-900 title-dark">Mart</span></span>
             </a>
-            
             <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
                 <div class="w-full relative flex items-center">
-                    <div class="absolute left-1.5 w-9 h-9 rounded-full bg-primary-50 flex items-center justify-center text-primary-600">
-                        <i data-lucide="search" class="w-4 h-4"></i>
-                    </div>
-                    <input type="text" id="desktop-search" onkeyup="handleSearch(this.value)" placeholder="Search groceries, snacks, beverages..." class="w-full bg-gray-100 rounded-full py-3 pl-12 pr-10 text-sm font-medium outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition border border-transparent shadow-inner">
-                    <button onclick="document.getElementById('desktop-search').value=''; handleSearch('');" class="absolute right-3 text-gray-400 hover:text-gray-600 hidden" id="clear-search-btn">
-                        <i data-lucide="x" class="w-4 h-4"></i>
-                    </button>
+                    <div class="absolute left-2 w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 shadow-inner"><i data-lucide="search" class="w-5 h-5"></i></div>
+                    <input type="text" id="desktop-search" onkeyup="handleSearch(this.value)" placeholder="Search groceries, snacks, beverages..." class="w-full bg-gray-50 rounded-full py-4 pl-14 pr-10 text-sm font-bold outline-none focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 transition border border-gray-200 shadow-inner input-dark">
+                    <button onclick="document.getElementById('desktop-search').value=''; handleSearch('');" class="absolute right-4 text-gray-400 hover:text-gray-600 hidden btn-3d bg-gray-100 rounded-full p-1" id="clear-search-btn"><i data-lucide="x" class="w-4 h-4"></i></button>
                 </div>
-                <div id="search-results-container" class="absolute top-14 left-0 w-full bg-white rounded-3xl shadow-2xl border border-gray-100 hidden max-h-80 overflow-y-auto z-50"></div>
             </div>
-
-            <div class="flex items-center gap-3 flex-shrink-0">
-                <button onclick="toggleFSModal('settings-modal')" class="w-11 h-11 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 flex items-center justify-center text-gray-700 transition active:scale-95">
-                    <i data-lucide="user" class="w-5 h-5"></i>
+            <div class="flex items-center gap-4 flex-shrink-0">
+                <button onclick="toggleFSModal('settings-modal')" class="btn-3d w-12 h-12 rounded-full bg-gray-50 border border-gray-200 hover:bg-primary-50 hover:text-primary-600 flex items-center justify-center text-gray-700 transition shadow-sm relative input-dark">
+                    <i data-lucide="user" class="w-6 h-6"></i><span id="settings-dot" class="absolute top-0 right-0 bg-red-500 text-white text-[10px] h-4 w-4 rounded-full flex items-center justify-center font-bold border-2 border-white hidden"></span>
                 </button>
-                <button onclick="toggleFSModal('cart-drawer')" class="relative h-11 px-5 rounded-full bg-primary-600 hover:bg-primary-700 text-white flex items-center gap-2 transition active:scale-95 shadow-md shadow-primary-500/20">
-                    <i data-lucide="shopping-bag" class="w-4 h-4"></i>
-                    <span id="header-cart-total" class="text-sm font-bold">₹0</span>
-                    <span id="settings-dot" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] h-5 w-5 rounded-full flex items-center justify-center font-bold border-2 border-white hidden">0</span>
+                <button onclick="toggleFSModal('cart-drawer')" class="btn-3d relative h-12 px-6 rounded-full bg-primary-600 hover:bg-primary-700 text-white flex items-center gap-3 transition shadow-lg shadow-primary-500/30 hidden md:flex">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i><span id="header-cart-total" class="text-sm font-extrabold tracking-wide">₹0</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <div class="md:hidden px-4 py-2.5 bg-white border-b border-gray-100 relative z-40">
+    <!-- MOBILE SEARCH -->
+    <div class="md:hidden px-4 py-3 bg-white border-b border-gray-100 relative z-40 header-dark">
         <div class="relative flex items-center">
-            <div class="absolute left-1.5 w-9 h-9 rounded-full bg-primary-50 flex items-center justify-center text-primary-600">
-                <i data-lucide="search" class="w-4 h-4"></i>
-            </div>
-            <input type="text" id="mobile-search" onkeyup="handleSearch(this.value)" placeholder="Search products..." class="w-full bg-gray-100 rounded-full py-3 pl-12 pr-4 text-sm font-medium outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition border border-transparent shadow-inner">
+            <div class="absolute left-2 w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 shadow-inner"><i data-lucide="search" class="w-5 h-5"></i></div>
+            <input type="text" id="mobile-search" onkeyup="handleSearch(this.value)" placeholder="Search products..." class="w-full bg-gray-50 border border-gray-200 rounded-full py-3.5 pl-14 pr-4 text-sm font-bold outline-none focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 transition shadow-inner input-dark">
         </div>
     </div>
 
-    <section class="bg-gradient-to-br from-primary-50 via-emerald-50/40 to-white border-b border-primary-100/60">
-        <div class="max-w-[1400px] mx-auto px-4 py-8 md:py-12 flex flex-col md:flex-row items-center gap-6">
-            <div class="flex-1 space-y-4">
-                <span class="inline-block px-4 py-1.5 bg-white text-primary-700 rounded-full text-xs font-bold border border-primary-200/60 shadow-sm">🛒 Your Everyday Store</span>
-                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-[1.1] tracking-tight">Daily Needs.<br><span class="text-primary-600">Delivered to Your Door.</span></h1>
-                <p class="text-gray-600 text-sm md:text-base max-w-lg font-medium leading-relaxed">From everyday essentials to little indulgences, everything your home needs is just a few clicks away.</p>
-                <div class="flex gap-3 pt-2">
-                    <button onclick="scrollToProducts()" class="bg-primary-600 text-white px-8 py-3.5 rounded-full text-sm font-bold shadow-lg shadow-primary-500/30 hover:bg-primary-700 transition active:scale-95 flex items-center gap-2">
-                        Shop Now <i data-lucide="arrow-down" class="w-4 h-4"></i>
-                    </button>
+    <!-- HERO SECTION -->
+    <section class="bg-gradient-to-br from-primary-50 via-emerald-50/40 to-white border-b border-primary-100/60 hero-dark">
+        <div class="max-w-[1400px] mx-auto px-4 py-8 md:py-14 flex flex-col md:flex-row items-center gap-6">
+            <div class="flex-1 space-y-5 text-center md:text-left">
+                <span class="inline-block px-5 py-2 bg-white text-primary-700 rounded-full text-xs font-extrabold border border-primary-200/60 shadow-sm uppercase tracking-wider card-dark">🛒 Your Everyday Store</span>
+                <h1 class="text-4xl md:text-[3.5rem] font-extrabold text-gray-900 leading-[1.1] tracking-tight title-dark">Daily Needs.<br><span class="text-primary-600">Delivered to Your Door.</span></h1>
+                <p class="text-gray-600 text-sm md:text-lg max-w-xl font-medium leading-relaxed mx-auto md:mx-0 subtitle-dark">From everyday essentials to little indulgences, everything your home needs is just a few clicks away.</p>
+                <div class="flex justify-center md:justify-start gap-4 pt-3">
+                    <button onclick="scrollToProducts()" class="btn-3d bg-primary-600 text-white px-8 py-4 rounded-full text-sm font-extrabold shadow-xl shadow-primary-500/40 hover:bg-primary-700 transition flex items-center gap-2 tracking-wide">Shop Now <i data-lucide="arrow-down" class="w-5 h-5"></i></button>
                 </div>
-            </div>
-            <div class="hidden md:block w-1/3 opacity-95">
-                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=600" alt="Groceries" class="rounded-3xl object-cover h-64 w-full shadow-xl border border-gray-100">
             </div>
         </div>
     </section>
 
-    <section class="hidden md:block max-w-[1400px] mx-auto px-4 py-5 border-b border-gray-100 bg-white">
-        <div class="flex overflow-x-auto hide-scrollbar gap-3 pb-1" id="quick-categories"></div>
-    </section>
-
-    <main id="products-section" class="max-w-[1400px] mx-auto px-4 py-6 md:py-10 flex flex-col md:flex-row gap-6">
-        
-        <aside class="hidden md:block w-[250px] flex-shrink-0">
-            <div class="sticky top-24 bg-white rounded-3xl border border-gray-200/80 shadow-sm p-5">
-                <h3 class="font-bold text-gray-900 mb-4 border-b pb-3 text-sm flex items-center gap-2">
-                    <i data-lucide="grid" class="w-4 h-4 text-primary-600"></i> Shop by Category
-                </h3>
-                <ul class="space-y-1.5 text-sm" id="desktop-sidebar-categories"></ul>
-
-                <h3 class="font-bold text-gray-900 mt-6 mb-4 border-b pb-3 text-sm flex items-center gap-2">
-                    <i data-lucide="sliders" class="w-4 h-4 text-primary-600"></i> Filters
-                </h3>
-                <div class="space-y-3 text-sm text-gray-600 font-medium">
-                    <label class="flex items-center gap-3 cursor-pointer hover:text-gray-900"><input type="checkbox" class="rounded text-primary-600 focus:ring-primary-500 w-4 h-4"> In Stock Only</label>
-                    <label class="flex items-center gap-3 cursor-pointer hover:text-gray-900"><input type="checkbox" class="rounded text-primary-600 focus:ring-primary-500 w-4 h-4"> On Sale</label>
-                </div>
-            </div>
-        </aside>
-
+    <!-- MAIN PRODUCT SECTION -->
+    <main id="products-section" class="max-w-[1400px] mx-auto px-4 py-8 md:py-12 flex flex-col md:flex-row gap-8">
         <div class="flex-1">
-            <div class="flex justify-between items-center mb-6 bg-white p-3.5 rounded-3xl border border-gray-200/80 shadow-sm">
-                <h2 class="text-base md:text-xl font-extrabold text-gray-900 ml-2" id="grid-title">All Products</h2>
+            <div class="flex justify-between items-center mb-8 bg-white p-4 rounded-full border border-gray-200/80 shadow-sm card-dark">
+                <h2 class="text-lg md:text-2xl font-extrabold text-gray-900 ml-3 title-dark" id="grid-title">All Products</h2>
                 <div class="flex items-center gap-3">
-                    <select onchange="sortProducts(this.value)" class="premium-select bg-gray-50 border border-gray-200 rounded-full pl-5 pr-10 py-2.5 text-xs md:text-sm font-bold text-gray-700 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition cursor-pointer">
+                    <select onchange="sortProducts(this.value)" class="premium-select bg-gray-50 border border-gray-200 rounded-full pl-6 pr-12 py-3 text-xs md:text-sm font-extrabold text-gray-700 outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 transition cursor-pointer shadow-inner input-dark">
                         <option value="recommended">Sort: Recommended</option>
                         <option value="priceLow">Price: Low to High</option>
                         <option value="priceHigh">Price: High to Low</option>
                     </select>
                 </div>
             </div>
-
-            <div id="products-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5"></div>
+            <div id="products-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"></div>
         </div>
     </main>
-    
-    <section class="bg-white py-12 border-t border-gray-200">
-        <div class="max-w-[1400px] mx-auto px-4">
-            <div class="flex items-center justify-between mb-8">
-                <div>
-                    <h2 class="text-xl md:text-2xl font-bold text-gray-900">Why Shop With FreshMart?</h2>
-                    <p class="text-sm text-gray-500 mt-1 font-medium">Reliable daily-needs shopping</p>
-                </div>
-                <div class="flex gap-2">
-                    <button onclick="slideSlider('why-shop-slider', -1)" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition"><i data-lucide="chevron-left" class="w-5 h-5 text-gray-600"></i></button>
-                    <button onclick="slideSlider('why-shop-slider', 1)" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition"><i data-lucide="chevron-right" class="w-5 h-5 text-gray-600"></i></button>
-                </div>
-            </div>
-            
-            <div id="why-shop-slider" class="slider-container hide-scrollbar">
-                <div class="slider-item slider-item-4 p-6 bg-gray-50 rounded-3xl border border-gray-100 flex flex-col items-center text-center">
-                    <div class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl mb-4">🚚</div><h4 class="font-bold text-sm text-gray-900">Fast Local Delivery</h4><p class="text-xs text-gray-500 mt-1 font-medium">Direct to your doorstep in minutes</p>
-                </div>
-                <div class="slider-item slider-item-4 p-6 bg-gray-50 rounded-3xl border border-gray-100 flex flex-col items-center text-center">
-                    <div class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl mb-4">✨</div><h4 class="font-bold text-sm text-gray-900">Quality Products</h4><p class="text-xs text-gray-500 mt-1 font-medium">100% genuine & fresh essentials</p>
-                </div>
-                <div class="slider-item slider-item-4 p-6 bg-gray-50 rounded-3xl border border-gray-100 flex flex-col items-center text-center">
-                    <div class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl mb-4">💰</div><h4 class="font-bold text-sm text-gray-900">Best Daily Prices</h4><p class="text-xs text-gray-500 mt-1 font-medium">Guaranteed savings on groceries</p>
-                </div>
-                <div class="slider-item slider-item-4 p-6 bg-gray-50 rounded-3xl border border-gray-100 flex flex-col items-center text-center">
-                    <div class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl mb-4">🔒</div><h4 class="font-bold text-sm text-gray-900">Instant COD & UPI</h4><p class="text-xs text-gray-500 mt-1 font-medium">Pay smoothly on delivery</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="bg-primary-50/60 py-12 border-t border-primary-100">
-        <div class="max-w-[1400px] mx-auto px-4">
-            <div class="flex items-center justify-between mb-8">
-                <div>
-                    <h2 class="text-xl md:text-2xl font-bold text-gray-900">What Our Customers Say</h2>
-                    <p class="text-sm text-gray-500 mt-1 font-medium">Real feedback from verified shoppers</p>
-                </div>
-                <div class="flex gap-2">
-                    <button onclick="slideSlider('reviews-slider', -1)" class="w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-100 transition"><i data-lucide="chevron-left" class="w-5 h-5 text-gray-600"></i></button>
-                    <button onclick="slideSlider('reviews-slider', 1)" class="w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-100 transition"><i data-lucide="chevron-right" class="w-5 h-5 text-gray-600"></i></button>
-                </div>
-            </div>
-
-            <div id="reviews-slider" class="slider-container hide-scrollbar">
-                <div class="slider-item slider-item-3 bg-white p-6 rounded-3xl border border-gray-200/80 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex text-yellow-500 mb-3"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
-                        <p class="text-sm text-gray-600 leading-relaxed font-medium">"Good products and quick delivery. Very convenient for daily grocery shopping."</p>
-                    </div>
-                    <p class="text-xs font-bold text-gray-900 mt-5 uppercase tracking-wider">— Rahul S., Verified</p>
-                </div>
-                <div class="slider-item slider-item-3 bg-white p-6 rounded-3xl border border-gray-200/80 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex text-yellow-500 mb-3"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
-                        <p class="text-sm text-gray-600 leading-relaxed font-medium">"I get all my daily needs here. Prices are much better than local market shops."</p>
-                    </div>
-                    <p class="text-xs font-bold text-gray-900 mt-5 uppercase tracking-wider">— Priya K., Verified</p>
-                </div>
-                <div class="slider-item slider-item-3 bg-white p-6 rounded-3xl border border-gray-200/80 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex text-yellow-500 mb-3"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
-                        <p class="text-sm text-gray-600 leading-relaxed font-medium">"Very smooth ordering process on WhatsApp. Total order was accurate and packed well."</p>
-                    </div>
-                    <p class="text-xs font-bold text-gray-900 mt-5 uppercase tracking-wider">— Amit V., Verified</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PREMIUM FOOTER -->
-    <footer class="bg-gray-900 text-gray-300 py-10 md:py-14 text-sm pb-28 md:pb-10">
-        <div class="max-w-[1400px] mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-8 border-b border-gray-800 pb-10">
-                <div class="md:col-span-1">
-                    <!-- FOOTER LOGO -->
-                    <a href="index.html" class="flex items-center gap-2 mb-4">
-                        <img src="images/logo.png" alt="FreshMart Logo" class="h-12 md:h-14 w-auto object-contain bg-white rounded-full p-1 shadow-sm" onerror="this.onerror=null; this.outerHTML='<h3 class=\'text-2xl font-bold text-white flex items-center gap-2 tracking-tight\'><i data-lucide=\'shopping-basket\' class=\'text-primary-500\'></i> FreshMart</h3>';">
-                    </a>
-                    <p class="text-gray-400 text-xs md:text-sm mb-4 leading-relaxed font-medium">Your everyday grocery & essentials store. Shop Local • Shop Smart • Shop Fresh.</p>
-                    <div class="flex gap-2">
-                        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-primary-600 transition flex items-center justify-center text-white"><i data-lucide="facebook" class="w-4 h-4"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-pink-600 transition flex items-center justify-center text-white"><i data-lucide="instagram" class="w-4 h-4"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-green-500 transition flex items-center justify-center text-white"><i data-lucide="message-circle" class="w-4 h-4"></i></a>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-xs">Shop</h4>
-                    <ul class="space-y-2 text-xs md:text-sm font-medium">
-                        <li><a href="#" class="hover:text-primary-400 transition">All Products</a></li>
-                        <li><a href="#" class="hover:text-primary-400 transition">Water & Drinks</a></li>
-                        <li><a href="#" class="hover:text-primary-400 transition">Snacks</a></li>
-                        <li><a href="#" class="hover:text-primary-400 transition">Grocery</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-xs">Customer Care</h4>
-                    <ul class="space-y-2 text-xs md:text-sm font-medium">
-                        <li><a href="help.html" class="hover:text-primary-400 transition">Help & Support</a></li>
-                        <li><a href="help.html" class="hover:text-primary-400 transition">Shipping & Delivery</a></li>
-                        <li><a href="help.html" class="hover:text-primary-400 transition">Refund Policy</a></li>
-                        <li><a href="terms.html" class="hover:text-primary-400 transition">Terms & Conditions</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-xs">My Account</h4>
-                    <ul class="space-y-2 text-xs md:text-sm font-medium">
-                        <li><a href="#" onclick="toggleFSModal('settings-modal')" class="hover:text-primary-400 transition">My Profile</a></li>
-                        <li><a href="#" onclick="toggleFSModal('orders-modal')" class="hover:text-primary-400 transition">My Orders</a></li>
-                        <li><a href="#" onclick="toggleFSModal('wishlist-modal')" class="hover:text-primary-400 transition">Wishlist</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-xs">Stay Updated</h4>
-                    <p class="text-xs text-gray-400 mb-3 font-medium">Official email address for support & offers:</p>
-                    
-                    <div class="bg-gray-800/80 border border-gray-700 rounded-2xl p-3 mb-5 flex items-center gap-3 hover:bg-gray-800 transition cursor-pointer" onclick="window.location.href='mailto:FreshMart@gmail.com'">
-                        <div class="w-9 h-9 rounded-full bg-primary-500/10 text-primary-400 flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="mail" class="w-4 h-4"></i>
-                        </div>
-                        <div class="truncate">
-                            <div class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Official Email</div>
-                            <div class="text-white font-bold text-xs md:text-sm truncate block">FreshMart@gmail.com</div>
-                        </div>
-                    </div>
-
-                    <ul class="space-y-2 text-xs text-gray-400 font-medium">
-                        <li class="flex items-center gap-2"><i data-lucide="phone" class="w-3.5 h-3.5 text-gray-500"></i> +91 79883 00872</li>
-                        <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-gray-500"></i> Hisar, Haryana</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-medium">
-                <div class="flex gap-4">
-                    <span class="flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-primary-500"></i> Secure Shopping</span>
-                    <span class="flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-primary-500"></i> Local Delivery</span>
-                </div>
-                <p>© 2026 FreshMart. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 z-40 flex justify-around items-center h-16 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] px-2">
-        <a href="#" class="flex flex-col items-center text-primary-600">
-            <div class="nav-circle-btn bg-primary-50 text-primary-600"><i data-lucide="home" class="w-5 h-5"></i></div>
-            <span class="text-[10px] font-bold mt-0.5">Home</span>
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200 z-40 flex justify-around items-center h-20 shadow-[0_-10px_30px_rgba(0,0,0,0.08)] px-2 pb-2 header-dark">
+        <a href="index.html" class="flex flex-col items-center text-primary-600">
+            <div class="nav-circle-btn bg-primary-50 text-primary-600 shadow-inner"><i data-lucide="home" class="w-6 h-6"></i></div>
+            <span class="text-[10px] font-extrabold mt-1 tracking-wider uppercase">Home</span>
         </a>
-        <button onclick="toggleFSModal('category-modal')" class="flex flex-col items-center text-gray-500 hover:text-primary-600">
-            <div class="nav-circle-btn"><i data-lucide="grid" class="w-5 h-5"></i></div>
-            <span class="text-[10px] font-semibold mt-0.5">Category</span>
+        <button onclick="toggleFSModal('category-full-modal')" class="flex flex-col items-center text-gray-500 hover:text-primary-600 transition">
+            <div class="nav-circle-btn"><i data-lucide="grid" class="w-6 h-6"></i></div>
+            <span class="text-[10px] font-extrabold mt-1 tracking-wider uppercase">Category</span>
         </button>
-        <button onclick="toggleFSModal('cart-drawer')" class="flex flex-col items-center text-gray-500 hover:text-primary-600 relative">
-            <div class="nav-circle-btn"><i data-lucide="shopping-bag" class="w-5 h-5"></i></div>
-            <span id="nav-cart-badge" class="absolute top-1 right-2 bg-red-500 h-2.5 w-2.5 rounded-full hidden border border-white"></span>
-            <span class="text-[10px] font-semibold mt-0.5">Cart</span>
+        <button onclick="toggleFSModal('cart-drawer')" class="flex flex-col items-center text-gray-500 hover:text-primary-600 transition relative">
+            <div class="nav-circle-btn"><i data-lucide="shopping-bag" class="w-6 h-6"></i></div>
+            <span id="nav-cart-badge" class="absolute top-0 right-1 bg-red-500 h-3 w-3 rounded-full hidden border-2 border-white shadow-sm"></span>
+            <span class="text-[10px] font-extrabold mt-1 tracking-wider uppercase">Cart</span>
         </button>
-        <button onclick="toggleFSModal('settings-modal')" class="flex flex-col items-center text-gray-500 hover:text-primary-600 relative">
-            <div class="nav-circle-btn"><i data-lucide="user" class="w-5 h-5"></i></div>
-            <span id="nav-settings-dot" class="absolute top-1 right-2 bg-red-500 h-2.5 w-2.5 rounded-full hidden border border-white"></span>
-            <span class="text-[10px] font-semibold mt-0.5">Profile</span>
+        <button onclick="toggleFSModal('settings-modal')" class="flex flex-col items-center text-gray-500 hover:text-primary-600 transition relative">
+            <div class="nav-circle-btn"><i data-lucide="user" class="w-6 h-6"></i></div>
+            <span id="nav-settings-dot" class="absolute top-0 right-1 bg-red-500 h-3 w-3 rounded-full hidden border-2 border-white shadow-sm"></span>
+            <span class="text-[10px] font-extrabold mt-1 tracking-wider uppercase">Profile</span>
         </button>
     </nav>
 
-    <!-- WHATSAPP RETURN POPUP -->
-    <div id="whatsapp-popup" class="fixed inset-0 bg-black/60 z-[110] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity opacity-0">
-        <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col items-center text-center relative border border-gray-100">
-            <button onclick="closeWAPopup()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition"><i data-lucide="x" class="w-4 h-4 text-gray-600"></i></button>
-            <div class="w-16 h-16 bg-[#25D366]/10 text-[#25D366] rounded-full flex items-center justify-center mb-4 mt-2">
-                <i data-lucide="message-circle" class="w-8 h-8"></i>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2 tracking-tight">Thanks for reaching out! 💚</h3>
-            <p id="wa-popup-subtitle" class="text-sm text-gray-500 mb-6 font-medium px-2">Your message has been sent to FreshMart on WhatsApp.</p>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Need anything else?</p>
-            <div class="w-full space-y-3">
-                <button onclick="closeWAPopup()" class="w-full bg-primary-600 text-white font-bold py-3.5 rounded-full hover:bg-primary-700 transition shadow-lg shadow-primary-500/30 active:scale-95">Continue Shopping</button>
-                <button onclick="closeWAPopup(); setTimeout(()=>{toggleFSModal('cart-drawer')},300);" class="w-full bg-gray-100 text-gray-800 font-bold py-3.5 rounded-full hover:bg-gray-200 transition active:scale-95">View My Cart</button>
+    <!-- 1. GENERAL PREMIUM ALERT MODAL (OK BUTTON) -->
+    <div id="premium-alert-popup" class="premium-popup-overlay fixed inset-0 bg-black/60 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="premium-popup-box bg-white rounded-[3rem] w-full max-w-sm p-8 shadow-2xl flex flex-col items-center text-center relative border border-gray-100 card-dark">
+            <div id="alert-icon-container" class="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mb-5 mt-2 shadow-inner"><i data-lucide="check-circle" id="alert-icon" class="w-10 h-10"></i></div>
+            <h3 id="alert-title" class="text-2xl font-extrabold text-gray-900 mb-2 tracking-tight title-dark">Success</h3>
+            <p id="alert-message" class="text-sm text-gray-500 mb-8 font-bold px-2 subtitle-dark">Action completed.</p>
+            <div class="w-full"><button onclick="closePremiumAlert()" class="btn-3d w-full bg-gray-900 text-white font-extrabold py-4 rounded-full hover:bg-black transition shadow-xl text-sm uppercase tracking-widest">OK</button></div>
+        </div>
+    </div>
+
+    <!-- 2. WHATSAPP RETURN POPUP -->
+    <div id="whatsapp-popup" class="premium-popup-overlay fixed inset-0 bg-black/60 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="premium-popup-box bg-white rounded-[3rem] w-full max-w-sm p-8 shadow-2xl flex flex-col items-center text-center relative border border-gray-100 card-dark">
+            <div class="w-20 h-20 bg-[#25D366]/10 text-[#25D366] rounded-full flex items-center justify-center mb-5 mt-2 shadow-inner"><i data-lucide="message-circle" class="w-10 h-10"></i></div>
+            <h3 class="text-2xl font-extrabold text-gray-900 mb-2 tracking-tight title-dark">Thanks for reaching out! 💚</h3>
+            <p id="wa-popup-subtitle" class="text-sm text-gray-500 mb-8 font-bold px-2 subtitle-dark">Your message has been sent.</p>
+            <div class="w-full space-y-4">
+                <button onclick="closeWAPopup()" class="btn-3d w-full bg-primary-600 text-white font-extrabold py-4 rounded-full hover:bg-primary-700 transition shadow-xl shadow-primary-500/30 text-sm">OK, Continue Shopping</button>
             </div>
         </div>
     </div>
 
-    <!-- ALL EXISTING FULL-SCREEN MODALS -->
 
-    <div id="category-modal" class="full-screen-modal fixed inset-0 bg-white z-[90] flex flex-col swipeable md:hidden">
-        <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
-            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="filter" class="w-5 h-5 text-primary-600"></i> Categories</h2>
-            <button onclick="toggleFSModal('category-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="x" class="w-4 h-4"></i></button>
+    <!-- ==============================================
+         ALL MODALS
+         ============================================== -->
+
+    <div id="category-full-modal" class="full-screen-modal fixed inset-0 bg-gray-50 flex flex-col swipeable md:hidden">
+        <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm header-dark">
+            <h2 class="text-xl font-extrabold flex items-center gap-3 title-dark"><div class="p-2 bg-primary-50 rounded-full text-primary-600"><i data-lucide="grid" class="w-5 h-5"></i></div> All Categories</h2>
+            <button onclick="toggleFSModal('category-full-modal')" class="btn-3d w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-down" class="w-5 h-5 text-gray-600"></i></button>
         </div>
-        <div id="fs-categories-container" class="flex-1 overflow-y-auto p-4 flex flex-col gap-2 bg-gray-50"></div>
+        <div class="p-4 grid grid-cols-2 gap-4 max-w-2xl mx-auto w-full" id="fs-categories-container"></div>
     </div>
 
-    <div id="settings-modal" class="full-screen-modal fixed inset-0 bg-gray-50 z-[90] flex flex-col swipeable overflow-y-auto pb-10">
-        <div class="sticky top-0 z-10 p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
-            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="user" class="text-primary-600"></i> My Profile</h2>
-            <button onclick="toggleFSModal('settings-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+    <!-- PROFILE SETTINGS -->
+    <div id="settings-modal" class="full-screen-modal fixed inset-0 bg-gray-50 flex flex-col swipeable overflow-y-auto pb-10">
+        <div class="sticky top-0 z-10 p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm header-dark">
+            <h2 class="text-xl font-extrabold flex items-center gap-3 title-dark"><div class="p-2 bg-primary-50 rounded-full text-primary-600"><i data-lucide="user" class="w-5 h-5"></i></div> User Settings</h2>
+            <button onclick="toggleFSModal('settings-modal')" class="btn-3d w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-down" class="w-5 h-5 text-gray-600"></i></button>
         </div>
-        
-        <div class="p-4">
-            <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-4 mb-2">
-                <div class="w-14 h-14 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-xl font-bold">SM</div>
+        <div class="p-4 max-w-2xl mx-auto w-full">
+            <div class="bg-white p-5 rounded-[2.5rem] shadow-sm border border-gray-100 flex items-center gap-5 mb-4 hover:shadow-md transition card-dark border-dark">
+                <div class="w-16 h-16 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-2xl font-black shadow-inner overflow-hidden relative"><span id="profile-initials">SM</span></div>
                 <div class="flex-1">
-                    <h3 class="font-bold text-lg text-gray-900">Sahil Sharma</h3>
-                    <p class="text-sm text-gray-500 font-medium">+91 79883 00872</p>
+                    <h3 id="profile-name-display" class="font-extrabold text-xl text-gray-900 tracking-tight title-dark">Sahil Sharma</h3>
+                    <p id="profile-phone-display" class="text-sm text-gray-500 font-bold mt-1">+91 79883 00872</p>
                 </div>
-                <button class="text-primary-600 font-bold text-xs bg-primary-50 px-4 py-2 rounded-full hover:bg-primary-100 transition">Edit</button>
+                <button onclick="openSubModal('edit-profile-modal', 'settings-modal')" class="btn-3d text-primary-600 font-bold text-xs bg-primary-50 px-5 py-2.5 rounded-full hover:bg-primary-100 transition shadow-sm border border-primary-100">Edit</button>
             </div>
-
-            <div class="settings-group-title">Shopping</div>
-            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 flex flex-col overflow-hidden">
-                <div onclick="openSubModal('cart-drawer', 'settings-modal')" class="settings-item">
-                    <div class="settings-icon-wrapper"><i data-lucide="shopping-bag" class="text-primary-600"></i> My Cart</div>
-                    <div class="flex items-center gap-2"><span id="settings-cart-count" class="bg-red-500 text-white px-2 py-0.5 rounded-full text-xs font-bold">0</span><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i></div>
+            
+            <div class="settings-group-title">My Orders & Shopping</div>
+            <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col overflow-hidden card-dark border-dark">
+                <div onclick="openSubModal('orders-modal', 'settings-modal')" class="settings-item card-dark border-dark">
+                    <div class="settings-icon-wrapper"><div class="settings-icon-circle bg-blue-50 text-blue-500"><i data-lucide="package" class="w-5 h-5"></i></div> <div class="flex flex-col"><span class="leading-none title-dark">My Orders</span></div></div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
                 </div>
-                <div onclick="openSubModal('wishlist-modal', 'settings-modal')" class="settings-item">
-                    <div class="settings-icon-wrapper"><i data-lucide="heart" class="text-red-500"></i> Wishlist</div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
+                <div onclick="openSubModal('cart-drawer', 'settings-modal')" class="settings-item card-dark border-dark">
+                    <div class="settings-icon-wrapper"><div class="settings-icon-circle bg-primary-50 text-primary-600"><i data-lucide="shopping-bag" class="w-5 h-5"></i></div> <div class="flex flex-col"><span class="leading-none title-dark">My Cart</span></div></div>
+                    <div class="flex items-center gap-3"><span id="settings-cart-count" class="bg-red-500 text-white px-2.5 py-0.5 rounded-full text-xs font-bold shadow-sm">0</span><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i></div>
                 </div>
-                <div onclick="openSubModal('orders-modal', 'settings-modal')" class="settings-item">
-                    <div class="settings-icon-wrapper"><i data-lucide="package" class="text-blue-500"></i> My Orders</div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
-                </div>
-                <div onclick="openSubModal('saved-later-modal', 'settings-modal')" class="settings-item">
-                    <div class="settings-icon-wrapper"><i data-lucide="bookmark" class="text-yellow-500"></i> Saved for Later</div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
+                <div onclick="openSubModal('wishlist-modal', 'settings-modal')" class="settings-item card-dark border-dark">
+                    <div class="settings-icon-wrapper"><div class="settings-icon-circle bg-red-50 text-red-500"><i data-lucide="heart" class="w-5 h-5"></i></div> <div class="flex flex-col"><span class="leading-none title-dark">Wishlist</span></div></div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
                 </div>
             </div>
 
             <div class="settings-group-title">Preferences</div>
-            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 flex flex-col overflow-hidden">
-                <div onclick="openSubModal('address-modal', 'settings-modal')" class="settings-item">
-                    <div class="settings-icon-wrapper"><i data-lucide="map-pin" class="text-pink-500"></i> My Addresses</div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
+            <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col overflow-hidden card-dark border-dark">
+                <div onclick="openSubModal('payment-modal', 'settings-modal')" class="settings-item card-dark border-dark">
+                    <div class="settings-icon-wrapper"><div class="settings-icon-circle bg-slate-100 text-slate-600"><i data-lucide="credit-card" class="w-5 h-5"></i></div> <div class="flex flex-col"><span class="leading-none title-dark">Payment Methods</span></div></div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
                 </div>
-                <div onclick="openSubModal('appearance-modal', 'settings-modal')" class="settings-item">
-                    <div class="settings-icon-wrapper"><i data-lucide="moon" class="text-slate-600"></i> Appearance</div>
-                    <div class="text-xs font-bold text-gray-400 flex items-center gap-1"><span id="theme-status">System Default</span> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
+                <div onclick="openSubModal('address-modal', 'settings-modal')" class="settings-item card-dark border-dark">
+                    <div class="settings-icon-wrapper"><div class="settings-icon-circle bg-pink-50 text-pink-500"><i data-lucide="map-pin" class="w-5 h-5"></i></div> <div class="flex flex-col"><span class="leading-none title-dark">My Addresses</span></div></div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
+                </div>
+                <div onclick="openSubModal('notification-modal', 'settings-modal')" class="settings-item card-dark border-dark">
+                    <div class="settings-icon-wrapper"><div class="settings-icon-circle bg-blue-50 text-blue-400"><i data-lucide="bell" class="w-5 h-5"></i></div> <div class="flex flex-col"><span class="leading-none title-dark">Notifications & Lang</span></div></div>
+                    <div class="text-[10px] flex items-center gap-1 font-black text-primary-700 bg-primary-100 border border-primary-200 px-3 py-1 rounded-full"><span id="notif-count-badge">0</span> New <i data-lucide="chevron-right" class="w-3 h-3 text-primary-400"></i></div>
+                </div>
+                <div onclick="openSubModal('appearance-modal', 'settings-modal')" class="settings-item card-dark border-dark">
+                    <div class="settings-icon-wrapper"><div class="settings-icon-circle bg-gray-100 text-gray-600"><i data-lucide="moon" class="w-5 h-5"></i></div> <div class="flex flex-col"><span class="leading-none title-dark">Appearance</span></div></div>
+                    <div class="text-xs font-bold text-gray-500 flex items-center gap-2 bg-gray-50 px-3 py-1 rounded-full"><span id="theme-status">Light</span> <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i></div>
                 </div>
             </div>
 
-            <div class="settings-group-title">Support & Security</div>
-            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 flex flex-col overflow-hidden">
-                <a href="help.html" class="settings-item">
-                    <div class="settings-icon-wrapper"><i data-lucide="headphones" class="text-teal-500"></i> Help & Support</div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
+            <div class="settings-group-title">Support & Legal</div>
+            <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col overflow-hidden card-dark border-dark">
+                <a href="help.html" class="settings-item card-dark border-dark">
+                    <div class="settings-icon-wrapper"><div class="settings-icon-circle bg-teal-50 text-teal-500"><i data-lucide="headphones" class="w-5 h-5"></i></div> <div class="flex flex-col"><span class="leading-none title-dark">Help & Support</span></div></div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
                 </a>
-                <div onclick="openSubModal('security-modal', 'settings-modal')" class="settings-item">
-                    <div class="settings-icon-wrapper"><i data-lucide="shield-check" class="text-green-600"></i> Account Security</div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
-                </div>
-                <a href="terms.html" class="settings-item">
-                    <div class="settings-icon-wrapper"><i data-lucide="file-text" class="text-gray-600"></i> Terms & Conditions</div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
+                <a href="security.html" class="settings-item card-dark border-dark">
+                    <div class="settings-icon-wrapper"><div class="settings-icon-circle bg-green-50 text-green-600"><i data-lucide="shield-check" class="w-5 h-5"></i></div> <div class="flex flex-col"><span class="leading-none title-dark">Account Security</span></div></div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
+                </a>
+                <a href="legal.html" class="settings-item card-dark border-dark">
+                    <div class="settings-icon-wrapper"><div class="settings-icon-circle bg-gray-100 text-gray-600"><i data-lucide="file-text" class="w-5 h-5"></i></div> <div class="flex flex-col"><span class="leading-none title-dark">Legal & Terms</span></div></div><i data-lucide="chevron-right" class="text-gray-300 w-5 h-5"></i>
                 </a>
             </div>
 
             <div class="settings-group-title text-red-500">Danger Zone</div>
-            <div class="bg-white rounded-3xl shadow-sm border border-red-100 flex flex-col mb-8 overflow-hidden">
-                <div class="settings-item"><div class="settings-icon-wrapper text-red-500"><i data-lucide="log-out"></i> Logout</div></div>
+            <div class="bg-white rounded-[2.5rem] shadow-sm border border-red-100 flex flex-col mb-10 overflow-hidden card-dark border-dark">
+                <div onclick="showPremiumAlert('Logged Out', 'You have successfully logged out of your account.', 'check-circle')" class="settings-item hover:bg-red-50 transition card-dark border-dark">
+                    <div class="settings-icon-wrapper text-red-600 font-extrabold"><div class="settings-icon-circle bg-red-100 text-red-600"><i data-lucide="log-out" class="w-5 h-5"></i></div> Logout</div>
+                </div>
             </div>
-            
-            <div class="text-center text-gray-400 text-xs pb-4 font-medium">Version 1.0.0 (FreshMart Premium)<br>Swipe right to close</div>
+            <div class="text-center text-gray-400 text-[10px] pb-6 font-extrabold tracking-widest uppercase">Version 1.0.0 (FreshMart Premium)</div>
         </div>
     </div>
 
-    <!-- SUB-MODALS (WITH 1-STEP BACK) -->
-    <div id="orders-modal" class="full-screen-modal fixed inset-0 bg-gray-50 z-[95] flex flex-col swipeable">
-        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
-            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="package" class="text-blue-500"></i> My Orders</h2>
-            <button onclick="closeSubModal('orders-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+    <!-- EDIT PROFILE -->
+    <div id="edit-profile-modal" class="full-screen-modal fixed inset-0 bg-gray-50 flex flex-col swipeable overflow-y-auto">
+        <div class="sticky top-0 z-10 p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm header-dark">
+            <h2 class="text-xl font-extrabold flex items-center gap-3 title-dark"><div class="p-2 bg-primary-50 rounded-full text-primary-600"><i data-lucide="edit" class="w-5 h-5"></i></div> Edit Profile</h2>
+            <button onclick="closeSubModal('edit-profile-modal')" class="btn-3d w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-5 h-5 text-gray-600"></i></button>
         </div>
-        <div class="flex-1 overflow-y-auto p-4 space-y-4">
-            <div class="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm">
-                <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-50">
-                    <div>
-                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Order #FM-9082</div>
-                        <div class="text-sm font-bold text-gray-900 mt-1">Delivered on 05 Oct 2026</div>
+        <div class="p-4 md:p-6 bg-gray-50 flex-1 max-w-2xl mx-auto w-full">
+            <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-md space-y-6 card-dark border-dark">
+                <div class="flex justify-center mb-6">
+                    <div class="w-24 h-24 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-4xl font-black shadow-inner relative">
+                        <span id="edit-initials">SM</span>
+                        <div class="absolute bottom-0 right-0 w-8 h-8 bg-gray-900 rounded-full text-white flex items-center justify-center border-2 border-white cursor-pointer hover:bg-gray-700 transition"><i data-lucide="camera" class="w-4 h-4"></i></div>
                     </div>
-                    <span class="bg-green-50 text-green-600 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Delivered</span>
                 </div>
-                <div class="flex gap-3 mb-5">
-                    <img src="https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=100&q=80" class="w-14 h-14 rounded-2xl border border-gray-100 bg-gray-50 object-contain p-1">
-                    <img src="https://images.unsplash.com/photo-1599507593499-a3f7d1d94260?w=100&q=80" class="w-14 h-14 rounded-2xl border border-gray-100 bg-gray-50 object-contain p-1">
-                    <div class="w-14 h-14 rounded-2xl border border-gray-100 bg-gray-50 flex items-center justify-center text-xs font-bold text-gray-500">+2</div>
-                </div>
-                <div class="flex justify-between items-center">
-                    <div class="font-black text-gray-900 text-lg">₹350</div>
-                    <button class="text-primary-600 font-bold text-xs uppercase tracking-wider bg-primary-50 px-5 py-2.5 rounded-full hover:bg-primary-100 transition">Reorder</button>
-                </div>
-            </div>
-            
-            <div class="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm opacity-80">
-                <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-50">
-                    <div>
-                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Order #FM-8810</div>
-                        <div class="text-sm font-bold text-gray-900 mt-1">Delivered on 12 Sep 2026</div>
-                    </div>
-                    <span class="bg-green-50 text-green-600 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Delivered</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <div class="font-black text-gray-900 text-lg">₹820</div>
-                    <button class="text-primary-600 font-bold text-xs uppercase tracking-wider bg-primary-50 px-5 py-2.5 rounded-full hover:bg-primary-100 transition">Reorder</button>
-                </div>
+                <div><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Full Name</label><input type="text" id="prof-name" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-3xl outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 focus:bg-white text-sm font-bold transition shadow-inner input-dark"></div>
+                <div><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Mobile Number</label><input type="tel" id="prof-phone" maxlength="10" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-3xl outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 focus:bg-white text-sm font-bold transition shadow-inner input-dark"></div>
+                <button onclick="saveProfile()" class="btn-3d w-full bg-primary-600 text-white font-extrabold py-4 rounded-full shadow-xl shadow-primary-500/30 hover:bg-primary-700 transition text-base mt-6 tracking-wide">Save Profile</button>
             </div>
         </div>
     </div>
 
-    <div id="appearance-modal" class="full-screen-modal fixed inset-0 bg-gray-50 z-[95] flex flex-col swipeable">
-        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
-            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="moon" class="text-slate-600"></i> Appearance</h2>
-            <button onclick="closeSubModal('appearance-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+    <!-- ORDERS -->
+    <div id="orders-modal" class="full-screen-modal fixed inset-0 bg-gray-50 flex flex-col swipeable">
+        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm header-dark">
+            <h2 class="text-xl font-extrabold flex items-center gap-3 title-dark"><div class="p-2 bg-blue-50 rounded-full text-blue-500"><i data-lucide="package" class="w-5 h-5"></i></div> My Orders</h2>
+            <button onclick="closeSubModal('orders-modal')" class="btn-3d w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-5 h-5 text-gray-600"></i></button>
         </div>
-        <div class="p-4 space-y-3">
-            <div class="bg-white rounded-3xl border border-gray-100 p-2 shadow-sm">
-                <label class="flex items-center justify-between p-3.5 cursor-pointer hover:bg-gray-50 rounded-2xl transition">
-                    <div class="flex items-center gap-3 font-bold text-gray-800"><i data-lucide="sun" class="w-5 h-5 text-orange-500"></i> Light Mode</div>
-                    <input type="radio" name="theme" value="Light Mode" onchange="updateThemeText(this)" class="w-5 h-5 text-primary-600 focus:ring-primary-500">
+        <div class="flex-1 overflow-y-auto p-4 space-y-5 max-w-2xl mx-auto w-full" id="orders-container"></div>
+    </div>
+
+    <!-- NOTIFICATION -->
+    <div id="notification-modal" class="full-screen-modal fixed inset-0 bg-gray-50 flex flex-col swipeable">
+        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm header-dark">
+            <h2 class="text-xl font-extrabold flex items-center gap-3 title-dark"><div class="p-2 bg-blue-50 rounded-full text-blue-400"><i data-lucide="bell" class="w-5 h-5"></i></div> Notifications & Lang</h2>
+            <div class="flex items-center gap-3">
+                <select id="lang-select" onchange="showPremiumAlert('Language Updated', 'Language preference saved successfully.', 'globe')" class="bg-gray-100 border border-transparent rounded-full px-3 py-1.5 text-xs font-bold text-gray-700 outline-none focus:border-primary-500 input-dark">
+                    <option value="en">English</option><option value="hi">हिंदी</option>
+                </select>
+                <button onclick="closeSubModal('notification-modal')" class="btn-3d w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-5 h-5 text-gray-600"></i></button>
+            </div>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4 space-y-3 max-w-2xl mx-auto w-full" id="notification-container"></div>
+    </div>
+
+    <!-- PAYMENT MODAL -->
+    <div id="payment-modal" class="full-screen-modal fixed inset-0 bg-gray-50 flex flex-col swipeable">
+        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm header-dark">
+            <h2 class="text-xl font-extrabold flex items-center gap-3 title-dark"><div class="p-2 bg-slate-100 rounded-full text-slate-600"><i data-lucide="credit-card" class="w-5 h-5"></i></div> Payment Method</h2>
+            <button onclick="closeSubModal('payment-modal')" class="btn-3d w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-5 h-5 text-gray-600"></i></button>
+        </div>
+        <div class="p-5 max-w-2xl mx-auto w-full space-y-4">
+            <div class="bg-white rounded-[2.5rem] border border-gray-100 p-3 shadow-md card-dark border-dark">
+                <label class="flex items-center justify-between p-4 cursor-pointer bg-primary-50 border border-primary-200 rounded-[2rem] transition shadow-inner">
+                    <div class="flex items-center gap-4 font-bold text-gray-900 title-dark"><div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary-600 shadow-sm"><i data-lucide="banknote" class="w-5 h-5"></i></div> Cash on Delivery (COD)</div>
+                    <div class="w-6 h-6 rounded-full bg-primary-600 flex items-center justify-center text-white"><i data-lucide="check" class="w-4 h-4"></i></div>
+                </label>
+                <div class="w-full h-px bg-gray-50 my-2"></div>
+                <label class="flex items-center justify-between p-4 rounded-[2rem] transition opacity-50 cursor-not-allowed">
+                    <div class="flex items-center gap-4 font-bold text-gray-900 title-dark"><div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 shadow-inner"><i data-lucide="smartphone" class="w-5 h-5"></i></div> Online Payment</div>
+                    <span class="bg-gray-200 text-gray-500 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Not Ready</span>
+                </label>
+            </div>
+            <button onclick="closeSubModal('payment-modal'); showPremiumAlert('Saved', 'Payment preference updated successfully.', 'check-circle')" class="btn-3d w-full bg-primary-600 text-white font-extrabold py-4 rounded-full shadow-xl shadow-primary-500/30 hover:bg-primary-700 transition text-lg mt-6">Save Preference</button>
+        </div>
+    </div>
+
+    <!-- APPEARANCE MODAL -->
+    <div id="appearance-modal" class="full-screen-modal fixed inset-0 bg-gray-50 flex flex-col swipeable">
+        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm header-dark">
+            <h2 class="text-xl font-extrabold flex items-center gap-3 title-dark"><div class="p-2 bg-gray-100 rounded-full text-gray-600"><i data-lucide="moon" class="w-5 h-5"></i></div> Appearance</h2>
+            <button onclick="closeSubModal('appearance-modal')" class="btn-3d w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-5 h-5 text-gray-600"></i></button>
+        </div>
+        <div class="p-5 max-w-2xl mx-auto w-full space-y-4">
+            <div class="bg-white rounded-[2.5rem] border border-gray-100 p-3 shadow-md card-dark border-dark">
+                <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 rounded-[2rem] transition">
+                    <div class="flex items-center gap-4 font-bold text-gray-900 title-dark"><div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-500 shadow-inner"><i data-lucide="sun" class="w-5 h-5"></i></div> Light Mode</div>
+                    <input type="radio" name="theme" value="Light" onchange="updateThemeText(this)" class="w-6 h-6 text-primary-600 focus:ring-primary-500" checked>
                 </label>
                 <div class="w-full h-px bg-gray-50 my-1"></div>
-                <label class="flex items-center justify-between p-3.5 cursor-pointer hover:bg-gray-50 rounded-2xl transition">
-                    <div class="flex items-center gap-3 font-bold text-gray-800"><i data-lucide="moon" class="w-5 h-5 text-slate-500"></i> Dark Mode</div>
-                    <input type="radio" name="theme" value="Dark Mode" onchange="updateThemeText(this)" class="w-5 h-5 text-primary-600 focus:ring-primary-500">
-                </label>
-                <div class="w-full h-px bg-gray-50 my-1"></div>
-                <label class="flex items-center justify-between p-3.5 cursor-pointer hover:bg-gray-50 rounded-2xl transition">
-                    <div class="flex items-center gap-3 font-bold text-gray-800"><i data-lucide="monitor" class="w-5 h-5 text-blue-500"></i> System Default</div>
-                    <input type="radio" name="theme" value="System Default" checked onchange="updateThemeText(this)" class="w-5 h-5 text-primary-600 focus:ring-primary-500">
+                <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 rounded-[2rem] transition">
+                    <div class="flex items-center gap-4 font-bold text-gray-900 title-dark"><div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 shadow-inner"><i data-lucide="moon" class="w-5 h-5"></i></div> Dark Mode</div>
+                    <input type="radio" name="theme" value="Dark" onchange="updateThemeText(this)" class="w-6 h-6 text-primary-600 focus:ring-primary-500">
                 </label>
             </div>
         </div>
     </div>
 
-    <div id="saved-later-modal" class="full-screen-modal fixed inset-0 bg-gray-50 z-[95] flex flex-col swipeable">
-        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
-            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="bookmark" class="text-yellow-500"></i> Saved for Later</h2>
-            <button onclick="closeSubModal('saved-later-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+    <!-- CART DRAWER -->
+    <div id="cart-drawer" class="full-screen-modal fixed inset-y-0 right-0 w-full md:w-[450px] bg-gray-50 flex flex-col swipeable border-l border-gray-200 shadow-2xl">
+        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm header-dark">
+            <h2 class="text-xl font-extrabold flex items-center gap-3 title-dark"><div class="p-2 bg-primary-50 rounded-full text-primary-600"><i data-lucide="shopping-bag" class="w-5 h-5"></i></div> Your Cart</h2>
+            <button onclick="closeSubModal('cart-drawer')" class="btn-3d w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="x" class="w-5 h-5 text-gray-600"></i></button>
         </div>
-        <div id="saved-later-container" class="flex-1 overflow-y-auto p-4 space-y-3">
-            <div class="text-center text-gray-400 mt-10 text-sm font-medium">No items saved for later.</div>
-        </div>
-    </div>
-
-    <div id="security-modal" class="full-screen-modal fixed inset-0 bg-gray-50 z-[95] flex flex-col swipeable overflow-y-auto">
-        <div class="sticky top-0 z-10 p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
-            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="shield-check" class="text-green-600"></i> Account Security</h2>
-            <button onclick="closeSubModal('security-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
-        </div>
-        
-        <div class="p-4 space-y-6 pb-20">
-            <div class="bg-white p-5 rounded-3xl border border-green-200 shadow-sm flex items-center gap-4">
-                <div class="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center text-green-600 flex-shrink-0"><i data-lucide="shield-check" class="w-7 h-7"></i></div>
-                <div><h3 class="font-bold text-gray-900">Security Status</h3><p class="text-sm font-bold text-green-600 mt-0.5">Your account is secure</p></div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
+        <div id="cart-footer" class="p-5 border-t border-gray-200 bg-white pb-safe shadow-[0_-10px_20px_rgba(0,0,0,0.05)] header-dark">
+            <div class="space-y-3 mb-6 text-sm text-gray-600 font-bold subtitle-dark">
+                <div class="flex justify-between"><span>Subtotal:</span><span id="cart-subtotal" class="font-extrabold text-gray-900 text-base title-dark">₹0</span></div>
+                <div class="flex justify-between border-b border-gray-100 pb-4"><span>Delivery:</span><span class="font-extrabold text-gray-900 text-base title-dark">₹20</span></div>
+                <div class="flex justify-between font-black text-xl text-gray-900 pt-2 title-dark"><span>Total:</span><span id="cart-total" class="tracking-tight text-primary-600">₹0</span></div>
             </div>
-
-            <div>
-                <h3 class="font-bold text-[10px] text-gray-400 uppercase tracking-wider mb-3 px-2">Login Details</h3>
-                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
-                    <div class="p-4 border-b border-gray-50 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition">
-                        <div>
-                            <div class="text-xs font-bold text-gray-500 mb-1">Mobile Number</div>
-                            <div class="font-bold text-gray-900 flex items-center gap-2">******0872 <span class="bg-green-50 text-green-600 text-[10px] font-bold px-2 py-0.5 rounded-full"><i data-lucide="check" class="w-3 h-3 inline"></i> Verified</span></div>
-                        </div>
-                        <i data-lucide="chevron-right" class="text-gray-400 w-5 h-5"></i>
-                    </div>
-                    <div class="p-4 border-b border-gray-50 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition">
-                        <div>
-                            <div class="text-xs font-bold text-gray-500 mb-1">Email Address</div>
-                            <div class="font-bold text-gray-900 flex items-center gap-2">fr****@gmail.com <span class="bg-green-50 text-green-600 text-[10px] font-bold px-2 py-0.5 rounded-full"><i data-lucide="check" class="w-3 h-3 inline"></i> Verified</span></div>
-                        </div>
-                        <i data-lucide="chevron-right" class="text-gray-400 w-5 h-5"></i>
-                    </div>
-                    <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition">
-                        <div><div class="font-bold text-gray-900">Change Password</div><div class="text-xs font-medium text-gray-500 mt-1">Updated 2 months ago</div></div>
-                        <i data-lucide="chevron-right" class="text-gray-400 w-5 h-5"></i>
-                    </div>
+            <div class="mb-6 bg-gray-50 p-4 rounded-3xl border border-gray-200 text-sm shadow-sm hover:border-primary-200 transition card-dark">
+                <div class="flex justify-between items-center mb-1.5">
+                    <span class="font-black text-gray-700 text-[10px] uppercase tracking-widest subtitle-dark">Delivery To</span>
+                    <button onclick="openSubModal('address-modal', 'cart-drawer')" class="btn-3d text-primary-700 font-extrabold text-[10px] uppercase tracking-wider bg-primary-50 border border-primary-100 px-4 py-2 rounded-full hover:bg-primary-100 transition">Change</button>
                 </div>
+                <div id="selected-address-text" class="text-gray-900 truncate text-sm font-bold title-dark">No address selected</div>
             </div>
-
-            <div>
-                <h3 class="font-bold text-[10px] text-gray-400 uppercase tracking-wider mb-3 px-2">Advanced Protection</h3>
-                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
-                    <div class="p-4 border-b border-gray-50 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition">
-                        <div class="pr-4"><div class="font-bold text-gray-900">Two-Factor Authentication</div><div class="text-xs font-medium text-gray-500 mt-1">Add an extra layer of protection to your account</div></div>
-                        <span class="bg-gray-100 text-gray-500 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Coming Soon</span>
-                    </div>
-                    <div class="p-4 border-b border-gray-50 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition">
-                        <div><div class="font-bold text-gray-900">Login Alerts</div><div class="text-xs font-medium text-gray-500 mt-1">Get notified of new logins</div></div>
-                        <span class="bg-green-50 text-green-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">ON</span>
-                    </div>
-                    <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition">
-                        <div><div class="font-bold text-gray-900">Active Sessions</div><div class="text-xs font-medium text-gray-500 mt-1">Where you're logged in</div></div>
-                        <i data-lucide="chevron-right" class="text-gray-400 w-5 h-5"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-blue-50/50 p-5 rounded-3xl border border-blue-100">
-                <h4 class="font-bold text-blue-900 mb-3 flex items-center gap-2"><i data-lucide="info" class="w-5 h-5"></i> Keep Your Account Safe</h4>
-                <ul class="text-xs text-blue-800 space-y-2 font-medium">
-                    <li>✓ Never share your password or OTP.</li>
-                    <li>✓ Use a strong, unique password.</li>
-                    <li>✓ Review unfamiliar login activity.</li>
-                    <li>✓ Keep your email and mobile number verified.</li>
-                </ul>
-            </div>
-
-            <div class="bg-white rounded-3xl border border-red-100 shadow-sm overflow-hidden">
-                <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-red-50 transition">
-                    <div><div class="font-bold text-red-600">Delete Account</div><div class="text-xs font-medium text-red-400 mt-1">Permanently remove your account data</div></div>
-                    <i data-lucide="chevron-right" class="text-red-400 w-5 h-5"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Full Screen Cart -->
-    <div id="cart-drawer" class="full-screen-modal fixed inset-y-0 right-0 w-full md:w-[420px] bg-gray-50 z-[95] flex flex-col swipeable border-l border-gray-200 shadow-2xl">
-        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
-            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="shopping-bag" class="text-primary-600"></i> Your Cart</h2>
-            <button onclick="closeSubModal('cart-drawer')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="x" class="w-4 h-4"></i></button>
-        </div>
-        <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
-        <div class="p-4 border-t border-gray-200 bg-white pb-safe">
-            <div class="space-y-2 mb-5 text-sm text-gray-600 font-medium">
-                <div class="flex justify-between"><span>Subtotal:</span><span id="cart-subtotal" class="font-bold text-gray-900">₹0</span></div>
-                <div class="flex justify-between border-b border-gray-100 pb-3"><span>Delivery:</span><span class="font-bold text-gray-900">₹20</span></div>
-                <div class="flex justify-between font-extrabold text-lg text-gray-900 pt-2"><span>Total:</span><span id="cart-total">₹0</span></div>
-            </div>
-            <div class="mb-5 bg-gray-50 p-4 rounded-3xl border border-gray-200 text-sm">
-                <div class="flex justify-between items-center mb-1">
-                    <span class="font-bold text-gray-700 text-xs uppercase tracking-wider">Delivery To</span>
-                    <button onclick="openSubModal('address-modal', 'cart-drawer')" class="text-primary-600 font-bold text-xs bg-primary-50 px-3 py-1.5 rounded-full hover:bg-primary-100 transition">Change</button>
-                </div>
-                <div id="selected-address-text" class="text-gray-500 truncate text-xs font-semibold mt-1">No address selected</div>
-            </div>
-            <button onclick="checkoutWhatsApp()" class="w-full bg-[#25D366] text-white py-4 rounded-full font-bold shadow-lg hover:bg-[#20bd5a] transition active:scale-95 flex justify-center items-center gap-2 text-base">
-                <i data-lucide="message-circle" class="w-5 h-5"></i> Place Order via WhatsApp
+            <button onclick="checkoutWhatsApp()" class="btn-3d w-full bg-[#25D366] text-white py-4 rounded-full font-extrabold shadow-xl hover:bg-[#20bd5a] transition active:scale-95 flex justify-center items-center gap-3 text-lg tracking-wide">
+                <i data-lucide="message-circle" class="w-6 h-6"></i> Place Order via WhatsApp
             </button>
         </div>
     </div>
 
-    <!-- Full Screen Wishlist -->
-    <div id="wishlist-modal" class="full-screen-modal fixed inset-0 bg-gray-50 z-[95] flex flex-col swipeable">
-        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
-            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="heart" class="text-red-500"></i> My Wishlist</h2>
-            <button onclick="closeSubModal('wishlist-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+    <!-- WISHLIST MODAL -->
+    <div id="wishlist-modal" class="full-screen-modal fixed inset-0 bg-gray-50 flex flex-col swipeable">
+        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm header-dark">
+            <h2 class="text-xl font-extrabold flex items-center gap-3 title-dark"><div class="p-2 bg-red-50 rounded-full text-red-500"><i data-lucide="heart" class="w-5 h-5"></i></div> My Wishlist</h2>
+            <button onclick="closeSubModal('wishlist-modal')" class="btn-3d w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-5 h-5 text-gray-600"></i></button>
         </div>
-        <div id="wishlist-container" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+        <div id="wishlist-container" class="flex-1 overflow-y-auto p-4 space-y-4 max-w-2xl mx-auto w-full"></div>
     </div>
 
-    <!-- Product Details Modal -->
-    <div id="product-modal" class="full-screen-modal fixed inset-0 bg-white/60 backdrop-blur-md z-[100] flex items-center justify-center swipeable md:p-10" onclick="if(event.target===this) toggleFSModal('product-modal')">
-        <div id="product-modal-content" class="bg-white w-full h-full md:h-auto md:max-h-[90vh] md:max-w-4xl md:rounded-3xl shadow-2xl flex flex-col relative overflow-hidden border border-gray-200">
-            <!-- Content injected by JS -->
-        </div>
+    <!-- PRODUCT MODAL -->
+    <div id="product-modal" class="full-screen-modal fixed inset-0 bg-white/80 backdrop-blur-md z-[100] flex items-center justify-center swipeable md:p-10" onclick="if(event.target===this) toggleFSModal('product-modal')">
+        <div id="product-modal-content" class="bg-white w-full h-full md:h-auto md:max-h-[90vh] md:max-w-4xl md:rounded-[3rem] shadow-2xl flex flex-col relative overflow-hidden border border-gray-200 card-dark border-dark"></div>
     </div>
 
-    <!-- Address Modal -->
-    <div id="address-modal" class="full-screen-modal fixed inset-0 bg-gray-50 z-[105] flex flex-col swipeable overflow-y-auto">
-        <div class="sticky top-0 z-10 p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm">
-            <h2 class="text-lg font-bold flex items-center gap-2"><i data-lucide="map-pin" class="text-pink-500"></i> Delivery Address</h2>
-            <button onclick="closeSubModal('address-modal')" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+    <!-- ADDRESS MODAL (PREMIUM FULL VIEW) -->
+    <div id="address-modal" class="full-screen-modal fixed inset-0 bg-gray-50 flex flex-col swipeable overflow-y-auto">
+        <div class="sticky top-0 z-10 p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm header-dark">
+            <h2 class="text-xl font-extrabold flex items-center gap-3 title-dark"><div class="p-2 bg-pink-50 rounded-full text-pink-500"><i data-lucide="map-pin" class="w-5 h-5"></i></div> Delivery Address</h2>
+            <button onclick="closeSubModal('address-modal')" class="btn-3d w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i data-lucide="arrow-left" class="w-5 h-5 text-gray-600"></i></button>
         </div>
-        <div class="p-4 md:p-6 bg-gray-50 flex-1">
-            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+        <div class="p-4 md:p-6 bg-gray-50 flex-1 max-w-2xl mx-auto w-full">
+            <div class="bg-white p-6 md:p-8 rounded-[2.5rem] border border-gray-100 shadow-md space-y-6 card-dark border-dark">
+                
+                <button onclick="autoFillLocation()" class="btn-3d w-full bg-blue-50 border border-blue-100 text-blue-600 font-bold py-4 rounded-full flex items-center justify-center gap-2 text-sm shadow-sm hover:bg-blue-100 transition input-dark"><i data-lucide="crosshair" class="w-5 h-5"></i> Use Current Location</button>
+
                 <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Address Type</label>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Address Type</label>
                     <div class="flex gap-3">
                         <div class="relative">
                             <input type="radio" name="addr_type" id="type_home" value="Home" class="peer sr-only address-type-radio" checked>
-                            <label for="type_home" class="flex items-center gap-2 px-5 py-2.5 border border-gray-200 rounded-full cursor-pointer hover:bg-gray-50 transition text-sm font-bold text-gray-600 shadow-sm"><i data-lucide="home" class="w-4 h-4"></i> Home</label>
+                            <label for="type_home" class="btn-3d flex items-center gap-2 px-6 py-3 border border-gray-200 rounded-full cursor-pointer hover:bg-gray-50 transition text-sm font-bold text-gray-600 shadow-sm input-dark"><i data-lucide="home" class="w-4 h-4"></i> Home</label>
                         </div>
                         <div class="relative">
-                            <input type="radio" name="addr_type" id="type_work" value="Work" class="peer sr-only address-type-radio">
-                            <label for="type_work" class="flex items-center gap-2 px-5 py-2.5 border border-gray-200 rounded-full cursor-pointer hover:bg-gray-50 transition text-sm font-bold text-gray-600 shadow-sm"><i data-lucide="briefcase" class="w-4 h-4"></i> Work</label>
+                            <input type="radio" name="addr_type" id="type_work" value="Office" class="peer sr-only address-type-radio">
+                            <label for="type_work" class="btn-3d flex items-center gap-2 px-6 py-3 border border-gray-200 rounded-full cursor-pointer hover:bg-gray-50 transition text-sm font-bold text-gray-600 shadow-sm input-dark"><i data-lucide="briefcase" class="w-4 h-4"></i> Office</label>
                         </div>
                         <div class="relative">
                             <input type="radio" name="addr_type" id="type_other" value="Other" class="peer sr-only address-type-radio">
-                            <label for="type_other" class="flex items-center gap-2 px-5 py-2.5 border border-gray-200 rounded-full cursor-pointer hover:bg-gray-50 transition text-sm font-bold text-gray-600 shadow-sm"><i data-lucide="map-pin" class="w-4 h-4"></i> Other</label>
+                            <label for="type_other" class="btn-3d flex items-center gap-2 px-6 py-3 border border-gray-200 rounded-full cursor-pointer hover:bg-gray-50 transition text-sm font-bold text-gray-600 shadow-sm input-dark"><i data-lucide="map-pin" class="w-4 h-4"></i> Other</label>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Full Name</label>
-                    <input type="text" id="addr-name" placeholder="Receiver's name" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-primary-500 focus:bg-white text-sm font-bold transition">
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Full Name</label>
+                    <input type="text" id="addr-name" placeholder="Receiver's name" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-3xl outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 focus:bg-white text-sm font-bold transition shadow-inner input-dark">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Mobile Number</label>
-                    <input type="tel" id="addr-phone" placeholder="Delivery contact number" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-primary-500 focus:bg-white text-sm font-bold transition">
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Contact Number</label>
+                    <input type="tel" id="addr-phone" placeholder="10-digit number" maxlength="10" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-3xl outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 focus:bg-white text-sm font-bold transition shadow-inner input-dark">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">House / Flat / Landmark</label>
-                    <input type="text" id="addr-house" placeholder="e.g. Flat 101, Near Metro" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-primary-500 focus:bg-white text-sm font-bold transition">
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Permanent Address (House/Landmark)</label>
+                    <input type="text" id="addr-house" placeholder="e.g. Flat 101, Near Metro" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-3xl outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 focus:bg-white text-sm font-bold transition shadow-inner input-dark">
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-5">
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">City / Town</label>
-                        <input type="text" id="addr-city" placeholder="City name" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-primary-500 focus:bg-white text-sm font-bold transition">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">City / Town</label>
+                        <input type="text" id="addr-city" placeholder="City name" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-3xl outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 focus:bg-white text-sm font-bold transition shadow-inner input-dark">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Pin Code</label>
-                        <input type="number" id="addr-pin" placeholder="000000" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-primary-500 focus:bg-white text-sm font-bold transition">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Pin Code</label>
+                        <input type="number" id="addr-pin" placeholder="000000" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-3xl outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 focus:bg-white text-sm font-bold transition shadow-inner input-dark">
                     </div>
                 </div>
-                <button onclick="saveAddress()" class="w-full bg-primary-600 text-white font-bold py-4 rounded-full shadow-lg shadow-primary-500/30 active:scale-95 transition text-base mt-4">Save Address</button>
+                <button onclick="saveAddress()" class="btn-3d w-full bg-primary-600 text-white font-extrabold py-4 rounded-full shadow-xl shadow-primary-500/30 active:scale-95 transition text-base mt-6 tracking-wide">Save Address</button>
             </div>
         </div>
     </div>

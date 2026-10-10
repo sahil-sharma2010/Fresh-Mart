@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshMart - Premium Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .glass-panel { background: rgba(255, 255, 255, 0.95); border-radius: 3rem; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); }
+        .fade-in { animation: fadeIn 0.4s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Mobile Sidebar specific */
+        @media (max-width: 768px) {
+            #admin-sidebar { position: fixed; z-index: 50; transform: translateX(-100%); transition: transform 0.3s ease; }
+            #admin-sidebar.open { transform: translateX(0); }
+        }
+    </style>
+    <script>tailwind.config={theme:{extend:{colors:{primary:{50:'#ecfdf5',100:'#d1fae5',500:'#10b981',600:'#059669',700:'#047857'}}}}}</script>
+</head>
+<body class="h-screen w-screen overflow-hidden flex text-gray-800">
+
+    <!-- LOCK SCREEN (PRESERVED) -->
+    <div id="lock-screen" class="fixed inset-0 bg-gray-900/95 z-[100] flex items-center justify-center transition-opacity duration-500">
+        <div class="glass-panel p-10 text-center max-w-sm w-full mx-4 fade-in">
+            <div class="w-24 h-24 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center mx-auto mb-6"><i data-lucide="lock" class="w-10 h-10"></i></div>
+            <h2 class="text-3xl font-extrabold text-gray-900 mb-2 tracking-tight">Admin Portal</h2>
+            <p class="text-gray-500 text-xs font-bold mb-8 uppercase tracking-widest">Authorized Access Only</p>
+            <input type="password" id="admin-pass" placeholder="PIN" class="w-full bg-gray-50 border-2 border-gray-200 rounded-full py-4 px-6 text-center text-2xl font-black tracking-[0.5em] outline-none focus:border-primary-500 transition mb-6">
+            <button onclick="checkPass()" class="w-full bg-primary-600 text-white font-extrabold py-4 rounded-full shadow-lg hover:bg-primary-700 transition active:scale-95 text-lg">Unlock Dashboard</button>
+            <p id="error-msg" class="text-red-500 font-bold text-sm mt-4 hidden">Incorrect Password!</p>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div id="dashboard" class="flex w-full h-full hidden fade-in">
+        
+        <!-- SIDEBAR (13 MODULES) -->
+        <aside id="admin-sidebar" class="w-72 bg-white border-r border-gray-200 h-full flex flex-col shadow-xl md:shadow-none md:relative">
+            <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center shadow-lg"><i data-lucide="shield-check" class="w-6 h-6"></i></div>
+                    <h2 class="text-xl font-extrabold text-gray-900 tracking-tight">FreshMart<br><span class="text-[10px] font-black text-primary-600 uppercase tracking-widest">Admin Panel</span></h2>
+                </div>
+                <button onclick="toggleSidebar()" class="md:hidden text-gray-500 hover:text-gray-800"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            
+            <div class="p-4 space-y-1 flex-1 overflow-y-auto hide-scrollbar text-sm font-bold text-gray-600">
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="w-full flex items-center gap-3 p-3.5 rounded-2xl bg-primary-50 text-primary-700 transition"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</button>
+                <button onclick="switchTab('items')" id="tab-items" class="w-full flex items-center gap-3 p-3.5 rounded-2xl hover:bg-gray-50 transition"><i data-lucide="package" class="w-5 h-5"></i> Product Management</button>
+                <button onclick="switchTab('inventory')" id="tab-inventory" class="w-full flex items-center gap-3 p-3.5 rounded-2xl hover:bg-gray-50 transition"><i data-lucide="database" class="w-5 h-5"></i> Inventory & Stock</button>
+                <button onclick="switchTab('sales')" id="tab-sales" class="w-full flex items-center gap-3 p-3.5 rounded-2xl hover:bg-gray-50 transition"><i data-lucide="percent" class="w-5 h-5"></i> Sale & Coupons</button>
+                <button onclick="switchTab('orders')" id="tab-orders" class="w-full flex items-center gap-3 p-3.5 rounded-2xl hover:bg-gray-50 transition"><i data-lucide="shopping-cart" class="w-5 h-5"></i> Order Management</button>
+                <button onclick="switchTab('delivery')" id="tab-delivery" class="w-full flex items-center gap-3 p-3.5 rounded-2xl hover:bg-gray-50 transition"><i data-lucide="truck" class="w-5 h-5"></i> Delivery Control</button>
+                <button onclick="switchTab('customers')" id="tab-customers" class="w-full flex items-center gap-3 p-3.5 rounded-2xl hover:bg-gray-50 transition"><i data-lucide="users" class="w-5 h-5"></i> Customers & Support</button>
+                <button onclick="switchTab('category')" id="tab-category" class="w-full flex items-center gap-3 p-3.5 rounded-2xl hover:bg-gray-50 transition"><i data-lucide="list-tree" class="w-5 h-5"></i> Category Config</button>
+                <button onclick="switchTab('homepage')" id="tab-homepage" class="w-full flex items-center gap-3 p-3.5 rounded-2xl hover:bg-gray-50 transition"><i data-lucide="layout" class="w-5 h-5"></i> Homepage Manager</button>
+                <button onclick="switchTab('payment')" id="tab-payment" class="w-full flex items-center gap-3 p-3.5 rounded-2xl hover:bg-gray-50 transition"><i data-lucide="credit-card" class="w-5 h-5"></i> Payment Settings</button>
+                <button onclick="switchTab('reports')" id="tab-reports" class="w-full flex items-center gap-3 p-3.5 rounded-2xl hover:bg-gray-50 transition"><i data-lucide="bar-chart-2" class="w-5 h-5"></i> Reports & Export</button>
+                <button onclick="switchTab('security')" id="tab-security" class="w-full flex items-center gap-3 p-3.5 rounded-2xl hover:bg-gray-50 transition"><i data-lucide="shield-alert" class="w-5 h-5"></i> Admin Security</button>
+                <button onclick="switchTab('settings')" id="tab-settings" class="w-full flex items-center gap-3 p-3.5 rounded-2xl hover:bg-gray-50 transition"><i data-lucide="settings" class="w-5 h-5"></i> Business Settings</button>
+            </div>
+            <div class="p-4 border-t border-gray-100">
+                <a href="index.html" class="flex items-center justify-center gap-2 w-full p-4 rounded-full bg-gray-900 text-white font-bold hover:bg-gray-800 transition"><i data-lucide="globe" class="w-4 h-4"></i> View Website</a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden">
+            <!-- Mobile Header -->
+            <div class="md:hidden bg-white p-4 border-b border-gray-200 flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center"><i data-lucide="shield" class="w-4 h-4"></i></div>
+                    <span class="font-extrabold text-primary-700">Admin</span>
+                </div>
+                <button onclick="toggleSidebar()" class="p-2 bg-gray-100 rounded-lg text-gray-700"><i data-lucide="menu" class="w-5 h-5"></i></button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50">
+                
+                <!-- 1. DASHBOARD VIEW -->
+                <div id="view-dashboard" class="space-y-6">
+                    <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-2xl text-yellow-800 text-sm font-bold flex items-center gap-3 mb-6">
+                        <i data-lucide="info" class="w-5 h-5 flex-shrink-0"></i> System Note: Currently running on LocalStorage. Advanced features (Roles, Payment Gateway) require Node.js/Python backend setup.
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-6 flex items-center gap-3"><i data-lucide="layout-dashboard" class="text-primary-600"></i> Store Dashboard</h2>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+                        <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex flex-col justify-center">
+                            <div class="text-gray-400 mb-2"><i data-lucide="package" class="w-6 h-6"></i></div>
+                            <div class="text-3xl font-black text-gray-900" id="dash-total-products">20</div>
+                            <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Total Products</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex flex-col justify-center">
+                            <div class="text-blue-400 mb-2"><i data-lucide="shopping-cart" class="w-6 h-6"></i></div>
+                            <div class="text-3xl font-black text-gray-900">4</div>
+                            <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Pending Orders</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex flex-col justify-center">
+                            <div class="text-green-500 mb-2"><i data-lucide="indian-rupee" class="w-6 h-6"></i></div>
+                            <div class="text-3xl font-black text-gray-900">₹8,450</div>
+                            <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Today's Sales</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-[2rem] border border-red-100 shadow-sm flex flex-col justify-center bg-red-50/30">
+                            <div class="text-red-500 mb-2"><i data-lucide="alert-triangle" class="w-6 h-6"></i></div>
+                            <div class="text-3xl font-black text-red-600">2</div>
+                            <div class="text-[10px] font-bold text-red-400 uppercase tracking-widest mt-1">Low Stock Alerts</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. PRODUCT MANAGEMENT (PRESERVED OLD LOGIC) -->
+                <div id="view-items" class="space-y-6 hidden">
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-6 flex items-center gap-3"><i data-lucide="package" class="text-primary-600"></i> Product Management</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        <button onclick="showAction('add')" class="p-5 bg-white rounded-3xl border-2 border-transparent hover:border-green-500 font-extrabold text-gray-700 shadow-sm flex flex-col items-center gap-2 transition"><i data-lucide="plus-circle" class="text-green-500 w-8 h-8"></i> Add New Item</button>
+                        <button onclick="showAction('edit')" class="p-5 bg-white rounded-3xl border-2 border-transparent hover:border-blue-500 font-extrabold text-gray-700 shadow-sm flex flex-col items-center gap-2 transition"><i data-lucide="edit" class="text-blue-500 w-8 h-8"></i> Edit Item</button>
+                        <button onclick="showAction('delete')" class="p-5 bg-white rounded-3xl border-2 border-transparent hover:border-red-500 font-extrabold text-gray-700 shadow-sm flex flex-col items-center gap-2 transition"><i data-lucide="trash-2" class="text-red-500 w-8 h-8"></i> Delete Item</button>
+                    </div>
+
+                    <div id="action-container" class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-gray-100 hidden">
+                        <h3 id="action-title" class="text-lg font-extrabold text-gray-900 mb-6 uppercase tracking-wider">Select an Action</h3>
+                        <div id="form-area" class="space-y-4">
+                            <select id="item-select" onchange="loadItemData()" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold hidden mb-6 outline-none focus:border-primary-500"></select>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div><label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Item Name</label><input type="text" id="i-name" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold w-full outline-none focus:border-primary-500"></div>
+                                <div><label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Brand</label><input type="text" id="i-brand" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold w-full outline-none focus:border-primary-500"></div>
+                                <div><label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Category</label><select id="i-category" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold w-full outline-none focus:border-primary-500"><option value="c1">Water & Drinks</option><option value="c2">Snacks</option><option value="c3">Grocery</option><option value="c4">Personal Care</option><option value="c5">Household</option></select></div>
+                                <div><label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Variant Size</label><input type="text" id="i-size" placeholder="e.g. 1 L, 500g" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold w-full outline-none focus:border-primary-500"></div>
+                                <div><label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Price (₹)</label><input type="number" id="i-price" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold w-full outline-none focus:border-primary-500"></div>
+                                <div><label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Image URL</label><input type="text" id="i-image" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold w-full outline-none focus:border-primary-500"></div>
+                            </div>
+                            <div class="mt-4"><label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Description</label><textarea id="i-desc" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold w-full h-24 outline-none focus:border-primary-500"></textarea></div>
+                            <button id="save-btn" onclick="saveItemData()" class="w-full bg-primary-600 text-white font-extrabold py-4 rounded-full mt-6 hover:bg-primary-700 shadow-lg active:scale-95 transition tracking-wide text-lg">Save Item</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. INVENTORY & STOCK -->
+                <div id="view-inventory" class="space-y-6 hidden">
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-6 flex items-center gap-3"><i data-lucide="database" class="text-primary-600"></i> Inventory & Stock</h2>
+                    <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                            <h3 class="font-bold text-gray-900">Current Stock Levels</h3>
+                            <button class="bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-xs font-bold">Export Stock CSV</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm font-medium text-gray-600">
+                                <thead class="bg-gray-50/50 text-[10px] uppercase tracking-widest text-gray-400">
+                                    <tr><th class="p-4">Product Name</th><th class="p-4">Category</th><th class="p-4 text-center">In Stock</th><th class="p-4 text-right">Action</th></tr>
+                                </thead>
+                                <tbody id="inventory-table-body" class="divide-y divide-gray-50">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. SALE & COUPONS (PRESERVED OLD LOGIC) -->
+                <div id="view-sales" class="space-y-6 hidden">
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-6 flex items-center gap-3"><i data-lucide="percent" class="text-orange-500"></i> Sales & Coupons</h2>
+                    <div class="bg-white p-6 md:p-8 rounded-[3rem] shadow-sm border border-gray-100">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 ml-2">Category Filter</label><select id="s-category" onchange="loadCategoryItems()" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:border-orange-400"></select></div>
+                            <div><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 ml-2">Select Item</label><select id="s-item" onchange="loadSaleData()" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:border-orange-400"></select></div>
+                        </div>
+
+                        <div id="sale-details" class="hidden p-6 md:p-8 bg-orange-50/50 border border-orange-100 rounded-[2.5rem]">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 border-b border-orange-200/50 pb-6 gap-4">
+                                <div class="flex items-center gap-5">
+                                    <img id="s-img" src="" class="w-20 h-20 rounded-2xl object-contain bg-white shadow-sm border border-orange-100 p-1">
+                                    <div><h3 id="s-name" class="font-extrabold text-xl text-gray-900"></h3><p id="s-orig-price" class="text-sm font-bold text-gray-500 mt-1"></p></div>
+                                </div>
+                                <div class="flex items-center gap-3 bg-white px-5 py-3 rounded-2xl shadow-sm border border-orange-100">
+                                    <span class="font-black text-xs text-orange-600 uppercase tracking-widest">Sale Active</span>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                      <input type="checkbox" id="s-status" onchange="toggleSaleCalc()" class="sr-only peer">
+                                      <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-orange-500 shadow-inner"></div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div id="sale-inputs" class="grid grid-cols-1 md:grid-cols-3 gap-6 opacity-50 pointer-events-none transition-all">
+                                <div><label class="block text-[10px] font-bold text-orange-800 uppercase tracking-widest mb-2 ml-2">Sale Price (₹)</label><input type="number" id="s-new-price" onkeyup="calcDiscount()" class="w-full p-4 bg-white border border-orange-200 rounded-2xl font-black text-orange-600 text-xl shadow-inner outline-none focus:border-orange-500 text-center"></div>
+                                <div><label class="block text-[10px] font-bold text-orange-800 uppercase tracking-widest mb-2 ml-2">Auto Discount</label><input type="text" id="s-percent" disabled class="w-full p-4 bg-orange-100/50 border border-transparent rounded-2xl font-black text-gray-700 text-xl text-center"></div>
+                                <div><label class="block text-[10px] font-bold text-orange-800 uppercase tracking-widest mb-2 ml-2">End Date (Timer)</label><input type="date" id="s-end" class="w-full p-4 bg-white border border-orange-200 rounded-2xl font-bold shadow-inner text-gray-700 outline-none focus:border-orange-500"></div>
+                            </div>
+                            <button onclick="saveSaleData()" class="w-full bg-orange-500 text-white font-extrabold py-4 rounded-full mt-8 shadow-xl shadow-orange-500/30 hover:bg-orange-600 active:scale-95 transition tracking-widest uppercase text-sm">Apply Sale Update</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. DELIVERY MANAGEMENT (PRESERVED LOGIC) -->
+                <div id="view-delivery" class="space-y-6 hidden">
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-6 flex items-center gap-3"><i data-lucide="truck" class="text-blue-500"></i> Delivery Management</h2>
+                    <div class="bg-white p-6 md:p-8 rounded-[3rem] shadow-sm border border-gray-100">
+                        <p class="text-sm font-bold text-gray-500 mb-8 px-2">Update an order's delivery status to push a live notification to the customer's app.</p>
+                        
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 ml-2">Select Active Order</label>
+                        <select id="d-order-select" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold mb-8 outline-none focus:border-blue-500">
+                            <option value="">-- View Pending Orders --</option>
+                            <option value="FM-9901">Order #FM-9901 (Sahil Sharma) - ₹350</option>
+                            <option value="FM-9902">Order #FM-9902 (Rahul Kumar) - ₹820</option>
+                        </select>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-green-50/50 p-8 rounded-[2.5rem] border border-green-100 text-center hover:shadow-md transition">
+                                <i data-lucide="check-circle" class="w-16 h-16 text-green-500 mx-auto mb-4 drop-shadow-sm"></i>
+                                <h3 class="font-extrabold text-gray-900 mb-6 text-lg">Mark as Successful</h3>
+                                <button onclick="updateDelivery('Success')" class="w-full bg-green-500 text-white font-extrabold py-4 rounded-full shadow-lg shadow-green-500/30 hover:bg-green-600 active:scale-95 transition tracking-wide">Confirm Delivery</button>
+                            </div>
+                            <div class="bg-red-50/50 p-8 rounded-[2.5rem] border border-red-100 text-center hover:shadow-md transition">
+                                <i data-lucide="x-circle" class="w-16 h-16 text-red-500 mx-auto mb-4 drop-shadow-sm"></i>
+                                <h3 class="font-extrabold text-gray-900 mb-4 text-lg">Mark as Failed</h3>
+                                <input type="text" id="d-reason" placeholder="Reason (e.g. Customer unavailable)" class="w-full p-4 bg-white border border-red-200 rounded-xl font-bold mb-4 text-sm outline-none focus:border-red-500 text-center shadow-inner">
+                                <button onclick="updateDelivery('Failed')" class="w-full bg-red-500 text-white font-extrabold py-4 rounded-full shadow-lg shadow-red-500/30 hover:bg-red-600 active:scale-95 transition tracking-wide">Fail Delivery</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OTHER TABS PLACEHOLDERS (UI Ready for Backend) -->
+                <div id="view-orders" class="space-y-6 hidden">
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6 flex items-center gap-3"><i data-lucide="shopping-cart" class="text-primary-600"></i> Order Management</h2>
+                    <div class="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-100 text-center">
+                        <i data-lucide="database" class="w-16 h-16 text-gray-300 mx-auto mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Backend Connection Required</h3>
+                        <p class="text-gray-500 font-medium max-w-md mx-auto">To manage all customer orders, payments, and track history, please connect a Node.js/Python database.</p>
+                    </div>
+                </div>
+                
+                <!-- Similarly hidden divs for customers, category, homepage, payment, reports, security, settings -->
+                <div id="view-customers" class="hidden"><div class="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-100 text-center mt-10"><h3 class="text-xl font-bold">Customers & Support Module</h3><p class="text-gray-500 mt-2">Ready for Backend Integration.</p></div></div>
+                <div id="view-category" class="hidden"><div class="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-100 text-center mt-10"><h3 class="text-xl font-bold">Category Configuration Module</h3><p class="text-gray-500 mt-2">Ready for Backend Integration.</p></div></div>
+                <div id="view-homepage" class="hidden"><div class="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-100 text-center mt-10"><h3 class="text-xl font-bold">Homepage Manager Module</h3><p class="text-gray-500 mt-2">Ready for Backend Integration.</p></div></div>
+                <div id="view-payment" class="hidden"><div class="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-100 text-center mt-10"><h3 class="text-xl font-bold">Payment Settings Module</h3><p class="text-gray-500 mt-2">Ready for Payment Gateway API Setup.</p></div></div>
+                <div id="view-reports" class="hidden"><div class="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-100 text-center mt-10"><h3 class="text-xl font-bold">Reports & Export Module</h3><p class="text-gray-500 mt-2">Ready for Database Analytics Sync.</p></div></div>
+                <div id="view-security" class="hidden"><div class="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-100 text-center mt-10"><h3 class="text-xl font-bold">Admin Security & Roles</h3><p class="text-gray-500 mt-2">Requires server-side JWT authentication setup.</p></div></div>
+                <div id="view-settings" class="hidden"><div class="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-100 text-center mt-10"><h3 class="text-xl font-bold">Business Settings</h3><p class="text-gray-500 mt-2">Configure store details and policies. Ready for DB connection.</p></div></div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        let products = JSON.parse(localStorage.getItem('freshmart_products')) || [];
+        let categories = [ { id: 'c1', name: 'Water & Drinks'}, { id: 'c2', name: 'Snacks'}, { id: 'c3', name: 'Grocery'}, { id: 'c4', name: 'Personal Care'}, { id: 'c5', name: 'Household'} ];
+        let currentMode = ''; 
+
+        function checkPass() {
+            if(document.getElementById('admin-pass').value === '0276') {
+                document.getElementById('lock-screen').classList.add('opacity-0');
+                setTimeout(() => {
+                    document.getElementById('lock-screen').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    switchTab('dashboard');
+                }, 500);
+            } else { document.getElementById('error-msg').classList.remove('hidden'); }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('admin-sidebar').classList.toggle('open');
+        }
+
+        const tabs = ['dashboard', 'items', 'inventory', 'sales', 'orders', 'delivery', 'customers', 'category', 'homepage', 'payment', 'reports', 'security', 'settings'];
+        
+        function switchTab(tabId) {
+            tabs.forEach(t => {
+                const view = document.getElementById('view-' + t);
+                const btn = document.getElementById('tab-' + t);
+                if(view) view.classList.add('hidden');
+                if(btn) btn.className = 'w-full flex items-center gap-3 p-3.5 rounded-2xl hover:bg-gray-50 transition font-bold text-gray-600';
+            });
+            const view = document.getElementById('view-' + tabId);
+            const btn = document.getElementById('tab-' + tabId);
+            if(view) view.classList.remove('hidden');
+            if(btn) btn.className = 'w-full flex items-center gap-3 p-3.5 rounded-2xl bg-primary-50 text-primary-700 font-extrabold shadow-sm transition';
+            
+            if(tabId === 'dashboard') {
+                document.getElementById('dash-total-products').innerText = products.length;
+            } else if(tabId === 'items' || tabId === 'sales') {
+                populateCategoryDropdown();
+            } else if(tabId === 'inventory') {
+                loadInventoryTable();
+            }
+            if(window.innerWidth < 768) toggleSidebar();
+        }
+
+        // --- INVENTORY LOGIC (NEW) ---
+        function loadInventoryTable() {
+            const tbody = document.getElementById('inventory-table-body');
+            tbody.innerHTML = products.map(p => `
+                <tr class="hover:bg-gray-50 transition border-b border-gray-50">
+                    <td class="p-4 font-bold text-gray-900 flex items-center gap-3"><img src="${p.image}" class="w-8 h-8 rounded-lg object-contain border border-gray-100">${p.name}</td>
+                    <td class="p-4 text-xs font-bold text-gray-500 uppercase tracking-widest">${categories.find(c=>c.id===p.category).name}</td>
+                    <td class="p-4 text-center"><span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full font-black">${p.variants[0].stock}</span></td>
+                    <td class="p-4 text-right"><button onclick="switchTab('items'); showAction('edit')" class="text-primary-600 font-bold hover:underline text-xs">Edit Stock</button></td>
+                </tr>
+            `).join('');
+        }
+
+        // --- ITEMS ADJUSTMENT (PRESERVED) ---
+        function showAction(mode) {
+            currentMode = mode;
+            document.getElementById('action-container').classList.remove('hidden');
+            const title = document.getElementById('action-title');
+            const select = document.getElementById('item-select');
+            const inputs = ['i-name', 'i-brand', 'i-category', 'i-size', 'i-price', 'i-image', 'i-desc'];
+            
+            if(mode === 'add') {
+                title.innerHTML = '<span class="text-green-500">ADD</span> NEW ITEM';
+                select.classList.add('hidden');
+                inputs.forEach(id => { document.getElementById(id).disabled = false; document.getElementById(id).value = ''; });
+                document.getElementById('save-btn').innerText = 'Add Item to Store';
+                document.getElementById('save-btn').className = 'w-full bg-green-600 text-white font-extrabold py-4 rounded-full mt-6 hover:bg-green-700 shadow-lg active:scale-95 transition tracking-wider';
+            } else {
+                title.innerHTML = mode === 'edit' ? '<span class="text-blue-500">EDIT</span> EXISTING ITEM' : '<span class="text-red-500">DELETE</span> ITEM';
+                select.classList.remove('hidden');
+                select.innerHTML = '<option value="">-- Select an Item --</option>' + products.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+                inputs.forEach(id => { document.getElementById(id).value = ''; document.getElementById(id).disabled = (mode === 'delete'); });
+                
+                document.getElementById('save-btn').innerText = mode === 'edit' ? 'Save Changes' : 'Permanently Delete Item';
+                document.getElementById('save-btn').className = mode === 'edit' ? 'w-full bg-blue-600 text-white font-extrabold py-4 rounded-full mt-6 hover:bg-blue-700 shadow-lg active:scale-95 transition tracking-wider' : 'w-full bg-red-600 text-white font-extrabold py-4 rounded-full mt-6 hover:bg-red-700 shadow-lg active:scale-95 transition tracking-wider';
+            }
+        }
+
+        function loadItemData() {
+            const id = parseInt(document.getElementById('item-select').value);
+            if(!id) return;
+            const p = products.find(x => x.id === id);
+            document.getElementById('i-name').value = p.name;
+            document.getElementById('i-brand').value = p.brand;
+            document.getElementById('i-category').value = p.category;
+            document.getElementById('i-size').value = p.variants[0].size;
+            document.getElementById('i-price').value = p.variants[0].price;
+            document.getElementById('i-image').value = p.image;
+            document.getElementById('i-desc').value = p.description || '';
+        }
+
+        function saveItemData() {
+            if(currentMode === 'add') {
+                const newItem = {
+                    id: Date.now(),
+                    name: document.getElementById('i-name').value, brand: document.getElementById('i-brand').value,
+                    category: document.getElementById('i-category').value, description: document.getElementById('i-desc').value,
+                    image: document.getElementById('i-image').value, rating: 5.0, reviews: 0, sales: 0,
+                    variants: [{ vId: Date.now()+'v', size: document.getElementById('i-size').value, price: parseInt(document.getElementById('i-price').value), originalPrice: parseInt(document.getElementById('i-price').value), stock: 100 }]
+                };
+                products.push(newItem);
+                alert('Item Added Successfully!');
+            } else {
+                const id = parseInt(document.getElementById('item-select').value);
+                if(!id) return alert('Select an item first');
+                
+                if(currentMode === 'delete') {
+                    products = products.filter(x => x.id !== id);
+                    alert('Item Deleted!');
+                } else if(currentMode === 'edit') {
+                    const p = products.find(x => x.id === id);
+                    p.name = document.getElementById('i-name').value; p.brand = document.getElementById('i-brand').value;
+                    p.category = document.getElementById('i-category').value; p.description = document.getElementById('i-desc').value;
+                    p.image = document.getElementById('i-image').value; p.variants[0].size = document.getElementById('i-size').value;
+                    
+                    const newPrice = parseInt(document.getElementById('i-price').value);
+                    if(p.variants[0].price === p.variants[0].originalPrice) p.variants[0].originalPrice = newPrice;
+                    p.variants[0].price = newPrice;
+                    alert('Item Updated!');
+                }
+            }
+            localStorage.setItem('freshmart_products', JSON.stringify(products));
+            showAction(currentMode);
+        }
+
+        // --- SALES MANAGEMENT (PRESERVED) ---
+        function populateCategoryDropdown() {
+            const catSelects = document.querySelectorAll('select[id^="s-category"], select[id="i-category"]');
+            const options = '<option value="">-- Select Category --</option>' + categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+            document.getElementById('s-category').innerHTML = options;
+            document.getElementById('sale-details').classList.add('hidden');
+        }
+
+        function loadCategoryItems() {
+            const catId = document.getElementById('s-category').value;
+            const filtered = products.filter(p => p.category === catId);
+            document.getElementById('s-item').innerHTML = '<option value="">-- Select Product --</option>' + filtered.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+            document.getElementById('sale-details').classList.add('hidden');
+        }
+
+        function loadSaleData() {
+            const id = parseInt(document.getElementById('s-item').value);
+            if(!id) { document.getElementById('sale-details').classList.add('hidden'); return; }
+            
+            const p = products.find(x => x.id === id);
+            document.getElementById('s-img').src = p.image;
+            document.getElementById('s-name').innerText = p.name;
+            document.getElementById('s-orig-price').innerText = 'Original Price: ₹' + p.variants[0].originalPrice;
+            
+            const isOnSale = p.variants[0].originalPrice > p.variants[0].price;
+            document.getElementById('s-status').checked = isOnSale;
+            document.getElementById('s-new-price').value = p.variants[0].price;
+            
+            toggleSaleCalc(); calcDiscount();
+            document.getElementById('sale-details').classList.remove('hidden');
+        }
+
+        function toggleSaleCalc() {
+            const isActive = document.getElementById('s-status').checked;
+            const inputs = document.getElementById('sale-inputs');
+            if(isActive) { inputs.classList.remove('opacity-50', 'pointer-events-none'); } 
+            else {
+                inputs.classList.add('opacity-50', 'pointer-events-none');
+                const p = products.find(x => x.id === parseInt(document.getElementById('s-item').value));
+                document.getElementById('s-new-price').value = p.variants[0].originalPrice;
+                document.getElementById('s-percent').value = '0%';
+            }
+        }
+
+        function calcDiscount() {
+            if(!document.getElementById('s-status').checked) return;
+            const p = products.find(x => x.id === parseInt(document.getElementById('s-item').value));
+            const newPrice = parseInt(document.getElementById('s-new-price').value);
+            const origPrice = p.variants[0].originalPrice;
+            if(newPrice && newPrice < origPrice) {
+                const pct = Math.round(((origPrice - newPrice) / origPrice) * 100);
+                document.getElementById('s-percent').value = pct + '% OFF';
+            } else { document.getElementById('s-percent').value = 'Invalid'; }
+        }
+
+        function saveSaleData() {
+            const id = parseInt(document.getElementById('s-item').value);
+            const p = products.find(x => x.id === id);
+            const isActive = document.getElementById('s-status').checked;
+            
+            if(isActive) {
+                const newPrice = parseInt(document.getElementById('s-new-price').value);
+                if(newPrice >= p.variants[0].originalPrice) return alert('Sale price must be lower than original!');
+                p.variants[0].price = newPrice;
+                alert('Sale Applied! Discount badge active on homepage.');
+            } else {
+                p.variants[0].price = p.variants[0].originalPrice;
+                alert('Sale Removed!');
+            }
+            localStorage.setItem('freshmart_products', JSON.stringify(products));
+            loadSaleData();
+        }
+
+        // --- DELIVERY STATUS PUSH TO FRONTEND (PRESERVED & ENHANCED) ---
+        function updateDelivery(status) {
+            const orderId = document.getElementById('d-order-select').value;
+            if(!orderId) return alert("Select an order first");
+            
+            let message = '';
+            if(status === 'Success') { message = `Your Order ${orderId} has been successfully delivered!`; } 
+            else { const reason = document.getElementById('d-reason').value || 'Customer unavailable'; message = `Delivery Failed for Order ${orderId}. Reason: ${reason}`; }
+
+            let notifs = JSON.parse(localStorage.getItem('freshmart_notifs')) || [];
+            notifs.unshift({ id: Date.now(), msg: message, status: status, time: new Date().getTime(), expires: new Date().getTime() + (12 * 60 * 60 * 1000) });
+            localStorage.setItem('freshmart_notifs', JSON.stringify(notifs));
+            alert(`Status updated. App Notification sent to user for ${orderId}`);
+        }
+    </script>
+</body>
+</html>

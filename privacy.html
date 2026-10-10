@@ -1,0 +1,483 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Read the FreshMart Privacy Policy to understand how customer information is handled.">
+  <meta name="theme-color" content="#059669">
+  <title>Privacy Policy | FreshMart</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#ecfdf5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857'
+            }
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body { font-family: Inter, sans-serif; }
+
+    .policy-section {
+      background: rgba(255,255,255,.96);
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 22px;
+      scroll-margin-top: 100px;
+    }
+
+    .policy-section h2 {
+      color: #102a43;
+      font-size: 1.08rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .policy-section p,
+    .policy-section li {
+      color: #526174;
+      font-size: .94rem;
+      line-height: 1.85;
+    }
+
+    .policy-section ul {
+      list-style: disc;
+      padding-left: 22px;
+      margin-top: 8px;
+    }
+
+    .policy-link {
+      color: #047857;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .policy-link:hover { text-decoration: underline; }
+
+    .quick-link {
+      display: inline-flex;
+      padding: 9px 12px;
+      border-radius: 10px;
+      background: #ecfdf5;
+      color: #065f46;
+      font-size: .85rem;
+      font-weight: 600;
+      transition: background .2s;
+    }
+
+    .quick-link:hover { background: #d1fae5; }
+
+    @media (max-width: 640px) {
+      .policy-section { padding: 17px; border-radius: 14px; }
+      .policy-section h2 { font-size: 1rem; }
+    }
+  </style>
+</head>
+
+<body class="premium-bg min-h-screen text-gray-800">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-200 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+      <a href="index.html"
+         aria-label="Back to FreshMart home"
+         class="p-2 rounded-full bg-gray-100 hover:bg-green-100 transition">
+        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+      </a>
+
+      <img src="images/logo.png"
+           alt="FreshMart logo"
+           class="h-10 w-10 rounded-full object-contain"
+           onerror="this.style.display='none'">
+
+      <div>
+        <h1 class="text-lg sm:text-xl font-extrabold text-gray-900">Privacy Policy</h1>
+        <p class="text-xs text-gray-500">FreshMart · Your Privacy Matters</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-7 sm:py-10">
+
+    <!-- Hero -->
+    <section class="rounded-3xl p-6 sm:p-9 mb-7 text-white shadow-lg"
+      style="background:linear-gradient(135deg,#064e3b,#059669,#10b981)">
+      <div class="flex items-start gap-4">
+        <div class="hidden sm:flex bg-white/15 rounded-2xl p-4">
+          <i data-lucide="shield-check" class="w-9 h-9"></i>
+        </div>
+        <div>
+          <p class="text-green-100 text-sm font-semibold mb-2">YOUR PRIVACY MATTERS</p>
+          <h2 class="text-2xl sm:text-3xl font-extrabold mb-3">
+            Privacy Policy
+          </h2>
+          <p class="text-green-50 leading-7">
+            We respect your privacy. This policy explains how information
+            may be handled when you browse FreshMart, contact us or use
+            shopping features available on our website.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy reassurance -->
+    <section class="bg-white border border-green-100 rounded-2xl p-5 sm:p-6 mb-7">
+      <div class="flex gap-3 items-start">
+        <div class="bg-green-50 rounded-xl p-3">
+          <i data-lucide="lock-keyhole" class="w-6 h-6 text-green-700"></i>
+        </div>
+        <div>
+          <h2 class="font-extrabold text-gray-900 mb-2">Your information deserves care</h2>
+          <p class="text-sm text-gray-600 leading-7">
+            FreshMart aims to handle personal information responsibly and
+            use it only for appropriate purposes connected with the website
+            and its services. No online service can guarantee absolute security.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick navigation -->
+    <section class="bg-white rounded-2xl border border-gray-200 p-5 mb-7">
+      <h2 class="font-extrabold text-gray-900 mb-3">On this page</h2>
+      <div class="flex flex-wrap gap-2">
+        <a class="quick-link" href="#collection">Information Collected</a>
+        <a class="quick-link" href="#use">How We Use It</a>
+        <a class="quick-link" href="#sharing">Information Sharing</a>
+        <a class="quick-link" href="#security">Data Protection</a>
+        <a class="quick-link" href="#rights">Your Choices</a>
+        <a class="quick-link" href="#contact">Contact Us</a>
+      </div>
+    </section>
+
+    <div class="space-y-4">
+
+      <section id="introduction" class="policy-section">
+        <h2>1. Introduction</h2>
+        <p>
+          This Privacy Policy describes the approach FreshMart takes
+          towards personal information in connection with its website.
+          The exact information processed depends on the features you use,
+          the information you provide and the technical services actually
+          enabled on the website.
+        </p>
+        <p class="mt-3">
+          This policy should be read with our
+          <a href="terms.html" class="policy-link">Terms & Conditions</a>.
+          Applicable privacy and consumer-protection laws continue to apply.
+        </p>
+      </section>
+
+      <section id="collection" class="policy-section">
+        <h2>2. Information We May Collect</h2>
+        <p>
+          Depending on the features available and your interactions with
+          FreshMart, relevant information may include:
+        </p>
+        <ul>
+          <li><strong>Contact details:</strong> Name, phone number and email address that you provide.</li>
+          <li><strong>Delivery information:</strong> Address and delivery instructions supplied for an order.</li>
+          <li><strong>Order information:</strong> Products, quantities, order status and related support requests.</li>
+          <li><strong>Account information:</strong> Details associated with an account, if registration is available.</li>
+          <li><strong>Messages:</strong> Information you voluntarily include when contacting customer support.</li>
+          <li><strong>Technical information:</strong> Basic browser or device information, logs, cookies or analytics data only where the relevant systems collect them.</li>
+        </ul>
+        <p class="mt-3">
+          FreshMart should collect only information that is reasonably
+          needed for a disclosed purpose. This list does not mean that
+          every type of information is currently collected by the website.
+        </p>
+      </section>
+
+      <section id="use" class="policy-section">
+        <h2>3. How We May Use Information</h2>
+        <p>Where applicable, information may be used to:</p>
+        <ul>
+          <li>Process and manage orders.</li>
+          <li>Coordinate delivery and communicate order-related updates.</li>
+          <li>Respond to questions, complaints and support requests.</li>
+          <li>Maintain customer accounts where account features are enabled.</li>
+          <li>Help identify technical errors, misuse or fraudulent activity.</li>
+          <li>Meet applicable legal obligations and resolve disputes.</li>
+          <li>Improve website usability using technical information where such processing is enabled and appropriate.</li>
+        </ul>
+        <p class="mt-3">
+          Personal information should not be used for an unrelated purpose
+          without an appropriate legal basis or required notice or consent.
+        </p>
+      </section>
+
+      <section id="orders" class="policy-section">
+        <h2>4. Orders and Customer Accounts</h2>
+        <p>
+          If you place an order, the details you submit may be needed to
+          process the purchase, coordinate delivery and address issues.
+          If FreshMart offers customer accounts, account information may
+          be used to provide the account features you request.
+        </p>
+        <p class="mt-3">
+          Please provide accurate information and avoid sharing passwords,
+          verification codes or confidential payment credentials with
+          anyone claiming to be customer support.
+        </p>
+      </section>
+
+      <section id="payments" class="policy-section">
+        <h2>5. Payments and Payment Providers</h2>
+        <p>
+          If online payment functionality is enabled, payments may be
+          handled by the payment service provider selected for checkout.
+          The provider may process information according to its own
+          applicable terms and privacy policy.
+        </p>
+        <p class="mt-3">
+          The exact payment information handled or retained by FreshMart
+          depends on the integration actually implemented. Do not send
+          your card PIN, CVV, UPI PIN or account password through support
+          messages.
+        </p>
+      </section>
+
+      <section id="cookies" class="policy-section">
+        <h2>6. Cookies and Analytics</h2>
+        <p>
+          The website may use essential browser storage, cookies or
+          analytics technologies if those features are implemented.
+          Their purpose and behavior should be disclosed where required.
+        </p>
+        <p class="mt-3">
+          This policy does not claim that tracking, advertising analytics
+          or non-essential cookies are active unless they have actually
+          been configured. You can review your browser settings to manage
+          cookies, although disabling some technologies may affect website
+          functionality.
+        </p>
+      </section>
+
+      <section id="sharing" class="policy-section">
+        <h2>7. How Information May Be Shared</h2>
+        <p>
+          Personal information may be shared where necessary and
+          appropriate with service providers involved in operating
+          requested services, such as:
+        </p>
+        <ul>
+          <li>Delivery providers, where delivery is outsourced.</li>
+          <li>Payment providers, where online payment processing is enabled.</li>
+          <li>Hosting or technical service providers that support the website.</li>
+          <li>Competent authorities where disclosure is required by law.</li>
+        </ul>
+        <p class="mt-3">
+          Information should be limited to what is reasonably necessary
+          for the relevant purpose. FreshMart should not sell personal
+          information or disclose it for unrelated purposes without an
+          appropriate legal basis and required transparency.
+        </p>
+      </section>
+
+      <section id="security" class="policy-section">
+        <h2>8. How We Protect Information</h2>
+        <p>
+          FreshMart aims to use reasonable safeguards appropriate to the
+          information and services involved. Access to personal
+          information should be restricted to authorized purposes, and
+          technical and organizational protections should be reviewed
+          as the website develops.
+        </p>
+        <p class="mt-3">
+          No website, database or online transmission can be guaranteed
+          completely secure. Customers should use strong passwords where
+          accounts are supported and contact FreshMart if they suspect
+          an issue involving their information.
+        </p>
+      </section>
+
+      <section id="retention" class="policy-section">
+        <h2>9. How Long Information Is Kept</h2>
+        <p>
+          Information should be retained only for as long as reasonably
+          necessary for its stated purpose, applicable legal obligations,
+          legitimate recordkeeping requirements or dispute resolution.
+          The exact retention period depends on the type of information
+          and the services used.
+        </p>
+        <p class="mt-3">
+          FreshMart should establish appropriate retention and deletion
+          practices for its actual database, logs, backups and service
+          providers. This policy does not promise automatic deletion
+          unless such a process has been implemented.
+        </p>
+      </section>
+
+      <section id="rights" class="policy-section">
+        <h2>10. Your Privacy Choices and Requests</h2>
+        <p>
+          Depending on applicable law and the circumstances, you may be
+          able to request access to, correction of or deletion of certain
+          personal information, or exercise other applicable privacy rights.
+        </p>
+        <p class="mt-3">
+          To make a request, contact FreshMart using the details below.
+          We may need to verify your identity before acting on a request.
+          Some information may need to be retained where the law requires it.
+          Requests will be handled in accordance with applicable law.
+        </p>
+      </section>
+
+      <section id="marketing" class="policy-section">
+        <h2>11. Marketing Communications</h2>
+        <p>
+          If FreshMart introduces promotional messages, it should provide
+          appropriate notice and any consent or opt-out mechanism required
+          by applicable law. You may contact support to ask about marketing
+          preferences. Do not assume that promotional messaging is active
+          merely because this policy describes it.
+        </p>
+      </section>
+
+      <section id="children" class="policy-section">
+        <h2>12. Children's Privacy</h2>
+        <p>
+          FreshMart is intended for ordinary grocery shopping by people
+          who are legally able to use the relevant service. Where
+          information relating to a child is involved, applicable
+          requirements for children's data and any required parental
+          consent must be followed.
+        </p>
+      </section>
+
+      <section id="third-party" class="policy-section">
+        <h2>13. Third-Party Websites</h2>
+        <p>
+          FreshMart may link to external websites or services. Those
+          services may have separate privacy policies and practices.
+          Review their information before submitting personal details
+          to a third-party service.
+        </p>
+      </section>
+
+      <section id="updates" class="policy-section">
+        <h2>14. Updates to This Policy</h2>
+        <p>
+          This policy may be revised when FreshMart's features, information
+          practices or legal obligations change. The updated version
+          should be published on this page, with an accurate revision date
+          and additional notice where required by law.
+        </p>
+      </section>
+
+      <section id="contact" class="policy-section">
+        <h2>15. Contact FreshMart About Privacy</h2>
+        <p>
+          If you have a privacy question or want to submit a personal
+          information request, contact FreshMart through the following
+          channels:
+        </p>
+
+        <div class="grid sm:grid-cols-3 gap-3 mt-5">
+          <a href="tel:7988300872"
+             class="flex items-center gap-3 p-4 rounded-xl bg-green-50 hover:bg-green-100 transition">
+            <i data-lucide="phone" class="w-5 h-5 text-green-700"></i>
+            <div>
+              <p class="text-xs text-gray-500">Call us</p>
+              <p class="font-bold text-gray-900 text-sm">7988300872</p>
+            </div>
+          </a>
+
+          <a href="mailto:FreshMart@gmail.com"
+             class="flex items-center gap-3 p-4 rounded-xl bg-green-50 hover:bg-green-100 transition">
+            <i data-lucide="mail" class="w-5 h-5 text-green-700"></i>
+            <div>
+              <p class="text-xs text-gray-500">Email us</p>
+              <p class="font-bold text-gray-900 text-sm break-all">FreshMart@gmail.com</p>
+            </div>
+          </a>
+
+          <a href="https://wa.me/917988300872"
+             target="_blank" rel="noopener noreferrer"
+             class="flex items-center gap-3 p-4 rounded-xl bg-green-50 hover:bg-green-100 transition">
+            <i data-lucide="message-circle" class="w-5 h-5 text-green-700"></i>
+            <div>
+              <p class="text-xs text-gray-500">WhatsApp</p>
+              <p class="font-bold text-gray-900 text-sm">Chat with us</p>
+            </div>
+          </a>
+        </div>
+
+        <p class="mt-5">
+          For general questions, visit our
+          <a href="help.html" class="policy-link">Help & Support</a>
+          page.
+        </p>
+      </section>
+
+    </div>
+
+    <!-- Related policies -->
+    <section class="mt-7 bg-white border border-gray-200 rounded-2xl p-5 sm:p-6">
+      <h2 class="font-extrabold text-gray-900 mb-4">Related Policies</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <a href="terms.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
+          <span class="font-semibold text-gray-700">Terms & Conditions</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </a>
+
+        <a href="delivery.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
+          <span class="font-semibold text-gray-700">Delivery Policy</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </a>
+
+        <a href="refund.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
+          <span class="font-semibold text-gray-700">Return & Refund Policy</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </a>
+
+        <a href="cancellation.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
+          <span class="font-semibold text-gray-700">Cancellation Policy</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center py-8">
+      <a href="index.html" class="inline-flex items-center gap-2 text-green-700 font-bold hover:text-green-800">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        Back to FreshMart
+      </a>
+      <p class="text-xs text-gray-500 mt-3">
+        FreshMart · Privacy Policy
+      </p>
+      <p class="text-xs text-gray-400 mt-1">
+        Your privacy matters to us.
+      </p>
+    </footer>
+
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
+  </script>
+
+</body>
+</html>

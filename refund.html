@@ -1,0 +1,557 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FreshMart Return and Refund Policy: learn how to report damaged, incorrect or missing grocery items.">
+  <meta name="theme-color" content="#059669">
+  <title>Return & Refund Policy | FreshMart</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#ecfdf5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857'
+            }
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body { font-family: Inter, sans-serif; }
+
+    .policy-section {
+      background: rgba(255,255,255,.96);
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 22px;
+      scroll-margin-top: 100px;
+    }
+
+    .policy-section h2 {
+      color: #102a43;
+      font-size: 1.08rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .policy-section p,
+    .policy-section li {
+      color: #526174;
+      font-size: .94rem;
+      line-height: 1.85;
+    }
+
+    .policy-section ul {
+      list-style: disc;
+      padding-left: 22px;
+      margin-top: 8px;
+    }
+
+    .policy-link {
+      color: #047857;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .policy-link:hover { text-decoration: underline; }
+
+    .info-card {
+      border: 1px solid #e5e7eb;
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .faq-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      overflow: hidden;
+      background: white;
+    }
+
+    .faq-question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 17px;
+      text-align: left;
+      font-weight: 700;
+      color: #102a43;
+    }
+
+    .faq-answer {
+      padding: 0 17px 17px;
+      color: #526174;
+      font-size: .92rem;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 640px) {
+      .policy-section { padding: 17px; border-radius: 14px; }
+      .policy-section h2 { font-size: 1rem; }
+    }
+  </style>
+</head>
+
+<body class="premium-bg min-h-screen text-gray-800">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-200 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+      <a href="index.html"
+         aria-label="Back to FreshMart home"
+         class="p-2 rounded-full bg-gray-100 hover:bg-green-100 transition">
+        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+      </a>
+
+      <img src="images/logo.png"
+           alt="FreshMart logo"
+           class="h-10 w-10 rounded-full object-contain"
+           onerror="this.style.display='none'">
+
+      <div>
+        <h1 class="text-lg sm:text-xl font-extrabold text-gray-900">Return & Refund Policy</h1>
+        <p class="text-xs text-gray-500">FreshMart · Customer Assistance</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-7 sm:py-10">
+
+    <!-- Hero -->
+    <section class="rounded-3xl p-6 sm:p-9 mb-7 text-white shadow-lg"
+      style="background:linear-gradient(135deg,#064e3b,#059669,#10b981)">
+      <div class="flex items-start gap-4">
+        <div class="hidden sm:flex bg-white/15 rounded-2xl p-4">
+          <i data-lucide="package-check" class="w-9 h-9"></i>
+        </div>
+        <div>
+          <p class="text-green-100 text-sm font-semibold mb-2">RETURNS & REFUNDS</p>
+          <h2 class="text-2xl sm:text-3xl font-extrabold mb-3">
+            Return & Refund Policy
+          </h2>
+          <p class="text-green-50 leading-7">
+            Received a damaged, incorrect or incomplete order?
+            Find out how to report an issue and request assistance from FreshMart.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-7">
+      <div class="info-card">
+        <div class="bg-green-50 rounded-xl p-3 inline-flex mb-3">
+          <i data-lucide="package-x" class="w-6 h-6 text-green-700"></i>
+        </div>
+        <h2 class="font-extrabold text-gray-900 mb-2">Damaged or Wrong Item</h2>
+        <p class="text-sm text-gray-600 leading-6">
+          Contact support with your order details and explain the issue.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <div class="bg-green-50 rounded-xl p-3 inline-flex mb-3">
+          <i data-lucide="list-check" class="w-6 h-6 text-green-700"></i>
+        </div>
+        <h2 class="font-extrabold text-gray-900 mb-2">Missing Items</h2>
+        <p class="text-sm text-gray-600 leading-6">
+          Tell us which item or quantity is missing from your order.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <div class="bg-green-50 rounded-xl p-3 inline-flex mb-3">
+          <i data-lucide="wallet" class="w-6 h-6 text-green-700"></i>
+        </div>
+        <h2 class="font-extrabold text-gray-900 mb-2">Refund Assistance</h2>
+        <p class="text-sm text-gray-600 leading-6">
+          Eligible requests are reviewed according to the applicable policy.
+        </p>
+      </div>
+    </section>
+
+    <!-- Quick navigation -->
+    <section class="bg-white rounded-2xl border border-gray-200 p-5 mb-7">
+      <h2 class="font-extrabold text-gray-900 mb-3">On this page</h2>
+      <div class="flex flex-wrap gap-2">
+        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#eligibility">Eligibility</a>
+        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#request">How to Request</a>
+        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#refund-method">Refund Process</a>
+        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#groceries">Grocery Items</a>
+        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#faq">FAQs</a>
+      </div>
+    </section>
+
+    <div class="space-y-4">
+
+      <section class="policy-section">
+        <h2>1. Overview</h2>
+        <p>
+          FreshMart aims to handle order-related concerns fairly and
+          responsibly. If a product is damaged, defective, incorrect
+          or missing, customers can contact support to request a review.
+          Available resolutions depend on the circumstances, the order
+          details, the applicable policy and applicable law.
+        </p>
+      </section>
+
+      <section id="eligibility" class="policy-section">
+        <h2>2. Issues You Can Report</h2>
+        <p>You can contact FreshMart about issues such as:</p>
+        <ul>
+          <li>A product different from the one ordered.</li>
+          <li>A damaged or defective item.</li>
+          <li>An item missing from the delivered order.</li>
+          <li>A quantity that does not match the order.</li>
+          <li>A payment or order-related issue that needs investigation.</li>
+        </ul>
+        <p class="mt-3">
+          Reporting an issue does not automatically mean a refund or
+          replacement has been approved. Each request will be reviewed
+          on its own facts and under applicable requirements.
+        </p>
+      </section>
+
+      <section id="request" class="policy-section">
+        <h2>3. How to Request a Return or Refund</h2>
+        <ol class="list-decimal pl-5 space-y-2 text-sm text-gray-600 leading-7">
+          <li>Keep your order details or order number ready, if available.</li>
+          <li>Contact FreshMart through phone, email or WhatsApp support.</li>
+          <li>Explain the issue and identify the affected product.</li>
+          <li>Provide relevant photos or other information if reasonably requested and available.</li>
+          <li>Wait for the support team to review your request and communicate the next steps.</li>
+        </ol>
+        <p class="mt-3">
+          Contact details are provided at the end of this page. This page
+          explains the process; it does not itself submit or approve a refund.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>4. Reporting Time and Supporting Information</h2>
+        <p>
+          Please report a delivery problem as soon as reasonably possible
+          after discovering it. Prompt reporting can help FreshMart
+          investigate the issue.
+        </p>
+        <p class="mt-3">
+          Keep the order details and relevant packaging where practical.
+          A photograph may help explain visible damage or an incorrect
+          product, but evidence requirements depend on the case and
+          applicable law. No fixed reporting deadline is established by
+          this page.
+        </p>
+      </section>
+
+      <section id="groceries" class="policy-section">
+        <h2>5. Fresh and Perishable Grocery Items</h2>
+        <p>
+          Fresh fruits, vegetables, dairy and other perishable products
+          may require special handling because quality can change quickly.
+          Customers should report quality, damage or incorrect-item
+          concerns promptly.
+        </p>
+        <p class="mt-3">
+          Return arrangements may differ for perishable, opened or
+          hygiene-sensitive products. Any restrictions must be consistent
+          with the actual product policy and applicable consumer rights.
+          A blanket refusal of every return or refund is not established
+          by this page.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>6. Review and Available Resolution</h2>
+        <p>
+          After reviewing a request, FreshMart may communicate an
+          appropriate available resolution, which could include a refund,
+          replacement, correction of an order issue or another suitable
+          remedy where applicable.
+        </p>
+        <p class="mt-3">
+          The available outcome depends on the nature of the issue,
+          product availability, payment status, the actual service
+          process and applicable law. A replacement is not guaranteed
+          when the product is unavailable.
+        </p>
+      </section>
+
+      <section id="refund-method" class="policy-section">
+        <h2>7. Refund Approval and Processing</h2>
+        <p>
+          A refund can be processed only through the actual payment and
+          order-handling process available to FreshMart. If a refund is
+          approved, support should explain the applicable process and
+          provide status information where available.
+        </p>
+        <p class="mt-3">
+          Processing time can depend on the payment provider and payment
+          method. This policy does not promise a fixed number of days or
+          guarantee a refund before the request has been reviewed.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>8. Prepaid and Cash on Delivery Orders</h2>
+        <p>
+          For prepaid orders, any approved refund depends on the payment
+          method and the refund facilities supported by the actual system.
+          The payment provider may require additional processing time.
+        </p>
+        <p class="mt-3">
+          For Cash on Delivery orders, the available refund method must
+          be confirmed with support. Do not share your card PIN, CVV,
+          UPI PIN or account password to request a refund.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>9. Delivery Charges</h2>
+        <p>
+          Whether a delivery charge is refundable depends on the facts of
+          the case, the applicable order terms and applicable law. The
+          final outcome should be communicated when the request is reviewed.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>10. Items That May Have Return Restrictions</h2>
+        <p>
+          Certain perishable, opened or hygiene-sensitive items may have
+          restrictions where those restrictions are lawful and disclosed.
+          These restrictions do not remove rights or remedies that apply
+          under mandatory law, including in relevant cases involving
+          damaged, defective or incorrectly supplied products.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>11. If Your Request Is Not Approved</h2>
+        <p>
+          If a request cannot be approved, you may contact FreshMart
+          support for clarification or additional review. Please provide
+          the relevant order details and any information that may help
+          explain the issue.
+        </p>
+        <p class="mt-3">
+          Nothing in this policy prevents you from exercising rights or
+          remedies available under applicable law.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>12. Cancellation-Related Refunds</h2>
+        <p>
+          If an order is cancelled, any eligible refund will be handled
+          according to the circumstances, the payment process and the
+          applicable policy.
+          See our <a href="cancellation.html" class="policy-link">Cancellation Policy</a>
+          for additional information.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>13. Policy Updates</h2>
+        <p>
+          FreshMart may update this policy when its services, operational
+          processes or legal requirements change. The current version
+          should be published on this page.
+        </p>
+      </section>
+
+      <section id="contact" class="policy-section">
+        <h2>14. Contact FreshMart for Help</h2>
+        <p>
+          For a return, refund or order-related issue, contact FreshMart
+          using one of the channels below.
+        </p>
+
+        <div class="grid sm:grid-cols-3 gap-3 mt-5">
+          <a href="tel:7988300872"
+             class="flex items-center gap-3 p-4 rounded-xl bg-green-50 hover:bg-green-100 transition">
+            <i data-lucide="phone" class="w-5 h-5 text-green-700"></i>
+            <div>
+              <p class="text-xs text-gray-500">Call us</p>
+              <p class="font-bold text-gray-900 text-sm">7988300872</p>
+            </div>
+          </a>
+
+          <a href="mailto:FreshMart@gmail.com"
+             class="flex items-center gap-3 p-4 rounded-xl bg-green-50 hover:bg-green-100 transition">
+            <i data-lucide="mail" class="w-5 h-5 text-green-700"></i>
+            <div>
+              <p class="text-xs text-gray-500">Email us</p>
+              <p class="font-bold text-gray-900 text-sm break-all">FreshMart@gmail.com</p>
+            </div>
+          </a>
+
+          <a href="https://wa.me/917988300872?text=Hello%20FreshMart%20Support%2C%20I%20need%20help%20with%20a%20return%20or%20refund."
+             target="_blank" rel="noopener noreferrer"
+             class="flex items-center gap-3 p-4 rounded-xl bg-green-50 hover:bg-green-100 transition">
+            <i data-lucide="message-circle" class="w-5 h-5 text-green-700"></i>
+            <div>
+              <p class="text-xs text-gray-500">WhatsApp</p>
+              <p class="font-bold text-gray-900 text-sm">Get Support</p>
+            </div>
+          </a>
+        </div>
+
+        <p class="mt-5">
+          You can also visit our <a href="help.html" class="policy-link">Help &amp; Support</a> page.
+        </p>
+      </section>
+
+    </div>
+
+    <!-- FAQ -->
+    <section id="faq" class="mt-8">
+      <h2 class="text-xl font-extrabold text-gray-900 mb-4">
+        Frequently Asked Questions
+      </h2>
+
+      <div class="space-y-3">
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
+            <span>Which products can qualify for a refund?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
+          </button>
+          <div id="faq-answer-1" class="faq-answer hidden">
+            Eligibility depends on the issue, product and applicable policy.
+            Contact support if an item is damaged, defective, incorrect or missing.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
+            <span>How do I report a damaged product?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
+          </button>
+          <div id="faq-answer-2" class="faq-answer hidden">
+            Contact FreshMart with your order details and explain the
+            damage. Relevant photos may help support review your request.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
+            <span>How long will my refund take?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
+          </button>
+          <div id="faq-answer-3" class="faq-answer hidden">
+            Timing depends on approval, the supported refund process and
+            the payment provider. Contact support for information about
+            your specific request.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
+            <span>Can I get a replacement instead of a refund?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
+          </button>
+          <div id="faq-answer-4" class="faq-answer hidden">
+            A replacement may be considered depending on the issue,
+            product availability and applicable policy. Contact support
+            to learn about the available options.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-5">
+            <span>Does this page automatically submit a refund request?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
+          </button>
+          <div id="faq-answer-5" class="faq-answer hidden">
+            No. This page provides policy information. Contact FreshMart
+            using the listed channels unless a separate working refund
+            request feature is available on the website.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related policies -->
+    <section class="mt-7 bg-white border border-gray-200 rounded-2xl p-5 sm:p-6">
+      <h2 class="font-extrabold text-gray-900 mb-4">Related Policies</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <a href="terms.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
+          <span class="font-semibold text-gray-700">Terms &amp; Conditions</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </a>
+
+        <a href="privacy.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
+          <span class="font-semibold text-gray-700">Privacy Policy</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </a>
+
+        <a href="delivery.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
+          <span class="font-semibold text-gray-700">Delivery Policy</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </a>
+
+        <a href="cancellation.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
+          <span class="font-semibold text-gray-700">Cancellation Policy</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center py-8">
+      <a href="index.html" class="inline-flex items-center gap-2 text-green-700 font-bold hover:text-green-800">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        Back to FreshMart
+      </a>
+      <p class="text-xs text-gray-500 mt-3">FreshMart · Return &amp; Refund Policy</p>
+      <p class="text-xs text-gray-400 mt-1">
+        Requests are reviewed according to the applicable policy and law.
+      </p>
+    </footer>
+
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      document.querySelectorAll(".faq-question").forEach(function (button) {
+        button.addEventListener("click", function () {
+          const answer = document.getElementById(
+            button.getAttribute("aria-controls")
+          );
+          const expanded = button.getAttribute("aria-expanded") === "true";
+
+          button.setAttribute("aria-expanded", String(!expanded));
+          answer.classList.toggle("hidden", expanded);
+
+          const icon = button.querySelector(".faq-icon");
+          if (icon) {
+            icon.style.transform = expanded ? "rotate(0deg)" : "rotate(180deg)";
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
