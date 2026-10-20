@@ -1,325 +1,1310 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Read the FreshMart Terms and Conditions for using our grocery shopping website.">
-    <title>Terms & Conditions | FreshMart</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5faf6">
+  <title>Terms & Conditions | FreshMart</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: { 50: '#ecfdf5', 500: '#10b981', 600: '#059669', 700: '#047857' }
-                    },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
-                }
-            }
-        };
-    </script>
-    <style>
-        /* Smooth scrolling for anchor links */
-        html { scroll-behavior: smooth; }
-        .legal-section { scroll-margin-top: 100px; }
-    </style>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --green: #16834a;
+      --green-dark: #116638;
+      --green-light: #eaf7ef;
+      --navy: #172b24;
+      --text: #4b5b53;
+      --muted: #77857d;
+      --border: #e5ece7;
+      --surface: #ffffff;
+      --page: #f5f9f6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 105px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      font-size: 15px;
+      line-height: 1.85;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--green-dark);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .container {
+      width: min(1160px, calc(100% - 40px));
+      margin: auto;
+    }
+
+    /* Header */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--navy);
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .brand img {
+      width: 43px;
+      height: 43px;
+      object-fit: contain;
+    }
+
+    .brand span {
+      color: var(--green);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 9px;
+      min-height: 43px;
+      padding: 10px 17px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(23, 43, 36, .08);
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-dark);
+      color: white;
+    }
+
+    /* Hero */
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 76px 0 72px;
+      background:
+        radial-gradient(ellipse at 85% 15%, rgba(101, 190, 132, .20), transparent 38%),
+        radial-gradient(ellipse at 5% 100%, rgba(193, 231, 204, .38), transparent 42%),
+        linear-gradient(135deg, #eff9f1, #ffffff 55%, #edf8f0);
+      border-bottom: 1px solid #e2eee5;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      right: -100px;
+      bottom: -180px;
+      border: 1px solid rgba(22, 131, 74, .15);
+      border-radius: 50%;
+      box-shadow: 0 0 0 35px rgba(22, 131, 74, .035),
+                  0 0 0 70px rgba(22, 131, 74, .025);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 13px;
+      border-radius: 999px;
+      background: white;
+      border: 1px solid #dcefe1;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 23px 0 18px;
+      color: var(--navy);
+      font-size: clamp(36px, 5.5vw, 60px);
+      line-height: 1.13;
+      letter-spacing: -2.5px;
+      font-weight: 800;
+    }
+
+    .hero h1 span {
+      color: var(--green);
+    }
+
+    .hero-description {
+      max-width: 680px;
+      margin: 0;
+      color: #5e7165;
+      font-size: 16px;
+      line-height: 1.9;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 27px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, .82);
+      border: 1px solid #e2eee5;
+      color: #43594b;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .hero-badge i {
+      color: var(--green);
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Main layout */
+
+    .main-layout {
+      display: grid;
+      grid-template-columns: 255px minmax(0, 1fr);
+      align-items: start;
+      gap: 30px;
+      padding-top: 45px;
+      padding-bottom: 75px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 100px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px 15px;
+      box-shadow: 0 8px 30px rgba(27, 57, 39, .035);
+    }
+
+    .sidebar-title {
+      padding: 0 10px;
+      margin: 0 0 14px;
+      color: var(--navy);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .toc {
+      display: grid;
+      gap: 4px;
+    }
+
+    .toc a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: 10px;
+      color: #65736b;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.5;
+      transition: .2s ease;
+    }
+
+    .toc a:hover,
+    .toc a.active {
+      background: var(--green-light);
+      color: var(--green-dark);
+    }
+
+    .toc-number {
+      display: grid;
+      place-items: center;
+      flex: 0 0 24px;
+      height: 24px;
+      border-radius: 7px;
+      background: #f1f5f2;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .toc a.active .toc-number {
+      background: var(--green);
+      color: white;
+    }
+
+    .mobile-toc {
+      display: none;
+      margin-bottom: 20px;
+    }
+
+    .mobile-toc summary {
+      cursor: pointer;
+      padding: 15px 17px;
+      border-radius: 13px;
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    .mobile-toc .toc {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: white;
+    }
+
+    /* Intro and content cards */
+
+    .content {
+      min-width: 0;
+    }
+
+    .intro-card {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      padding: 27px;
+      margin-bottom: 22px;
+      border: 1px solid #dceee1;
+      border-radius: 20px;
+      background: linear-gradient(120deg, #edf8f0, #ffffff);
+    }
+
+    .intro-icon {
+      display: grid;
+      place-items: center;
+      flex: 0 0 48px;
+      height: 48px;
+      border-radius: 15px;
+      background: white;
+      color: var(--green);
+      box-shadow: 0 4px 12px rgba(22, 131, 74, .08);
+    }
+
+    .intro-icon i {
+      width: 23px;
+      height: 23px;
+    }
+
+    .intro-card h2 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .intro-card p {
+      margin: 0;
+      color: #5c6e63;
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    .terms-card {
+      scroll-margin-top: 105px;
+      margin-bottom: 20px;
+      padding: 29px 30px;
+      border: 1px solid var(--border);
+      border-radius: 19px;
+      background: var(--surface);
+      box-shadow: 0 5px 24px rgba(23, 43, 36, .025);
+      transition: border-color .2s ease, box-shadow .2s ease;
+      animation: rise .45s ease both;
+    }
+
+    .terms-card:hover {
+      border-color: #d1e6d7;
+      box-shadow: 0 10px 30px rgba(23, 43, 36, .045);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 20px;
+      padding-bottom: 19px;
+      border-bottom: 1px solid #edf1ee;
+    }
+
+    .section-icon {
+      display: grid;
+      place-items: center;
+      flex: 0 0 47px;
+      height: 47px;
+      border-radius: 14px;
+      background: var(--green-light);
+      color: var(--green);
+    }
+
+    .section-icon i {
+      width: 22px;
+      height: 22px;
+    }
+
+    .section-number {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(19px, 2vw, 22px);
+      font-weight: 750;
+      line-height: 1.45;
+      letter-spacing: -.45px;
+    }
+
+    .terms-card p {
+      margin: 0 0 17px;
+      color: #53635a;
+      font-size: 14px;
+      line-height: 1.95;
+    }
+
+    .terms-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .terms-card strong {
+      color: #263a2f;
+      font-weight: 700;
+    }
+
+    .terms-card ul,
+    .terms-card ol {
+      display: grid;
+      gap: 11px;
+      margin: 15px 0 20px;
+      padding-left: 23px;
+      color: #53635a;
+      font-size: 14px;
+      line-height: 1.85;
+    }
+
+    .terms-card li {
+      padding-left: 5px;
+    }
+
+    .terms-card li::marker {
+      color: var(--green);
+    }
+
+    .notice {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 12px;
+      border-left: 4px solid var(--green);
+      background: #f0f8f2;
+      color: #3f5d49;
+      font-size: 13px;
+      line-height: 1.85;
+    }
+
+    .notice strong {
+      color: var(--green-dark);
+    }
+
+    .notice.warning {
+      border-left-color: #d9a441;
+      background: #fff9eb;
+      color: #715a2c;
+    }
+
+    .notice.warning strong {
+      color: #8a651e;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .contact-item {
+      min-width: 0;
+      padding: 17px 13px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: #fbfdfb;
+      transition: .2s ease;
+    }
+
+    .contact-item:hover {
+      border-color: #c8e4d0;
+      transform: translateY(-2px);
+    }
+
+    .contact-item i {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--green);
+      width: 20px;
+      height: 20px;
+    }
+
+    .contact-item small {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .contact-item a {
+      display: block;
+      overflow-wrap: anywhere;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Related policies */
+
+    .related {
+      padding: 29px;
+      margin-top: 24px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: white;
+    }
+
+    .related h2 {
+      margin: 0 0 7px;
+      color: var(--navy);
+      font-size: 21px;
+      letter-spacing: -.5px;
+    }
+
+    .related > p {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+    .related-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 700;
+      transition: .2s ease;
+    }
+
+    .related-link:hover {
+      background: var(--green-light);
+      border-color: #d0e7d7;
+      transform: translateY(-2px);
+    }
+
+    .related-link i {
+      width: 17px;
+      height: 17px;
+      color: var(--green);
+      flex-shrink: 0;
+    }
+
+    /* Footer */
+
+    .footer {
+      padding: 30px 0;
+      border-top: 1px solid var(--border);
+      background: white;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 17px;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .back-top {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--green);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(22, 131, 74, .24);
+      transition: .2s ease;
+    }
+
+    .back-top:hover {
+      background: var(--green-dark);
+      transform: translateY(-3px);
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(9px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding-top: 28px;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .mobile-toc {
+        display: block;
+      }
+
+      .hero {
+        padding: 58px 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        font-size: 14px;
+      }
+
+      .container {
+        width: calc(100% - 30px);
+      }
+
+      .header-inner {
+        min-height: 66px;
+      }
+
+      .brand {
+        font-size: 20px;
+      }
+
+      .brand img {
+        width: 36px;
+        height: 36px;
+      }
+
+      .header-actions .btn {
+        min-height: 38px;
+        padding: 8px 10px;
+        font-size: 11px;
+      }
+
+      .hero {
+        padding: 46px 0 43px;
+      }
+
+      .hero h1 {
+        font-size: 38px;
+        letter-spacing: -1.7px;
+      }
+
+      .hero-description {
+        font-size: 14px;
+      }
+
+      .hero-badges {
+        gap: 7px;
+      }
+
+      .hero-badge {
+        padding: 8px 10px;
+        font-size: 10px;
+      }
+
+      .main-layout {
+        padding-top: 22px;
+        padding-bottom: 45px;
+      }
+
+      .intro-card {
+        padding: 19px;
+        gap: 13px;
+        border-radius: 16px;
+      }
+
+      .intro-icon {
+        flex-basis: 40px;
+        height: 40px;
+      }
+
+      .terms-card {
+        padding: 21px 18px;
+        margin-bottom: 14px;
+        border-radius: 16px;
+        scroll-margin-top: 82px;
+      }
+
+      .section-heading {
+        gap: 12px;
+        margin-bottom: 17px;
+        padding-bottom: 16px;
+      }
+
+      .section-icon {
+        flex-basis: 39px;
+        height: 39px;
+        border-radius: 12px;
+      }
+
+      .section-icon i {
+        width: 19px;
+        height: 19px;
+      }
+
+      .section-heading h2 {
+        font-size: 18px;
+      }
+
+      .terms-card p,
+      .terms-card ul,
+      .terms-card ol {
+        font-size: 13px;
+        line-height: 1.9;
+      }
+
+      .terms-card ul,
+      .terms-card ol {
+        padding-left: 19px;
+        gap: 9px;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px;
+      }
+
+      .contact-item i {
+        margin: 0;
+      }
+
+      .contact-item small {
+        margin-bottom: 0;
+      }
+
+      .related {
+        padding: 20px 17px;
+      }
+
+      .related-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .back-top {
+        right: 14px;
+        bottom: 14px;
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+
+      .header, .sidebar, .mobile-toc, .header-actions,
+      .related, .footer, .back-top {
+        display: none !important;
+      }
+
+      .hero {
+        padding: 20px 0;
+        background: white;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      .main-layout {
+        display: block;
+        padding: 15px 0;
+      }
+
+      .terms-card, .intro-card {
+        break-inside: avoid;
+        box-shadow: none;
+        border-color: #ddd;
+      }
+
+      .terms-card {
+        padding: 18px;
+        margin-bottom: 12px;
+      }
+
+      a {
+        color: black;
+        text-decoration: none;
+      }
+    }
+  </style>
 </head>
 
-<body class="premium-bg min-h-screen text-gray-800 font-sans pb-10">
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="FreshMart Home">
+        <img src="images/logo.png" alt="FreshMart logo">
+        Fresh<span>Mart</span>
+      </a>
 
-    <!-- Subtle Premium Background Watermark -->
-    <div class="fixed inset-0 z-[-1] opacity-[0.04] pointer-events-none" style="background-image: url('images/background.png'); background-size: cover; background-position: center; background-attachment: fixed;"></div>
+      <div class="header-actions">
+        <button class="btn" onclick="goBack()" type="button">
+          <i data-lucide="arrow-left" width="16"></i>
+          <span>Back</span>
+        </button>
+        <button class="btn btn-primary" onclick="window.print()" type="button">
+          <i data-lucide="download" width="16"></i>
+          <span>Save PDF</span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-    <!-- Header -->
-    <header class="bg-white/90 backdrop-blur-xl border-b border-gray-200 sticky top-0 z-50 px-4 py-3 flex items-center shadow-sm">
-        <a href="legal.html" aria-label="Back to Legal" class="btn-3d p-2 mr-3 bg-gray-100 hover:bg-gray-200 rounded-full transition text-gray-600">
-            <i data-lucide="arrow-left" class="w-5 h-5"></i>
-        </a>
-        <img src="images/logo.png" alt="FreshMart logo" class="h-10 w-auto rounded-full object-contain shadow-sm border border-gray-100" onerror="this.style.display='none'">
-        <div class="ml-3">
-            <h1 class="text-lg md:text-xl font-extrabold text-gray-900 tracking-tight">Terms & Conditions</h1>
-            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">FreshMart Legal</p>
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="eyebrow">
+        <i data-lucide="book-open-check" width="15"></i>
+        FreshMart · Customer Guidelines
+      </div>
+
+      <h1>Terms & <span>Conditions</span></h1>
+
+      <p class="hero-description">
+        Welcome to FreshMart. These terms explain the guidelines for using
+        our website, placing orders and shopping with us. Please read them
+        carefully so your shopping experience stays clear and convenient.
+      </p>
+
+      <div class="hero-badges">
+        <span class="hero-badge">
+          <i data-lucide="shopping-bag"></i>
+          Shopping Guidelines
+        </span>
+        <span class="hero-badge">
+          <i data-lucide="shield-check"></i>
+          Customer Responsibilities
+        </span>
+        <span class="hero-badge">
+          <i data-lucide="file-check"></i>
+          Clear Policies
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <main class="container main-layout">
+    <aside class="sidebar">
+      <p class="sidebar-title">On this page</p>
+      <nav class="toc" id="desktopToc" aria-label="Terms sections"></nav>
+    </aside>
+
+    <div class="content">
+      <details class="mobile-toc">
+        <summary>Explore Terms & Conditions</summary>
+        <nav class="toc" id="mobileToc" aria-label="Mobile terms sections"></nav>
+      </details>
+
+      <div class="intro-card">
+        <div class="intro-icon">
+          <i data-lucide="info"></i>
         </div>
-    </header>
+        <div>
+          <h2>A few things to know before you shop</h2>
+          <p>
+            These terms are intended to explain how FreshMart services work
+            and what customers can expect. They should be read together with
+            our Privacy, Delivery, Refund and Cancellation policies.
+          </p>
+        </div>
+      </div>
 
-    <main class="max-w-[1000px] mx-auto px-4 py-8 md:py-10">
+      <!-- Terms sections are rendered below. Edit the content in the
+           termsData array to preserve and maintain your official policy. -->
+      <div id="termsContent"></div>
 
-        <!-- Intro Premium Card -->
-        <section class="rounded-[2.5rem] p-8 md:p-10 mb-8 text-white shadow-xl border border-primary-600/20 relative overflow-hidden" style="background: linear-gradient(135deg, #064e3b, #059669, #10b981);">
-            <!-- Decorative circle -->
-            <div class="absolute -right-10 -top-10 w-40 h-40 bg-white opacity-10 rounded-full blur-2xl"></div>
-            
-            <div class="flex items-start gap-5 relative z-10">
-                <div class="hidden md:flex bg-white/20 rounded-full p-4 backdrop-blur-sm shadow-inner">
-                    <i data-lucide="file-check-2" class="w-10 h-10 text-white"></i>
-                </div>
-                <div>
-                    <p class="text-green-100 text-xs font-bold uppercase tracking-widest mb-2">Legal Information</p>
-                    <h2 class="text-3xl md:text-4xl font-extrabold mb-4 tracking-tight text-white">
-                        Terms & Conditions
-                    </h2>
-                    <p class="text-green-50 text-sm md:text-base leading-relaxed font-medium max-w-2xl">
-                        Please read these terms carefully before using FreshMart. They explain the general conditions for browsing our website and using the services that are actually available.
-                    </p>
-                    <p class="text-green-200 text-xs font-bold mt-4 uppercase tracking-widest">Last Updated: 08 Oct 2026</p>
-                </div>
-            </div>
-        </section>
+      <section class="related">
+        <h2>Explore our policies</h2>
+        <p>Find more information about your FreshMart shopping experience.</p>
 
-        <!-- Quick Navigation -->
-        <section class="glass-card p-6 mb-10 border border-gray-100">
-            <h2 class="font-extrabold text-gray-900 mb-4 text-sm uppercase tracking-widest flex items-center gap-2">
-                <i data-lucide="list" class="w-4 h-4 text-primary-600"></i> On this page
-            </h2>
-            <div class="flex flex-wrap gap-3 text-sm font-bold">
-                <a class="btn-3d px-4 py-2 rounded-full bg-primary-50 text-primary-700 hover:bg-primary-100 transition shadow-sm border border-primary-100" href="#acceptance">Acceptance</a>
-                <a class="btn-3d px-4 py-2 rounded-full bg-primary-50 text-primary-700 hover:bg-primary-100 transition shadow-sm border border-primary-100" href="#products">Products & Pricing</a>
-                <a class="btn-3d px-4 py-2 rounded-full bg-primary-50 text-primary-700 hover:bg-primary-100 transition shadow-sm border border-primary-100" href="#orders">Orders</a>
-                <a class="btn-3d px-4 py-2 rounded-full bg-primary-50 text-primary-700 hover:bg-primary-100 transition shadow-sm border border-primary-100" href="#payments">Payments</a>
-                <a class="btn-3d px-4 py-2 rounded-full bg-primary-50 text-primary-700 hover:bg-primary-100 transition shadow-sm border border-primary-100" href="#delivery">Delivery</a>
-                <a class="btn-3d px-4 py-2 rounded-full bg-primary-50 text-primary-700 hover:bg-primary-100 transition shadow-sm border border-primary-100" href="#refunds">Returns & Refunds</a>
-                <a class="btn-3d px-4 py-2 rounded-full bg-primary-50 text-primary-700 hover:bg-primary-100 transition shadow-sm border border-primary-100" href="#contact">Contact Support</a>
-            </div>
-        </section>
+        <div class="related-grid">
+          <a class="related-link" href="privacy.html">
+            <span>Privacy Policy</span>
+            <i data-lucide="arrow-up-right"></i>
+          </a>
+          <a class="related-link" href="delivery.html">
+            <span>Delivery Policy</span>
+            <i data-lucide="arrow-up-right"></i>
+          </a>
+          <a class="related-link" href="refund.html">
+            <span>Refund Policy</span>
+            <i data-lucide="arrow-up-right"></i>
+          </a>
+          <a class="related-link" href="cancellation.html">
+            <span>Cancellation Policy</span>
+            <i data-lucide="arrow-up-right"></i>
+          </a>
+          <a class="related-link" href="about.html">
+            <span>About FreshMart</span>
+            <i data-lucide="arrow-up-right"></i>
+          </a>
+          <a class="related-link" href="help.html">
+            <span>Help & Support</span>
+            <i data-lucide="arrow-up-right"></i>
+          </a>
+        </div>
+      </section>
 
-        <!-- Terms Content Wrapper (Glass Card) -->
-        <div class="glass-card p-6 md:p-10 space-y-6 border border-gray-100">
-
-            <section id="introduction" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">1.</span> Introduction</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    Welcome to FreshMart. These Terms & Conditions describe general rules for accessing and using the FreshMart website. In these terms, “FreshMart”, “we”, “our” and “us” refer to the FreshMart website or its operator, as applicable. “You” and “customer” refer to a person using the website.
-                </p>
-                <p class="mt-3 text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    Please review these terms together with the relevant Privacy, Delivery, Return & Refund and Cancellation policies.
-                </p>
-            </section>
-
-            <section id="acceptance" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">2.</span> Acceptance of Terms</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    By accessing or using FreshMart, you agree to follow the applicable terms and policies. If you do not agree, please discontinue use of the website. Any rights available to you under applicable law remain unaffected.
-                </p>
-            </section>
-
-            <section id="responsibilities" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-4 flex items-center gap-2"><span class="text-primary-600">3.</span> Customer Responsibilities</h2>
-                <p class="text-gray-600 font-bold mb-3">When using FreshMart, you should:</p>
-                <ul class="space-y-2 text-sm md:text-base font-medium text-gray-600 list-disc pl-5">
-                    <li>Provide accurate information when placing an order or creating an account.</li>
-                    <li>Keep your account credentials private, if account functionality is available.</li>
-                    <li>Use the website lawfully and avoid fraudulent or harmful activity.</li>
-                    <li>Review product details, quantities, prices and delivery information before ordering.</li>
-                    <li>Contact support if you notice an order or account issue.</li>
-                </ul>
-            </section>
-
-            <section id="products" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">4.</span> Products, Descriptions and Availability</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    Product images, descriptions, sizes, quantities and other details are provided to help customers make informed choices. Images may differ slightly from the delivered product. Product availability can change, and a displayed product may become unavailable before an order is fulfilled.
-                </p>
-                <p class="mt-3 text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    If an item is unavailable or an important product detail changes, FreshMart should communicate the available options where reasonably possible. Nothing in these terms removes applicable consumer rights.
-                </p>
-            </section>
-
-            <section id="pricing" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">5.</span> Prices, Taxes and Charges</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    Product prices and any applicable delivery charges should be reviewed on the website and at checkout before placing an order. The final payable amount should be shown before the customer confirms the purchase, where the checkout supports this.
-                </p>
-                <p class="mt-3 text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    If a pricing or listing error is discovered, the order may need review and the customer should be informed of the available resolution. No unlisted fee should be assumed to apply.
-                </p>
-            </section>
-
-            <section id="orders" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">6.</span> Cart, Orders and Confirmation</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    Adding products to a cart does not necessarily reserve stock. Customers should check the selected items, quantities, delivery details and total amount before submitting an order.
-                </p>
-                <p class="mt-3 text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    An order confirmation should be treated according to the actual checkout and order-processing process used by FreshMart. If an order status or confirmation feature is not available on the website, contact support to ask about the order.
-                </p>
-            </section>
-
-            <section id="accounts" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">7.</span> Accounts and Account Security</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    If FreshMart offers customer accounts, users should provide accurate registration information and protect their login credentials. Notify FreshMart if you suspect unauthorized access. Account creation, verification and recovery are subject to the features actually implemented on the website.
-                </p>
-            </section>
-
-            <section id="payments" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">8.</span> Payments</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    Customers should use the payment methods actually presented at checkout and review the payable amount before confirming payment. Payment processing may depend on the selected payment provider.
-                </p>
-                <p class="mt-3 text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    Do not send your card PIN, CVV, UPI PIN or password to customer support. For a payment deduction, duplicate charge or payment status issue, contact FreshMart with relevant order details without sharing confidential payment credentials.
-                </p>
-            </section>
-
-            <section id="delivery" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">9.</span> Delivery</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    Delivery availability, estimated timing and charges depend on the service areas and options actually offered by FreshMart. Customers are responsible for providing an accurate delivery address and reachable contact details.
-                </p>
-                <p class="mt-3 text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    Delays may occur due to product availability, traffic, weather or other operational circumstances. Any available delivery updates should be read together with our <a href="delivery.html" class="text-primary-600 font-bold hover:underline">Delivery Policy</a>.
-                </p>
-            </section>
-
-            <section id="cancellation" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">10.</span> Order Cancellation</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    Cancellation requests are handled according to order status, operational feasibility and applicable law. A request may need review, particularly if an order has already been packed or dispatched.
-                </p>
-                <p class="mt-3 text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    For instructions and applicable conditions, read our <a href="cancellation.html" class="text-primary-600 font-bold hover:underline">Cancellation Policy</a> or contact support.
-                </p>
-            </section>
-
-            <section id="refunds" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">11.</span> Returns, Replacements and Refunds</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    If an item is damaged, defective, incorrect or missing, contact FreshMart with the order details so the issue can be reviewed. Available resolutions depend on the circumstances, the actual policy and applicable law.
-                </p>
-                <p class="mt-3 text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    Eligibility and processing time may vary by case and payment provider. Read our <a href="refund.html" class="text-primary-600 font-bold hover:underline">Return & Refund Policy</a> for further information.
-                </p>
-            </section>
-
-            <section id="offers" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">12.</span> Coupons, Discounts and Promotions</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    Promotional offers, if available, may have specific eligibility conditions, validity periods or usage limits. The applicable conditions should be displayed with the offer. FreshMart should not represent an offer as available when it has expired or its conditions are not met.
-                </p>
-            </section>
-
-            <section id="prohibited" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-4 flex items-center gap-2"><span class="text-primary-600">13.</span> Prohibited Activities</h2>
-                <p class="text-gray-600 font-bold mb-3">You must not use FreshMart to:</p>
-                <ul class="space-y-2 text-sm md:text-base font-medium text-gray-600 list-disc pl-5">
-                    <li>Commit fraud or submit knowingly false order information.</li>
-                    <li>Attempt unauthorized access to accounts, systems or data.</li>
-                    <li>Disrupt website operation or interfere with other users.</li>
-                    <li>Upload malicious code or misuse the website for unlawful purposes.</li>
-                    <li>Copy or misuse website content in violation of applicable rights.</li>
-                </ul>
-            </section>
-
-            <section id="intellectual-property" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">14.</span> Intellectual Property</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    Website text, graphics, logos, design elements and other content may be protected by applicable intellectual-property laws. You may use the website for ordinary personal shopping purposes. Reuse of protected content beyond what the law permits requires appropriate authorization.
-                </p>
-            </section>
-
-            <section id="third-party" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">15.</span> Third-Party Services and Links</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    FreshMart may link to or use third-party services, such as payment or delivery providers, if those integrations are available. Third-party services may have their own terms and privacy practices. Review those terms when using their services.
-                </p>
-            </section>
-
-            <section id="privacy" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">16.</span> Privacy and Personal Information</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    Personal information should be handled in accordance with the applicable privacy practices and laws. Please read our <a href="privacy.html" class="text-primary-600 font-bold hover:underline">Privacy Policy</a> to understand how information may be collected, used and handled.
-                </p>
-            </section>
-
-            <section id="availability" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">17.</span> Website Availability and Technical Issues</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    We aim to keep the website usable, but uninterrupted availability cannot be guaranteed. Maintenance, network problems, hosting failures or technical errors may temporarily affect access. We will not use this section to exclude liability that cannot lawfully be excluded.
-                </p>
-            </section>
-
-            <section id="liability" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">18.</span> Liability and Customer Rights</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    These terms must be read consistently with applicable Indian laws and consumer-protection requirements. Nothing in these terms is intended to exclude or limit a consumer right or legal liability where such exclusion or limitation is not permitted by law.
-                </p>
-            </section>
-
-            <section id="changes" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">19.</span> Changes to These Terms</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    FreshMart may update these terms when its services, policies or legal requirements change. Updated terms should be published on this page with an accurate revision date. Customers should review the page periodically.
-                </p>
-            </section>
-
-            <section id="law" class="legal-section bg-white/70 p-6 md:p-8 rounded-[2rem] shadow-sm hover:shadow-md transition">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-3 flex items-center gap-2"><span class="text-primary-600">20.</span> Applicable Law and Disputes</h2>
-                <p class="text-gray-600 font-medium leading-relaxed text-sm md:text-base">
-                    These terms are intended to be interpreted in accordance with applicable laws of India. Any dispute will be handled through the processes and forums available under applicable law. This section does not remove any mandatory consumer rights.
-                </p>
-            </section>
-
-            <!-- Contact Section -->
-            <section id="contact" class="mt-10 p-8 bg-primary-50/90 rounded-[2.5rem] border border-primary-200 shadow-md">
-                <h2 class="text-xl font-extrabold text-primary-700 mb-5 flex items-center gap-2"><i data-lucide="headphones" class="w-6 h-6"></i> 21. Contact FreshMart</h2>
-                <p class="text-gray-700 font-medium mb-6">For questions about these terms, orders or website usage, contact FreshMart through the following channels:</p>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <a href="tel:7988300872" class="btn-3d flex items-center gap-4 p-5 rounded-2xl bg-white border border-primary-100 hover:border-primary-300 shadow-sm transition">
-                        <div class="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center"><i data-lucide="phone" class="w-5 h-5 text-green-600"></i></div>
-                        <div><p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Call Us</p><p class="font-extrabold text-gray-900">7988300872</p></div>
-                    </a>
-
-                    <a href="mailto:FreshMart@gmail.com" class="btn-3d flex items-center gap-4 p-5 rounded-2xl bg-white border border-primary-100 hover:border-primary-300 shadow-sm transition">
-                        <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center"><i data-lucide="mail" class="w-5 h-5 text-blue-600"></i></div>
-                        <div class="overflow-hidden"><p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Email Us</p><p class="font-extrabold text-gray-900 truncate">FreshMart@gmail.com</p></div>
-                    </a>
-
-                    <a href="https://wa.me/917988300872" target="_blank" rel="noopener noreferrer" class="btn-3d flex items-center gap-4 p-5 rounded-2xl bg-white border border-primary-100 hover:border-primary-300 shadow-sm transition">
-                        <div class="w-10 h-10 bg-[#25D366]/10 rounded-full flex items-center justify-center"><i data-lucide="message-circle" class="w-5 h-5 text-[#25D366]"></i></div>
-                        <div><p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">WhatsApp</p><p class="font-extrabold text-gray-900">Chat with us</p></div>
-                    </a>
-                </div>
-            </section>
-
+      <section class="terms-card" id="contact">
+        <div class="section-heading">
+          <div class="section-icon"><i data-lucide="headset"></i></div>
+          <div>
+            <span class="section-number">Need assistance?</span>
+            <h2>Contact FreshMart Support</h2>
+          </div>
         </div>
 
-        <!-- Related Policies Nav -->
-        <section class="mt-8 bg-white border border-gray-200 rounded-[2.5rem] p-6 md:p-8 shadow-sm">
-            <h2 class="font-extrabold text-gray-900 mb-5 text-lg flex items-center gap-2"><i data-lucide="folder" class="w-5 h-5 text-primary-600"></i> Related Policies</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                <a href="privacy.html" class="btn-3d flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-primary-50 transition border border-transparent hover:border-primary-100">
-                    <span class="font-bold text-gray-700 text-sm">Privacy Policy</span><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
-                </a>
-                <a href="delivery.html" class="btn-3d flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-primary-50 transition border border-transparent hover:border-primary-100">
-                    <span class="font-bold text-gray-700 text-sm">Delivery Policy</span><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
-                </a>
-                <a href="refund.html" class="btn-3d flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-primary-50 transition border border-transparent hover:border-primary-100">
-                    <span class="font-bold text-gray-700 text-sm">Return & Refund</span><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
-                </a>
-                <a href="cancellation.html" class="btn-3d flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-primary-50 transition border border-transparent hover:border-primary-100">
-                    <span class="font-bold text-gray-700 text-sm">Cancellation Policy</span><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
-                </a>
+        <p>
+          If you have questions about these terms, your order or our policies,
+          contact our support team using the details below.
+        </p>
+
+        <div class="contact-grid">
+          <div class="contact-item">
+            <i data-lucide="mail"></i>
+            <div>
+              <small>Email support</small>
+              <a href="mailto:FreshMart@gmail.com">FreshMart@gmail.com</a>
             </div>
-        </section>
+          </div>
 
-        <!-- Footer -->
-        <footer class="text-center py-10">
-            <p class="text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">FreshMart · Terms & Conditions</p>
-            <p class="text-xs font-medium text-gray-500">Please review these terms before placing an order.</p>
-        </footer>
+          <div class="contact-item">
+            <i data-lucide="phone"></i>
+            <div>
+              <small>Call support</small>
+              <a href="tel:+917988300872">+91 7988300872</a>
+            </div>
+          </div>
 
-    </main>
+          <div class="contact-item">
+            <i data-lucide="message-circle"></i>
+            <div>
+              <small>WhatsApp support</small>
+              <a href="https://wa.me/917988300872" target="_blank" rel="noopener noreferrer">
+                Chat with FreshMart
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+      <div class="notice warning">
+        <strong>Before publishing:</strong> Review these terms against your
+        actual business practices and applicable laws. Replace any placeholder
+        policy text with your approved terms before accepting customer orders.
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> FreshMart. All rights reserved.</p>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="index.html">Home</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="delivery.html">Delivery</a>
+        <a href="help.html">Support</a>
+      </nav>
+    </div>
+  </footer>
+
+  <button class="back-top" id="backTop" type="button" aria-label="Back to top" title="Back to top">
+    <i data-lucide="arrow-up"></i>
+  </button>
+
+  <script>
+    /*
+      IMPORTANT:
+      Put your existing approved Terms & Conditions sections in termsData.
+      This keeps the design separate from the legal text so that no existing
+      legal wording is accidentally deleted or replaced.
+    */
+
+    const termsData = [
+      {
+        title: "Acceptance of Terms",
+        icon: "handshake",
+        paragraphs: [
+          "By accessing or using the FreshMart website, you agree to follow the applicable terms and policies governing your use of the service.",
+          "If you do not agree with these terms, please discontinue use of the website. Please review the policies linked on this page before placing an order."
+        ]
+      },
+      {
+        title: "Eligibility and Your Account",
+        icon: "user-round",
+        paragraphs: [
+          "You are responsible for providing accurate information when creating or using an account. Keep your login credentials confidential and notify FreshMart if you suspect unauthorized access.",
+          "Account access may be restricted when necessary to protect customers, the website or the integrity of the service."
+        ]
+      },
+      {
+        title: "Products and Availability",
+        icon: "shopping-basket",
+        paragraphs: [
+          "Product descriptions, images and availability are provided to help customers make informed choices. Actual packaging or appearance may vary where appropriate.",
+          "Products may become unavailable, and FreshMart may need to update listings or contact customers about affected items."
+        ]
+      },
+      {
+        title: "Pricing and Payments",
+        icon: "wallet",
+        paragraphs: [
+          "Prices and applicable charges should be reviewed at checkout before an order is confirmed. The final order summary is the reference for the amount presented to you.",
+          "Payment options depend on the methods actually enabled on the website. Do not send passwords, card PINs or one-time verification codes to anyone claiming to be support."
+        ]
+      },
+      {
+        title: "Orders and Confirmation",
+        icon: "clipboard-check",
+        paragraphs: [
+          "Submitting an order is a request to purchase the selected products. Order confirmation and acceptance are subject to the checkout process, availability and applicable verification.",
+          "Check your order details carefully, including quantities, delivery address and contact information, before submitting."
+        ]
+      },
+      {
+        title: "Delivery and Address Accuracy",
+        icon: "truck",
+        paragraphs: [
+          "Customers should provide a complete and accurate delivery address and a reachable contact number. Delivery availability, charges and estimated timelines depend on the service offered for the selected location.",
+          "Please consult the Delivery Policy for further information about delivery arrangements, delays and order handover."
+        ]
+      },
+      {
+        title: "Cancellation, Returns and Refunds",
+        icon: "refresh-ccw",
+        paragraphs: [
+          "Cancellation requests, product issues and refund eligibility are handled under the applicable Cancellation and Refund Policies.",
+          "If an item is missing, damaged or incorrect, contact FreshMart support promptly with the order details and any relevant evidence."
+        ]
+      },
+      {
+        title: "Promotions and Offers",
+        icon: "badge-percent",
+        paragraphs: [
+          "Promotional offers, when available, may have specific eligibility requirements, validity periods and usage conditions. Review the terms displayed with each offer before applying it.",
+          "An offer should not be considered valid unless it is displayed as applicable during the order process."
+        ]
+      },
+      {
+        title: "Acceptable Website Use",
+        icon: "shield-check",
+        paragraphs: [
+          "You must not misuse the website, interfere with its operation, attempt unauthorized access, submit fraudulent orders or use the service for unlawful activities.",
+          "FreshMart may take reasonable steps to investigate suspected misuse and protect the website and its customers."
+        ]
+      },
+      {
+        title: "Privacy and Data Protection",
+        icon: "lock-keyhole",
+        paragraphs: [
+          "Personal information should be handled according to the FreshMart Privacy Policy and applicable law.",
+          "Please review the Privacy Policy to understand what information is collected, how it is used and the choices available to you."
+        ]
+      },
+      {
+        title: "Third-Party Services and Links",
+        icon: "external-link",
+        paragraphs: [
+          "The website may link to third-party websites or services. Their content, availability and privacy practices may be governed by their own terms and policies.",
+          "Review the relevant third-party terms before using an external service."
+        ]
+      },
+      {
+        title: "Website Availability and Changes",
+        icon: "monitor",
+        paragraphs: [
+          "FreshMart may update, maintain or temporarily restrict parts of the website to improve security, reliability or functionality.",
+          "Product listings, website features and these terms may be updated when necessary. The current version should be reviewed periodically."
+        ]
+      },
+      {
+        title: "Liability and Limitations",
+        icon: "scale",
+        paragraphs: [
+          "Nothing in these terms is intended to exclude or restrict any consumer right or legal protection that cannot lawfully be excluded or restricted.",
+          "Any limitation of liability must be interpreted subject to applicable law and the specific circumstances of the service."
+        ]
+      },
+      {
+        title: "Suspension or Termination",
+        icon: "user-round-x",
+        paragraphs: [
+          "Where reasonably necessary and permitted by law, FreshMart may restrict access to the website in response to suspected fraud, security risks or serious misuse.",
+          "Any such action should be handled consistently with applicable legal requirements and relevant customer rights."
+        ]
+      },
+      {
+        title: "Governing Law and Disputes",
+        icon: "landmark",
+        paragraphs: [
+          "These terms are subject to applicable laws and the rights and remedies available to customers under those laws.",
+          "Any governing-law or dispute-resolution provision should be finalized to reflect the actual business location and applicable legal requirements."
+        ]
+      },
+      {
+        title: "Updates to These Terms",
+        icon: "file-check",
+        paragraphs: [
+          "FreshMart may revise these terms when its services, business practices or legal requirements change. Updated wording should be published on this page with an appropriate revision date.",
+          "Please review this page periodically for changes relevant to your use of the website."
+        ]
+      }
+    ];
+
+    const iconFallback = "file-text";
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[character]));
+    }
+
+    function renderTerms() {
+      const content = document.getElementById("termsContent");
+      const desktopToc = document.getElementById("desktopToc");
+      const mobileToc = document.getElementById("mobileToc");
+
+      content.innerHTML = termsData.map((section, index) => {
+        const id = `section-${index + 1}`;
+        const number = String(index + 1).padStart(2, "0");
+        const paragraphs = (section.paragraphs || [])
+          .map(paragraph => `<p>${escapeHTML(paragraph)}</p>`)
+          .join("");
+
+        const list = section.items?.length
+          ? `<ul>${section.items.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul>`
+          : "";
+
+        return `
+          <section class="terms-card" id="${id}">
+            <div class="section-heading">
+              <div class="section-icon">
+                <i data-lucide="${escapeHTML(section.icon || iconFallback)}"></i>
+              </div>
+              <div>
+                <span class="section-number">Section ${number}</span>
+                <h2>${escapeHTML(section.title)}</h2>
+              </div>
+            </div>
+            ${paragraphs}
+            ${list}
+            ${section.notice ? `<div class="notice">${escapeHTML(section.notice)}</div>` : ""}
+          </section>
+        `;
+      }).join("");
+
+      const links = termsData.map((section, index) => {
+        const number = String(index + 1).padStart(2, "0");
+        return `
+          <a href="#section-${index + 1}">
+            <span class="toc-number">${number}</span>
+            <span>${escapeHTML(section.title)}</span>
+          </a>
+        `;
+      }).join("");
+
+      desktopToc.innerHTML = links;
+      mobileToc.innerHTML = links;
+
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+
+      setupActiveNavigation();
+    }
+
+    function setupActiveNavigation() {
+      const sections = [...document.querySelectorAll("#termsContent .terms-card")];
+      const tocLinks = [...document.querySelectorAll("#desktopToc a, #mobileToc a")];
+
+      if (!("IntersectionObserver" in window)) return;
+
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            tocLinks.forEach(link => {
+              const active = link.getAttribute("href") === `#${entry.target.id}`;
+              link.classList.toggle("active", active);
+              if (active) link.setAttribute("aria-current", "location");
+              else link.removeAttribute("aria-current");
+            });
+          }
         });
-    </script>
+      }, {
+        rootMargin: "-18% 0px -68% 0px"
+      });
+
+      sections.forEach(section => observer.observe(section));
+    }
+
+    function goBack() {
+      if (document.referrer &&
+          new URL(document.referrer).origin === window.location.origin &&
+          window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "index.html";
+      }
+    }
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    document.getElementById("backTop").addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    renderTerms();
+  </script>
 </body>
 </html>
