@@ -4,529 +4,772 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Read FreshMart's order cancellation policy and learn how to request cancellation and understand eligible refunds.">
-  <meta name="theme-color" content="#059669">
+  <meta name="theme-color" content="#0b6b43">
   <title>Cancellation Policy | FreshMart</title>
+  <meta name="description" content="Read FreshMart's order cancellation information, steps and frequently asked questions.">
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: {
-              50: '#ecfdf5',
-              500: '#10b981',
-              600: '#059669',
-              700: '#047857'
-            }
-          },
-          fontFamily: { sans: ['Inter', 'sans-serif'] }
-        }
-      }
-    };
-  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    body { font-family: Inter, sans-serif; }
-
-    .policy-section {
-      background: rgba(255,255,255,.96);
-      border: 1px solid #e5e7eb;
-      border-radius: 18px;
-      padding: 22px;
-      scroll-margin-top: 100px;
+    :root {
+      --green: #0b6b43;
+      --green-dark: #084d32;
+      --green-light: #eaf7ef;
+      --text: #17251e;
+      --muted: #647168;
+      --border: #e5ece7;
+      --white: #fff;
+      --bg: #f7faf8;
+      --radius: 18px;
+      --shadow: 0 8px 28px rgba(18, 65, 42, 0.06);
     }
 
-    .policy-section h2 {
-      color: #102a43;
-      font-size: 1.08rem;
-      font-weight: 800;
-      margin-bottom: 12px;
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
     }
 
-    .policy-section p,
-    .policy-section li {
-      color: #526174;
-      font-size: .94rem;
-      line-height: 1.85;
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
     }
 
-    .policy-section ul {
-      list-style: disc;
-      padding-left: 22px;
-      margin-top: 8px;
-    }
-
-    .policy-link {
-      color: #047857;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .policy-link:hover { text-decoration: underline; }
-
-    .info-card {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 18px;
-    }
-
-    .faq-item {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      overflow: hidden;
-    }
-
-    .faq-question {
-      width: 100%;
+    .nav {
+      max-width: 1120px;
+      min-height: 76px;
+      margin: auto;
+      padding: 12px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      padding: 17px;
-      text-align: left;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .brand img {
+      width: 46px;
+      height: 46px;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    .brand-name {
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: -0.7px;
+    }
+
+    .brand-tagline {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      min-height: 42px;
+      padding: 10px 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: var(--white);
+      color: var(--text);
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn:hover { border-color: var(--green); color: var(--green); }
+
+    .btn-primary {
+      background: var(--green);
+      border-color: var(--green);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-dark);
+      color: var(--white);
+    }
+
+    .hero {
+      padding: 65px 24px 58px;
+      background: linear-gradient(130deg, #e9f7ee 0%, #f7fbf8 60%, #fff 100%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-inner {
+      max-width: 1000px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 12px;
+      border-radius: 30px;
+      background: #d8f0e1;
+      color: var(--green-dark);
+      font-size: 12px;
       font-weight: 700;
-      color: #102a43;
+      letter-spacing: 0.3px;
     }
 
-    .faq-answer {
-      padding: 0 17px 17px;
-      color: #526174;
-      font-size: .92rem;
-      line-height: 1.8;
+    h1 {
+      margin: 19px 0 12px;
+      font-size: clamp(32px, 5vw, 49px);
+      line-height: 1.15;
+      letter-spacing: -1.8px;
     }
 
-    .faq-question:focus-visible,
-    a:focus-visible {
-      outline: 3px solid #10b981;
-      outline-offset: 3px;
+    .hero p {
+      max-width: 680px;
+      margin: auto;
+      color: var(--muted);
+      font-size: 16px;
     }
 
-    @media (max-width: 640px) {
-      .policy-section { padding: 17px; border-radius: 14px; }
-      .policy-section h2 { font-size: 1rem; }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 11px;
+      margin-top: 25px;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: auto;
+      padding: 38px 24px 64px;
+    }
+
+    .section-heading { margin-bottom: 20px; }
+
+    .section-heading h2 {
+      margin: 0 0 5px;
+      font-size: 25px;
+      letter-spacing: -0.7px;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 17px;
+    }
+
+    .card {
+      padding: 23px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .icon-box {
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      background: var(--green-light);
+      color: var(--green);
+      border-radius: 13px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      padding: 19px;
+      margin: 25px 0 43px;
+      background: #f0faf3;
+      border: 1px solid #d8ebdf;
+      border-radius: 15px;
+    }
+
+    .notice > i {
+      flex-shrink: 0;
+      margin-top: 3px;
+      color: var(--green);
+    }
+
+    .notice strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .notice p {
+      margin: 0;
+      color: #52685a;
+      font-size: 13.5px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 13px;
+      margin-bottom: 43px;
+    }
+
+    .step {
+      padding: 18px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+    }
+
+    .step-number {
+      width: 31px;
+      height: 31px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      background: var(--green);
+      color: white;
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .step h3 { margin: 0 0 6px; font-size: 14px; }
+    .step p { margin: 0; color: var(--muted); font-size: 12.5px; }
+
+    .faq-list {
+      display: grid;
+      gap: 11px;
+      margin-bottom: 43px;
+    }
+
+    details {
+      padding: 0 19px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 17px 0;
+      cursor: pointer;
+      list-style: none;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+
+    summary::after {
+      content: '+';
+      color: var(--green);
+      font-size: 23px;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    details[open] summary::after { content: '−'; }
+
+    details p {
+      margin: 0;
+      padding: 0 0 18px;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    .support {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+      padding: 29px;
+      background: var(--green-dark);
+      color: white;
+      border-radius: 20px;
+    }
+
+    .support h2 {
+      margin: 0 0 7px;
+      font-size: 23px;
+      letter-spacing: -0.5px;
+    }
+
+    .support p {
+      margin: 0;
+      color: #d4e8dc;
+      font-size: 13.5px;
+    }
+
+    .support .btn {
+      flex-shrink: 0;
+      background: white;
+      border-color: white;
+      color: var(--green-dark);
+    }
+
+    .related { margin-top: 36px; }
+
+    .related-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .related-links a {
+      padding: 10px 13px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .related-links a:hover {
+      background: var(--green-light);
+      border-color: var(--green);
+    }
+
+    footer {
+      padding: 25px 24px;
+      background: white;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      max-width: 1000px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .footer-inner p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer-links a:hover { color: var(--green); }
+
+    @media (max-width: 760px) {
+      .nav { min-height: 68px; padding: 11px 16px; }
+      .brand img { width: 39px; height: 39px; }
+      .brand-name { font-size: 18px; }
+      .brand-tagline { font-size: 10px; }
+      .nav-actions { gap: 7px; }
+      .nav-actions .btn { min-height: 39px; padding: 8px 10px; font-size: 12px; }
+      .hero { padding: 47px 18px 42px; }
+      .hero p { font-size: 14px; }
+      main { padding: 29px 17px 45px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .card { padding: 18px; }
+      .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .support { align-items: flex-start; flex-direction: column; padding: 24px; }
+    }
+
+    @media (max-width: 430px) {
+      .brand-tagline { display: none; }
+      .brand-name { font-size: 16px; }
+      .nav-actions .btn { padding: 8px; }
+      .grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .step { padding: 14px; }
+      .section-heading h2 { font-size: 22px; }
+      .support h2 { font-size: 21px; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
     }
   </style>
 </head>
 
-<body class="premium-bg min-h-screen text-gray-800">
-
-  <!-- Header -->
-  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-200 shadow-sm">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
-      <a href="index.html"
-         aria-label="Back to FreshMart home"
-         class="p-2 rounded-full bg-gray-100 hover:bg-green-100 transition">
-        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+<body>
+  <header class="topbar">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="FreshMart Home">
+        <img src="images/logo.png" alt="FreshMart logo">
+        <span>
+          <span class="brand-name">FreshMart</span>
+          <span class="brand-tagline">Freshness at your doorstep</span>
+        </span>
       </a>
 
-      <img src="images/logo.png"
-           alt="FreshMart logo"
-           class="h-10 w-10 rounded-full object-contain"
-           onerror="this.style.display='none'">
-
-      <div>
-        <h1 class="text-lg sm:text-xl font-extrabold text-gray-900">Cancellation Policy</h1>
-        <p class="text-xs text-gray-500">FreshMart · Order Assistance</p>
+      <div class="nav-actions">
+        <button class="btn" type="button" onclick="goBack()">
+          <i data-lucide="arrow-left" size="16"></i>
+          Back
+        </button>
+        <a class="btn btn-primary" href="index.html">
+          <i data-lucide="house" size="16"></i>
+          Home
+        </a>
       </div>
-    </div>
+    </nav>
   </header>
 
-  <main class="max-w-5xl mx-auto px-4 py-7 sm:py-10">
-
-    <!-- Hero -->
-    <section class="rounded-3xl p-6 sm:p-9 mb-7 text-white shadow-lg"
-      style="background:linear-gradient(135deg,#064e3b,#059669,#10b981)">
-      <div class="flex items-start gap-4">
-        <div class="hidden sm:flex bg-white/15 rounded-2xl p-4">
-          <i data-lucide="clipboard-x" class="w-9 h-9"></i>
-        </div>
-        <div>
-          <p class="text-green-100 text-sm font-semibold mb-2">ORDER CANCELLATION</p>
-          <h2 class="text-2xl sm:text-3xl font-extrabold mb-3">
-            Cancellation Policy
-          </h2>
-          <p class="text-green-50 leading-7">
-            Need to cancel an order? Learn how cancellation requests
-            are handled and what to know about order status and refunds.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Quick cards -->
-    <section class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-7">
-      <div class="info-card">
-        <div class="bg-green-50 rounded-xl p-3 inline-flex mb-3">
-          <i data-lucide="clipboard-list" class="w-6 h-6 text-green-700"></i>
-        </div>
-        <h2 class="font-extrabold text-gray-900 mb-2">Cancellation Request</h2>
-        <p class="text-sm text-gray-600 leading-6">
-          Contact support with your order details to ask about cancellation.
-        </p>
-      </div>
-
-      <div class="info-card">
-        <div class="bg-green-50 rounded-xl p-3 inline-flex mb-3">
-          <i data-lucide="package" class="w-6 h-6 text-green-700"></i>
-        </div>
-        <h2 class="font-extrabold text-gray-900 mb-2">Order Status</h2>
-        <p class="text-sm text-gray-600 leading-6">
-          Cancellation eligibility may depend on the current order status.
-        </p>
-      </div>
-
-      <div class="info-card">
-        <div class="bg-green-50 rounded-xl p-3 inline-flex mb-3">
-          <i data-lucide="wallet" class="w-6 h-6 text-green-700"></i>
-        </div>
-        <h2 class="font-extrabold text-gray-900 mb-2">Refund Information</h2>
-        <p class="text-sm text-gray-600 leading-6">
-          Eligible refunds follow the applicable refund process.
-        </p>
-      </div>
-    </section>
-
-    <!-- Quick navigation -->
-    <section class="bg-white rounded-2xl border border-gray-200 p-5 mb-7">
-      <h2 class="font-extrabold text-gray-900 mb-3">On this page</h2>
-      <div class="flex flex-wrap gap-2">
-        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#request">How to Cancel</a>
-        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#status">Order Status</a>
-        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#refunds">Refunds</a>
-        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#unavailable">Unavailable Items</a>
-        <a class="px-3 py-2 rounded-lg bg-green-50 text-green-800 text-sm" href="#faq">FAQs</a>
-      </div>
-    </section>
-
-    <div class="space-y-4">
-
-      <section class="policy-section">
-        <h2>1. Introduction</h2>
-        <p>
-          This Cancellation Policy explains the general process for
-          requesting cancellation of a FreshMart order. Whether an order
-          can be cancelled depends on its status, the services actually
-          available and applicable law.
-        </p>
-      </section>
-
-      <section id="request" class="policy-section">
-        <h2>2. How to Request Cancellation</h2>
-        <ol class="list-decimal pl-5 space-y-2 text-sm text-gray-600 leading-7">
-          <li>Keep your order number or order details ready, if available.</li>
-          <li>Contact FreshMart through phone, email or WhatsApp.</li>
-          <li>Clearly state that you want to request cancellation.</li>
-          <li>Provide any additional information reasonably needed to identify the order.</li>
-          <li>Wait for confirmation of the actual order status and next steps.</li>
-        </ol>
-        <p class="mt-3">
-          Sending a cancellation request does not by itself mean the order
-          has been cancelled. This page provides instructions and does not
-          submit a cancellation request automatically.
-        </p>
-      </section>
-
-      <section id="status" class="policy-section">
-        <h2>3. Cancellation Based on Order Status</h2>
-        <p>
-          <strong>Before processing:</strong> A request may be easier to
-          accommodate when order preparation has not started, but approval
-          depends on the actual order system and circumstances.
-        </p>
-        <p class="mt-3">
-          <strong>During preparation or packing:</strong> The order may
-          already involve picking and packing products. Contact support
-          as soon as possible to ask whether cancellation is possible.
-        </p>
-        <p class="mt-3">
-          <strong>After dispatch:</strong> Cancellation may be more limited
-          once an order has been dispatched for delivery. Contact FreshMart
-          to understand the available options. Any applicable legal rights
-          remain unaffected.
-        </p>
-      </section>
-
-      <section class="policy-section">
-        <h2>4. Cancellation Confirmation</h2>
-        <p>
-          Customers should rely on a genuine confirmation from the actual
-          order system or FreshMart support rather than assuming that a
-          message has completed the cancellation. If an order-status feature
-          is not available, contact support for clarification.
-        </p>
-      </section>
-
-      <section class="policy-section">
-        <h2>5. Prepaid Orders and Refunds</h2>
-        <p>
-          If a prepaid order is cancelled and a refund is due, the refund
-          will be handled through the payment process actually supported
-          by FreshMart. Eligibility depends on the circumstances and
-          applicable law.
-        </p>
-        <p class="mt-3">
-          Processing time may depend on the payment provider. This policy
-          does not promise a fixed refund timeline. See the
-          <a href="refund.html" class="policy-link">Return &amp; Refund Policy</a>
-          for additional information.
-        </p>
-      </section>
-
-      <section class="policy-section">
-        <h2>6. Cash on Delivery Orders</h2>
-        <p>
-          For Cash on Delivery orders, contact support to ask about
-          cancellation based on the current order status. If no payment
-          was collected, a payment refund may not apply; any other issue
-          will be reviewed according to the actual order circumstances.
-        </p>
-      </section>
-
-      <section id="unavailable" class="policy-section">
-        <h2>7. Out-of-Stock or Unavailable Products</h2>
-        <p>
-          If an item becomes unavailable, FreshMart should communicate
-          the available options where reasonably possible. Depending on
-          the order system, these may include an order update, cancellation
-          or an eligible refund.
-        </p>
-        <p class="mt-3">
-          A substitute product should not be assumed unless it is accepted
-          by the customer where required.
-        </p>
-      </section>
-
-      <section class="policy-section">
-        <h2>8. Cancellation by FreshMart</h2>
-        <p>
-          In some circumstances, an order may not be fulfillable because
-          of product availability, service limitations, an unresolved
-          payment issue or another legitimate operational reason. FreshMart
-          should communicate relevant information and handle any eligible
-          refund according to applicable policy and law.
-        </p>
-      </section>
-
-      <section class="policy-section">
-        <h2>9. Partial Cancellation</h2>
-        <p>
-          Cancelling only one item from an order depends on whether the
-          ordering system supports partial cancellation. If this feature
-          is unavailable, contact FreshMart to ask about the options for
-          your particular order.
-        </p>
-      </section>
-
-      <section class="policy-section">
-        <h2>10. Cancellation Charges</h2>
-        <p>
-          This page does not establish a cancellation fee or penalty.
-          Any charge, if applicable, must be part of the actual disclosed
-          order terms and comply with applicable law.
-        </p>
-      </section>
-
-      <section class="policy-section">
-        <h2>11. Customer Rights</h2>
-        <p>
-          This policy must be read consistently with applicable Indian
-          laws and consumer-protection requirements. Nothing in it is
-          intended to remove a right or remedy that cannot lawfully be
-          excluded or restricted.
-        </p>
-      </section>
-
-      <section class="policy-section">
-        <h2>12. Policy Updates</h2>
-        <p>
-          FreshMart may update this policy when its services or operational
-          processes change. The current version should be published on
-          this page.
-        </p>
-      </section>
-
-      <section id="contact" class="policy-section">
-        <h2>13. Need Help Cancelling an Order?</h2>
-        <p>
-          Contact FreshMart with your order details to ask about
-          cancellation eligibility and the current order status.
-        </p>
-
-        <div class="grid sm:grid-cols-3 gap-3 mt-5">
-          <a href="tel:7988300872"
-             class="flex items-center gap-3 p-4 rounded-xl bg-green-50 hover:bg-green-100 transition">
-            <i data-lucide="phone" class="w-5 h-5 text-green-700"></i>
-            <div>
-              <p class="text-xs text-gray-500">Call us</p>
-              <p class="font-bold text-gray-900 text-sm">7988300872</p>
-            </div>
-          </a>
-
-          <a href="mailto:FreshMart@gmail.com"
-             class="flex items-center gap-3 p-4 rounded-xl bg-green-50 hover:bg-green-100 transition">
-            <i data-lucide="mail" class="w-5 h-5 text-green-700"></i>
-            <div>
-              <p class="text-xs text-gray-500">Email us</p>
-              <p class="font-bold text-gray-900 text-sm break-all">FreshMart@gmail.com</p>
-            </div>
-          </a>
-
-          <a href="https://wa.me/917988300872?text=Hello%20FreshMart%20Support%2C%20I%20want%20to%20ask%20about%20cancelling%20my%20order."
-             target="_blank" rel="noopener noreferrer"
-             class="flex items-center gap-3 p-4 rounded-xl bg-green-50 hover:bg-green-100 transition">
-            <i data-lucide="message-circle" class="w-5 h-5 text-green-700"></i>
-            <div>
-              <p class="text-xs text-gray-500">WhatsApp</p>
-              <p class="font-bold text-gray-900 text-sm">Get Support</p>
-            </div>
-          </a>
-        </div>
-
-        <p class="mt-5">
-          Visit our <a href="help.html" class="policy-link">Help &amp; Support</a>
-          page for other assistance.
-        </p>
-      </section>
-
-    </div>
-
-    <!-- FAQ -->
-    <section id="faq" class="mt-8">
-      <h2 class="text-xl font-extrabold text-gray-900 mb-4">
-        Frequently Asked Questions
-      </h2>
-
-      <div class="space-y-3">
-        <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
-            <span>Can I cancel an order after placing it?</span>
-            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
-          </button>
-          <div id="faq-answer-1" class="faq-answer hidden">
-            Cancellation depends on the order status and the options
-            available for that order. Contact FreshMart as soon as possible.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
-            <span>Can I cancel an order after dispatch?</span>
-            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
-          </button>
-          <div id="faq-answer-2" class="faq-answer hidden">
-            Cancellation may be limited after dispatch. Contact support
-            to check the available options for your order.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
-            <span>When will my eligible refund arrive?</span>
-            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
-          </button>
-          <div id="faq-answer-3" class="faq-answer hidden">
-            Refund timing depends on the actual payment process and
-            payment provider. Contact support for information about your case.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
-            <span>Can I cancel only one item?</span>
-            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
-          </button>
-          <div id="faq-answer-4" class="faq-answer hidden">
-            Partial cancellation depends on whether FreshMart's order
-            system supports it. Contact support to ask about your order.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-5">
-            <span>Does clicking WhatsApp cancel my order?</span>
-            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 shrink-0"></i>
-          </button>
-          <div id="faq-answer-5" class="faq-answer hidden">
-            No. WhatsApp opens a conversation with support. Your order
-            is not cancelled unless the cancellation is actually processed
-            and confirmed.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Related policies -->
-    <section class="mt-7 bg-white border border-gray-200 rounded-2xl p-5 sm:p-6">
-      <h2 class="font-extrabold text-gray-900 mb-4">Related Policies</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <a href="terms.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
-          <span class="font-semibold text-gray-700">Terms &amp; Conditions</span>
-          <i data-lucide="chevron-right" class="w-4 h-4"></i>
-        </a>
-
-        <a href="privacy.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
-          <span class="font-semibold text-gray-700">Privacy Policy</span>
-          <i data-lucide="chevron-right" class="w-4 h-4"></i>
-        </a>
-
-        <a href="delivery.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
-          <span class="font-semibold text-gray-700">Delivery Policy</span>
-          <i data-lucide="chevron-right" class="w-4 h-4"></i>
-        </a>
-
-        <a href="refund.html" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition">
-          <span class="font-semibold text-gray-700">Return &amp; Refund Policy</span>
-          <i data-lucide="chevron-right" class="w-4 h-4"></i>
-        </a>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="text-center py-8">
-      <a href="index.html" class="inline-flex items-center gap-2 text-green-700 font-bold hover:text-green-800">
-        <i data-lucide="arrow-left" class="w-4 h-4"></i>
-        Back to FreshMart
-      </a>
-      <p class="text-xs text-gray-500 mt-3">FreshMart · Cancellation Policy</p>
-      <p class="text-xs text-gray-400 mt-1">
-        Cancellation requests are subject to order status and applicable policy.
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">
+        <i data-lucide="clipboard-x" size="15"></i>
+        FRESHMART ORDER POLICY
+      </span>
+      <h1>Cancellation Policy</h1>
+      <p>
+        Need to cancel an order? Learn how to request cancellation,
+        what can affect approval and what to do if your order is already being prepared.
       </p>
-    </footer>
+      <div class="hero-actions">
+        <a href="#cancellation-process" class="btn btn-primary">
+          <i data-lucide="list-check" size="17"></i>
+          Cancellation Steps
+        </a>
+        <a href="#cancellation-faq" class="btn">
+          <i data-lucide="circle-help" size="17"></i>
+          Common Questions
+        </a>
+      </div>
+    </div>
+  </section>
 
+  <main>
+    <section aria-labelledby="overview-title">
+      <div class="section-heading">
+        <h2 id="overview-title">Order Cancellation Information</h2>
+        <p>Important things to know before requesting a cancellation.</p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="icon-box"><i data-lucide="clock"></i></div>
+          <h3>Request Early</h3>
+          <p>
+            If you need to cancel, submit your request as soon as possible.
+            An order may become harder to cancel once processing has started.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box"><i data-lucide="package-check"></i></div>
+          <h3>Order Status Matters</h3>
+          <p>
+            Cancellation availability may depend on whether the order is
+            pending, being prepared, dispatched or already delivered.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box"><i data-lucide="message-circle"></i></div>
+          <h3>Contact Support</h3>
+          <p>
+            If a cancellation option is not available, contact FreshMart
+            support with your order number and cancellation request.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box"><i data-lucide="credit-card"></i></div>
+          <h3>Refund Information</h3>
+          <p>
+            If payment has already been collected, any eligible refund is
+            handled according to the applicable refund policy and payment method.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box"><i data-lucide="check-circle-2"></i></div>
+          <h3>Confirmation</h3>
+          <p>
+            Do not assume an order is cancelled until you receive confirmation
+            or the order status clearly reflects the cancellation.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box"><i data-lucide="file-text"></i></div>
+          <h3>Keep Order Details</h3>
+          <p>
+            Keep your order number and relevant confirmation messages available
+            so the support team can review your request.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <aside class="notice">
+      <i data-lucide="info" size="21"></i>
+      <div>
+        <strong>Important information</strong>
+        <p>
+          Cancellation eligibility, any applicable charges and refund handling
+          depend on the actual order status and FreshMart's applicable policies.
+          Check the details shown on the website and contact support if you are unsure.
+        </p>
+      </div>
+    </aside>
+
+    <section id="cancellation-process" aria-labelledby="process-title">
+      <div class="section-heading">
+        <h2 id="process-title">How to Request Cancellation</h2>
+        <p>Follow these steps to submit your request.</p>
+      </div>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-number">1</div>
+          <h3>Find Your Order</h3>
+          <p>Open your order details and check the current order status.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-number">2</div>
+          <h3>Request Cancellation</h3>
+          <p>Use the cancellation option if available, or contact support.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-number">3</div>
+          <h3>Share Details</h3>
+          <p>Provide your order number and explain that you want to cancel.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-number">4</div>
+          <h3>Check Confirmation</h3>
+          <p>Review the cancellation status and any refund information provided.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="cancellation-faq" aria-labelledby="faq-title">
+      <div class="section-heading">
+        <h2 id="faq-title">Frequently Asked Questions</h2>
+        <p>Answers to common cancellation questions.</p>
+      </div>
+
+      <div class="faq-list">
+        <details>
+          <summary>How can I cancel my FreshMart order?</summary>
+          <p>
+            Open your order details and use the cancellation option if it is
+            available. If you cannot find the option, contact support with
+            your order number and request cancellation.
+          </p>
+        </details>
+
+        <details>
+          <summary>Can I cancel an order after it has been placed?</summary>
+          <p>
+            Cancellation may be possible depending on the current order status.
+            Request it as early as possible. Once an order is being prepared
+            or dispatched, cancellation may no longer be available.
+          </p>
+        </details>
+
+        <details>
+          <summary>Can I cancel an order that has already been dispatched?</summary>
+          <p>
+            Cancellation after dispatch may be restricted. Contact support to
+            check the available options. Do not assume the order is cancelled
+            until you receive confirmation.
+          </p>
+        </details>
+
+        <details>
+          <summary>Will I receive a refund after cancellation?</summary>
+          <p>
+            If payment has been collected and your cancellation is eligible
+            for a refund, it will be handled according to the applicable
+            refund policy and payment method. Review the Refund Policy for details.
+          </p>
+        </details>
+
+        <details>
+          <summary>How long will a refund take?</summary>
+          <p>
+            Refund processing time can depend on the payment method and the
+            payment provider. Check the refund information shared for your
+            order or contact support for an update. Do not rely on an unconfirmed
+            processing deadline.
+          </p>
+        </details>
+
+        <details>
+          <summary>What if I cannot find the cancellation button?</summary>
+          <p>
+            The option may depend on your order's current status. Contact
+            FreshMart support using the contact details below and provide
+            your order number.
+          </p>
+        </details>
+
+        <details>
+          <summary>Can I cancel only one item from an order?</summary>
+          <p>
+            Partial cancellation depends on the options supported for your
+            order. Contact support to ask whether an individual item can
+            be cancelled before the order is processed further.
+          </p>
+        </details>
+
+        <details>
+          <summary>What if I receive a cancellation confirmation by mistake?</summary>
+          <p>
+            Check your order status and contact support promptly if the
+            confirmation does not match your request. Share the order number
+            and confirmation details so the issue can be reviewed.
+          </p>
+        </details>
+
+        <details>
+          <summary>Can I place a new order after cancellation?</summary>
+          <p>
+            You can place a new order if the products are available and
+            delivery is supported for your address. Review your cart and
+            order details before confirming the new purchase.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section class="support" aria-labelledby="support-title">
+      <div>
+        <h2 id="support-title">Need Help Cancelling an Order?</h2>
+        <p>
+          Contact FreshMart support with your order number and cancellation
+          request. Never share your password, OTP or payment PIN.
+        </p>
+      </div>
+
+      <a class="btn"
+         href="https://wa.me/917988300872?text=Hello%20FreshMart%20Support%2C%20I%20want%20to%20request%20an%20order%20cancellation."
+         target="_blank"
+         rel="noopener noreferrer">
+        <i data-lucide="message-circle" size="17"></i>
+        Contact Support
+      </a>
+    </section>
+
+    <section class="related" aria-labelledby="related-title">
+      <div class="section-heading">
+        <h2 id="related-title">Related Information</h2>
+        <p>Explore other FreshMart policies and support pages.</p>
+      </div>
+
+      <div class="related-links">
+        <a href="delivery.html">Delivery Information ↗</a>
+        <a href="refund.html">Refund Policy ↗</a>
+        <a href="privacy.html">Privacy Policy ↗</a>
+        <a href="security.html">Security Information ↗</a>
+        <a href="help.html">Help & Support ↗</a>
+        <a href="legal.html">Legal Information ↗</a>
+      </div>
+    </section>
   </main>
 
+  <footer>
+    <div class="footer-inner">
+      <p>© <span id="year"></span> FreshMart. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="delivery.html">Delivery</a>
+        <a href="refund.html">Refunds</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="help.html">Help</a>
+      </div>
+    </div>
+  </footer>
+
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      if (window.lucide) {
-        lucide.createIcons();
+    function goBack() {
+      if (
+        document.referrer &&
+        new URL(document.referrer).origin === window.location.origin &&
+        window.history.length > 1
+      ) {
+        window.history.back();
+      } else {
+        window.location.href = "index.html";
       }
+    }
 
-      document.querySelectorAll(".faq-question").forEach(function (button) {
-        button.addEventListener("click", function () {
-          const answer = document.getElementById(
-            button.getAttribute("aria-controls")
-          );
-          const expanded = button.getAttribute("aria-expanded") === "true";
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-          button.setAttribute("aria-expanded", String(!expanded));
-          answer.classList.toggle("hidden", expanded);
-
-          const icon = button.querySelector(".faq-icon");
-          if (icon) {
-            icon.style.transform = expanded ? "rotate(0deg)" : "rotate(180deg)";
-          }
-        });
-      });
-    });
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
   </script>
-
 </body>
 </html>
