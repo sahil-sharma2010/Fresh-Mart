@@ -4,435 +4,864 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b6b43">
   <title>About Us | FreshMart</title>
-  <meta name="description" content="Learn about FreshMart, our mission, values, and commitment to making everyday shopping simple and convenient.">
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Learn about FreshMart, our grocery shopping experience, values and commitment to convenient shopping.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: {
-              50: '#effdf4',
-              100: '#d8fbe4',
-              500: '#16a34a',
-              600: '#15803d',
-              700: '#166534'
-            }
-          },
-          fontFamily: {
-            inter: ['Inter', 'sans-serif']
-          }
-        }
-      }
-    };
-  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
+    :root {
+      --green: #0b6b43;
+      --green-dark: #084d32;
+      --green-light: #eaf7ef;
+      --text: #17251e;
+      --muted: #647168;
+      --border: #e5ece7;
+      --white: #fff;
+      --bg: #f7faf8;
+      --radius: 18px;
+      --shadow: 0 8px 28px rgba(18, 65, 42, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
     body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
       font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
     }
 
-    .about-hero {
-      background:
-        radial-gradient(circle at 85% 15%, rgba(34,197,94,.18), transparent 30%),
-        linear-gradient(135deg, #f0fdf4 0%, #ffffff 55%, #ecfdf5 100%);
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    .about-card {
-      transition: transform .25s ease, box-shadow .25s ease;
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
     }
 
-    .about-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 18px 35px rgba(15, 23, 42, .08);
+    .nav {
+      max-width: 1120px;
+      min-height: 76px;
+      margin: auto;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
     }
 
-    .icon-box {
-      width: 54px;
-      height: 54px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .brand img {
+      width: 46px;
+      height: 46px;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    .brand-name {
+      color: var(--green);
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -0.7px;
+    }
+
+    .brand-tagline {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      min-height: 42px;
+      padding: 10px 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: var(--white);
+      color: var(--text);
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .btn-primary {
+      background: var(--green);
+      border-color: var(--green);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--green-dark);
+      color: white;
+    }
+
+    .hero {
+      padding: 68px 24px 62px;
+      background: linear-gradient(130deg, #e9f7ee 0%, #f7fbf8 60%, #fff 100%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-inner {
+      max-width: 1000px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 12px;
+      border-radius: 30px;
+      background: #d8f0e1;
+      color: var(--green-dark);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    h1 {
+      margin: 19px 0 12px;
+      font-size: clamp(34px, 5vw, 50px);
+      line-height: 1.15;
+      letter-spacing: -1.8px;
+    }
+
+    .hero p {
+      max-width: 700px;
+      margin: auto;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 11px;
+      margin-top: 26px;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 24px 65px;
+    }
+
+    .section {
+      margin-bottom: 43px;
+    }
+
+    .section-heading {
+      margin-bottom: 20px;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 6px;
+      font-size: 25px;
+      letter-spacing: -0.7px;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .intro-card {
+      padding: 29px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .intro-card h2 {
+      margin: 0 0 13px;
+      font-size: 24px;
+      line-height: 1.35;
+      letter-spacing: -0.6px;
+    }
+
+    .intro-card p {
+      margin: 0 0 13px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .intro-card p:last-child { margin-bottom: 0; }
+
+    .highlight-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 29px;
+      background: var(--green-dark);
+      color: white;
+      border-radius: var(--radius);
+    }
+
+    .highlight-card .large-icon {
+      width: 55px;
+      height: 55px;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-bottom: 19px;
+      background: rgba(255,255,255,0.13);
       border-radius: 16px;
-      background: #dcfce7;
-      color: #15803d;
     }
 
-    html {
-      scroll-behavior: smooth;
+    .highlight-card h3 {
+      margin: 0 0 9px;
+      font-size: 22px;
+      letter-spacing: -0.5px;
+    }
+
+    .highlight-card p {
+      margin: 0;
+      color: #d4e8dc;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 17px;
+    }
+
+    .card {
+      padding: 23px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .icon-box {
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      background: var(--green-light);
+      color: var(--green);
+      border-radius: 13px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 17px;
+    }
+
+    .mission-card {
+      padding: 24px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .mission-card h3 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .mission-card h3 i { color: var(--green); }
+
+    .mission-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      padding: 19px;
+      margin-bottom: 43px;
+      background: #f0faf3;
+      border: 1px solid #d8ebdf;
+      border-radius: 15px;
+    }
+
+    .notice > i {
+      flex-shrink: 0;
+      margin-top: 3px;
+      color: var(--green);
+    }
+
+    .notice strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .notice p {
+      margin: 0;
+      color: #52685a;
+      font-size: 13.5px;
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    details {
+      padding: 0 19px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 17px 0;
+      cursor: pointer;
+      list-style: none;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+
+    summary::after {
+      content: '+';
+      color: var(--green);
+      font-size: 23px;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    details[open] summary::after { content: '−'; }
+
+    details p {
+      margin: 0;
+      padding: 0 0 18px;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    .support {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+      padding: 29px;
+      margin-top: 43px;
+      background: var(--green-dark);
+      color: white;
+      border-radius: 20px;
+    }
+
+    .support h2 {
+      margin: 0 0 7px;
+      font-size: 23px;
+      letter-spacing: -0.5px;
+    }
+
+    .support p {
+      margin: 0;
+      color: #d4e8dc;
+      font-size: 13.5px;
+    }
+
+    .support .btn {
+      flex-shrink: 0;
+      background: white;
+      border-color: white;
+      color: var(--green-dark);
+    }
+
+    .related { margin-top: 36px; }
+
+    .related-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .related-links a {
+      padding: 10px 13px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .related-links a:hover {
+      background: var(--green-light);
+      border-color: var(--green);
+    }
+
+    footer {
+      padding: 25px 24px;
+      background: white;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      max-width: 1000px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .footer-inner p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer-links a:hover { color: var(--green); }
+
+    @media (max-width: 760px) {
+      .nav { min-height: 68px; padding: 11px 16px; }
+      .brand img { width: 39px; height: 39px; }
+      .brand-name { font-size: 18px; }
+      .brand-tagline { font-size: 10px; }
+      .nav-actions { gap: 7px; }
+      .nav-actions .btn { min-height: 39px; padding: 8px 10px; font-size: 12px; }
+      .hero { padding: 48px 18px 42px; }
+      .hero p { font-size: 14px; }
+      main { padding: 29px 17px 45px; }
+      .intro-grid { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .card { padding: 18px; }
+      .support { align-items: flex-start; flex-direction: column; padding: 24px; }
+    }
+
+    @media (max-width: 430px) {
+      .brand-tagline { display: none; }
+      .brand-name { font-size: 16px; }
+      .nav-actions .btn { padding: 8px; }
+      .grid, .mission-grid { grid-template-columns: 1fr; }
+      .intro-card, .highlight-card { padding: 23px; }
+      .section-heading h2 { font-size: 22px; }
+      .support h2 { font-size: 21px; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
     }
   </style>
 </head>
 
-<body class="premium-bg text-slate-800">
-
-  <!-- HEADER -->
-  <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-
-      <a href="index.html" class="flex items-center gap-3">
-        <img
-          src="images/logo.png"
-          alt="FreshMart Logo"
-          class="h-11 w-11 rounded-xl object-contain"
-        >
-        <div>
-          <span class="block text-xl font-extrabold tracking-tight text-slate-900">FreshMart</span>
-          <span class="block text-xs font-medium text-slate-500">Everyday essentials, made easy</span>
-        </div>
+<body>
+  <header class="topbar">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="FreshMart Home">
+        <img src="images/logo.png" alt="FreshMart logo">
+        <span>
+          <span class="brand-name">FreshMart</span>
+          <span class="brand-tagline">Freshness at your doorstep</span>
+        </span>
       </a>
 
-      <a href="index.html"
-         class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-green-600 hover:text-green-700">
-        <i data-lucide="arrow-left" class="h-4 w-4"></i>
-        Back to Home
-      </a>
-    </div>
+      <div class="nav-actions">
+        <button class="btn" type="button" onclick="goBack()">
+          <i data-lucide="arrow-left" size="16"></i>
+          Back
+        </button>
+        <a class="btn btn-primary" href="index.html">
+          <i data-lucide="house" size="16"></i>
+          Home
+        </a>
+      </div>
+    </nav>
   </header>
 
-  <main>
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">
+        <i data-lucide="leaf" size="15"></i>
+        GET TO KNOW FRESHMART
+      </span>
 
-    <!-- HERO -->
-    <section class="about-hero overflow-hidden">
-      <div class="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-2 lg:px-8">
+      <h1>About FreshMart</h1>
 
-        <div>
-          <span class="inline-flex items-center gap-2 rounded-full border border-green-200 bg-white px-4 py-2 text-sm font-bold text-green-700">
-            <i data-lucide="heart-handshake" class="h-4 w-4"></i>
-            Get to know FreshMart
-          </span>
+      <p>
+        A convenient online grocery shopping experience designed to help
+        you explore everyday essentials and shop with greater ease.
+      </p>
 
-          <h1 class="mt-6 text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
-            Everyday shopping,
-            <span class="text-green-600">made better.</span>
-          </h1>
-
-          <p class="mt-6 max-w-xl text-base leading-8 text-slate-600 sm:text-lg">
-            FreshMart is built around a simple idea: shopping for everyday essentials
-            should feel convenient, clear, and easy. We aim to bring useful products
-            together in one simple shopping experience.
-          </p>
-
-          <div class="mt-8 flex flex-wrap gap-3">
-            <a href="index.html"
-               class="inline-flex items-center gap-2 rounded-xl bg-green-600 px-6 py-3.5 font-bold text-white shadow-lg shadow-green-600/20 transition hover:bg-green-700">
-              Explore FreshMart
-              <i data-lucide="arrow-up-right" class="h-5 w-5"></i>
-            </a>
-
-            <a href="help.html"
-               class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-bold text-slate-700 transition hover:border-green-600 hover:text-green-700">
-              Contact Support
-              <i data-lucide="message-circle" class="h-5 w-5"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="relative">
-          <div class="absolute -inset-4 rounded-[2rem] bg-green-200/50 blur-2xl"></div>
-
-          <div class="relative rounded-[2rem] border border-white bg-white p-6 shadow-2xl sm:p-9">
-            <div class="rounded-3xl bg-gradient-to-br from-green-50 to-emerald-100 p-8 sm:p-12">
-              <div class="mx-auto flex h-28 w-28 items-center justify-center rounded-3xl bg-white shadow-lg">
-                <img
-                  src="images/logo.png"
-                  alt="FreshMart"
-                  class="h-24 w-24 rounded-2xl object-contain"
-                >
-              </div>
-
-              <div class="mt-7 text-center">
-                <p class="text-3xl font-extrabold text-slate-900">FreshMart</p>
-                <p class="mt-2 text-sm font-medium text-green-800">
-                  Your everyday shopping destination
-                </p>
-              </div>
-
-              <div class="mt-8 grid grid-cols-3 gap-3">
-                <div class="rounded-2xl bg-white p-3 text-center">
-                  <i data-lucide="shopping-basket" class="mx-auto h-6 w-6 text-green-600"></i>
-                  <p class="mt-2 text-xs font-bold text-slate-700">Essentials</p>
-                </div>
-                <div class="rounded-2xl bg-white p-3 text-center">
-                  <i data-lucide="heart" class="mx-auto h-6 w-6 text-green-600"></i>
-                  <p class="mt-2 text-xs font-bold text-slate-700">Customer First</p>
-                </div>
-                <div class="rounded-2xl bg-white p-3 text-center">
-                  <i data-lucide="shield-check" class="mx-auto h-6 w-6 text-green-600"></i>
-                  <p class="mt-2 text-xs font-bold text-slate-700">Trust</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- OUR STORY -->
-    <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-      <div class="mx-auto max-w-3xl text-center">
-        <span class="text-sm font-extrabold uppercase tracking-[0.2em] text-green-700">
+      <div class="hero-actions">
+        <a href="#our-story" class="btn btn-primary">
+          <i data-lucide="book-open" size="17"></i>
           Our Story
-        </span>
+        </a>
+        <a href="#our-values" class="btn">
+          <i data-lucide="heart" size="17"></i>
+          Our Values
+        </a>
+      </div>
+    </div>
+  </section>
 
-        <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-          Shopping should be simple.
-        </h2>
+  <main>
+    <section id="our-story" class="section">
+      <div class="intro-grid">
+        <article class="intro-card">
+          <h2>Making Everyday Grocery Shopping Easier</h2>
 
-        <p class="mt-6 text-base leading-8 text-slate-600">
-          We created FreshMart with the goal of making everyday shopping easier to
-          navigate. From browsing products to finding support, our focus is on a
-          straightforward experience that helps customers make informed choices.
+          <p>
+            Welcome to FreshMart! We are building an online grocery shopping
+            experience where customers can explore products, review their
+            selections and place orders conveniently.
+          </p>
+
+          <p>
+            Our aim is to make everyday shopping straightforward by presenting
+            product information clearly and helping customers find the
+            essentials they need in one place.
+          </p>
+
+          <p>
+            We continue to focus on a simple browsing experience, useful
+            information and accessible support throughout the shopping journey.
+          </p>
+        </article>
+
+        <aside class="highlight-card">
+          <div class="large-icon">
+            <i data-lucide="shopping-basket" size="29"></i>
+          </div>
+
+          <h3>Your Everyday Shopping Companion</h3>
+
+          <p>
+            Explore groceries and daily essentials through a shopping
+            experience designed with convenience, clarity and customer needs in mind.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="what-we-offer-title">
+      <div class="section-heading">
+        <h2 id="what-we-offer-title">What FreshMart Offers</h2>
+        <p>Simple features designed to support your shopping journey.</p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="icon-box"><i data-lucide="shopping-cart"></i></div>
+          <h3>Convenient Shopping</h3>
+          <p>
+            Browse available products and organise your selections
+            in a convenient online shopping experience.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box"><i data-lucide="search"></i></div>
+          <h3>Easy Product Discovery</h3>
+          <p>
+            Explore product categories and review the information
+            provided to help you make informed choices.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box"><i data-lucide="clipboard-check"></i></div>
+          <h3>Clear Order Details</h3>
+          <p>
+            Review your selected products and available order information
+            before completing your purchase.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box"><i data-lucide="truck"></i></div>
+          <h3>Delivery Information</h3>
+          <p>
+            Review delivery availability and applicable details for your
+            location before placing an order.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box"><i data-lucide="shield-check"></i></div>
+          <h3>Security Awareness</h3>
+          <p>
+            We encourage safe shopping practices. Never share passwords,
+            OTPs or payment PINs with anyone.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box"><i data-lucide="headset"></i></div>
+          <h3>Customer Support</h3>
+          <p>
+            Reach out to FreshMart through the available support channels
+            if you need help with an order or website information.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="our-values" class="section">
+      <div class="section-heading">
+        <h2>Our Values</h2>
+        <p>The principles that guide the FreshMart shopping experience.</p>
+      </div>
+
+      <div class="mission-grid">
+        <article class="mission-card">
+          <h3><i data-lucide="users" size="22"></i> Customer First</h3>
+          <p>
+            We aim to make shopping easier to understand and navigate,
+            with clear information and accessible support.
+          </p>
+        </article>
+
+        <article class="mission-card">
+          <h3><i data-lucide="eye" size="22"></i> Clear Information</h3>
+          <p>
+            Product details, order totals and applicable policies should
+            be reviewed carefully before you complete an order.
+          </p>
+        </article>
+
+        <article class="mission-card">
+          <h3><i data-lucide="leaf" size="22"></i> Everyday Essentials</h3>
+          <p>
+            FreshMart is designed around the convenience of exploring
+            groceries and other everyday shopping needs online.
+          </p>
+        </article>
+
+        <article class="mission-card">
+          <h3><i data-lucide="message-square" size="22"></i> Helpful Support</h3>
+          <p>
+            We encourage customers to contact support when they need
+            clarification about an order, delivery or policy.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <aside class="notice">
+      <i data-lucide="info" size="21"></i>
+      <div>
+        <strong>A note about our services</strong>
+        <p>
+          Product availability, delivery coverage, payment options and other
+          services may vary. Please check the information displayed on the
+          website at the time of your purchase.
         </p>
+      </div>
+    </aside>
 
-        <p class="mt-4 text-base leading-8 text-slate-600">
-          We believe that a good shopping experience is built on clear information,
-          thoughtful service, and continuous improvement. As FreshMart grows, our
-          aim is to keep these principles at the centre of everything we do.
+    <section class="section" aria-labelledby="faq-title">
+      <div class="section-heading">
+        <h2 id="faq-title">Frequently Asked Questions</h2>
+        <p>Quick answers about FreshMart.</p>
+      </div>
+
+      <div class="faq-list">
+        <details>
+          <summary>What is FreshMart?</summary>
+          <p>
+            FreshMart is an online grocery shopping website designed to
+            help customers explore products and shop for everyday essentials.
+          </p>
+        </details>
+
+        <details>
+          <summary>How can I browse products?</summary>
+          <p>
+            Visit the Home page and use the available product categories
+            or search features, if provided, to explore the catalogue.
+          </p>
+        </details>
+
+        <details>
+          <summary>Does FreshMart deliver to every location?</summary>
+          <p>
+            Delivery availability depends on the service areas supported.
+            Check your address and delivery information on the website
+            before placing an order.
+          </p>
+        </details>
+
+        <details>
+          <summary>How can I contact FreshMart?</summary>
+          <p>
+            You can email FreshMart at FreshMart@gmail.com or use the
+            WhatsApp support link provided on this page.
+          </p>
+        </details>
+
+        <details>
+          <summary>Where can I find the delivery and refund policies?</summary>
+          <p>
+            Visit the Delivery Information and Refund Policy pages using
+            the related links below to review the applicable details.
+          </p>
+        </details>
+
+        <details>
+          <summary>How can I get help with an order?</summary>
+          <p>
+            Contact support with your order number and a description of
+            the issue. Do not include your password, OTP or payment PIN.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section class="support" aria-labelledby="support-title">
+      <div>
+        <h2 id="support-title">We Are Here to Help</h2>
+        <p>
+          Have a question about FreshMart or need assistance with an order?
+          Get in touch with our support team.
         </p>
       </div>
+
+      <a class="btn"
+         href="https://wa.me/917988300872?text=Hello%20FreshMart%2C%20I%20have%20a%20question."
+         target="_blank"
+         rel="noopener noreferrer">
+        <i data-lucide="message-circle" size="17"></i>
+        Contact Us
+      </a>
     </section>
 
-    <!-- MISSION & VISION -->
-    <section class="border-y border-slate-200 bg-white py-16 lg:py-20">
-      <div class="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 md:grid-cols-2 lg:px-8">
+    <section class="related" aria-labelledby="related-title">
+      <div class="section-heading">
+        <h2 id="related-title">Explore More</h2>
+        <p>Find useful information about shopping with FreshMart.</p>
+      </div>
 
-        <article class="about-card rounded-3xl border border-green-100 bg-green-50 p-7 sm:p-9">
-          <div class="icon-box">
-            <i data-lucide="target" class="h-7 w-7"></i>
-          </div>
-
-          <h2 class="mt-6 text-2xl font-extrabold text-slate-900">Our Mission</h2>
-
-          <p class="mt-4 leading-8 text-slate-600">
-            To make everyday essentials easier to discover and shop for through a
-            convenient, user-friendly experience, clear product information, and
-            responsive customer support.
-          </p>
-        </article>
-
-        <article class="about-card rounded-3xl border border-slate-200 bg-slate-50 p-7 sm:p-9">
-          <div class="icon-box">
-            <i data-lucide="telescope" class="h-7 w-7"></i>
-          </div>
-
-          <h2 class="mt-6 text-2xl font-extrabold text-slate-900">Our Vision</h2>
-
-          <p class="mt-4 leading-8 text-slate-600">
-            To build a dependable shopping destination that continues to improve
-            with customer needs, responsible practices, and thoughtful use of
-            technology.
-          </p>
-        </article>
-
+      <div class="related-links">
+        <a href="index.html">Start Shopping ↗</a>
+        <a href="delivery.html">Delivery Information ↗</a>
+        <a href="refund.html">Refund Policy ↗</a>
+        <a href="cancellation.html">Cancellation Policy ↗</a>
+        <a href="privacy.html">Privacy Policy ↗</a>
+        <a href="security.html">Security Information ↗</a>
+        <a href="help.html">Help & Support ↗</a>
+        <a href="legal.html">Legal Information ↗</a>
       </div>
     </section>
-
-    <!-- VALUES -->
-    <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-      <div class="text-center">
-        <span class="text-sm font-extrabold uppercase tracking-[0.2em] text-green-700">
-          What Matters to Us
-        </span>
-
-        <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-          The values behind FreshMart
-        </h2>
-
-        <p class="mx-auto mt-4 max-w-2xl leading-7 text-slate-600">
-          The principles we aim to follow in building a better shopping experience.
-        </p>
-      </div>
-
-      <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-
-        <article class="about-card rounded-2xl border border-slate-200 bg-white p-6">
-          <div class="icon-box">
-            <i data-lucide="users" class="h-6 w-6"></i>
-          </div>
-          <h3 class="mt-5 text-lg font-bold text-slate-900">Customer First</h3>
-          <p class="mt-3 text-sm leading-7 text-slate-600">
-            We aim to make browsing, shopping, and getting help straightforward.
-          </p>
-        </article>
-
-        <article class="about-card rounded-2xl border border-slate-200 bg-white p-6">
-          <div class="icon-box">
-            <i data-lucide="eye" class="h-6 w-6"></i>
-          </div>
-          <h3 class="mt-5 text-lg font-bold text-slate-900">Transparency</h3>
-          <p class="mt-3 text-sm leading-7 text-slate-600">
-            Clear product details and policies help customers make informed decisions.
-          </p>
-        </article>
-
-        <article class="about-card rounded-2xl border border-slate-200 bg-white p-6">
-          <div class="icon-box">
-            <i data-lucide="sparkles" class="h-6 w-6"></i>
-          </div>
-          <h3 class="mt-5 text-lg font-bold text-slate-900">Quality Focus</h3>
-          <p class="mt-3 text-sm leading-7 text-slate-600">
-            We aim to offer a thoughtful selection of everyday products.
-          </p>
-        </article>
-
-        <article class="about-card rounded-2xl border border-slate-200 bg-white p-6">
-          <div class="icon-box">
-            <i data-lucide="trending-up" class="h-6 w-6"></i>
-          </div>
-          <h3 class="mt-5 text-lg font-bold text-slate-900">Continuous Growth</h3>
-          <p class="mt-3 text-sm leading-7 text-slate-600">
-            We welcome feedback and look for ways to improve the experience.
-          </p>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- CUSTOMER EXPERIENCE -->
-    <section class="bg-slate-900 py-16 text-white lg:py-20">
-      <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
-
-        <div>
-          <span class="text-sm font-bold uppercase tracking-[0.2em] text-green-400">
-            The FreshMart Experience
-          </span>
-
-          <h2 class="mt-4 text-3xl font-extrabold leading-tight sm:text-4xl">
-            Designed around your everyday needs.
-          </h2>
-
-          <p class="mt-5 leading-8 text-slate-300">
-            We want customers to spend less time figuring out how to shop and more
-            time choosing what they need. Our website is designed to make product
-            discovery, policy information, and customer support easier to find.
-          </p>
-        </div>
-
-        <div class="space-y-4">
-          <div class="flex gap-4 rounded-2xl border border-white/10 bg-white/5 p-5">
-            <i data-lucide="search" class="mt-1 h-6 w-6 shrink-0 text-green-400"></i>
-            <div>
-              <h3 class="font-bold">Easy Product Discovery</h3>
-              <p class="mt-1 text-sm leading-6 text-slate-300">
-                Browse available products and review their details before ordering.
-              </p>
-            </div>
-          </div>
-
-          <div class="flex gap-4 rounded-2xl border border-white/10 bg-white/5 p-5">
-            <i data-lucide="message-circle" class="mt-1 h-6 w-6 shrink-0 text-green-400"></i>
-            <div>
-              <h3 class="font-bold">Accessible Support</h3>
-              <p class="mt-1 text-sm leading-6 text-slate-300">
-                Reach out to our support contact when you need assistance.
-              </p>
-            </div>
-          </div>
-
-          <div class="flex gap-4 rounded-2xl border border-white/10 bg-white/5 p-5">
-            <i data-lucide="file-text" class="mt-1 h-6 w-6 shrink-0 text-green-400"></i>
-            <div>
-              <h3 class="font-bold">Clear Policies</h3>
-              <p class="mt-1 text-sm leading-6 text-slate-300">
-                Review delivery, cancellation, privacy, and refund information.
-              </p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- CONTACT CTA -->
-    <section class="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-      <div class="rounded-3xl border border-green-100 bg-gradient-to-br from-green-50 to-white p-8 text-center sm:p-12">
-        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-green-100 text-green-700">
-          <i data-lucide="headset" class="h-8 w-8"></i>
-        </div>
-
-        <h2 class="mt-6 text-3xl font-extrabold text-slate-900">
-          We're here to help.
-        </h2>
-
-        <p class="mx-auto mt-4 max-w-2xl leading-7 text-slate-600">
-          Have a question about FreshMart, an order, or our policies? Get in touch
-          with our support team.
-        </p>
-
-        <div class="mt-8 flex flex-wrap justify-center gap-3">
-          <a href="help.html"
-             class="inline-flex items-center gap-2 rounded-xl bg-green-600 px-6 py-3.5 font-bold text-white transition hover:bg-green-700">
-            <i data-lucide="life-buoy" class="h-5 w-5"></i>
-            Help & Support
-          </a>
-
-          <a href="https://wa.me/917988300872?text=Hello%20FreshMart%20Support%2C%20I%20need%20help."
-             target="_blank"
-             rel="noopener noreferrer"
-             class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-bold text-slate-700 transition hover:border-green-600 hover:text-green-700">
-            <i data-lucide="message-circle" class="h-5 w-5"></i>
-            WhatsApp Us
-          </a>
-        </div>
-
-        <div class="mt-7 flex flex-col items-center justify-center gap-3 text-sm text-slate-600 sm:flex-row sm:gap-6">
-          <a href="tel:7988300872" class="inline-flex items-center gap-2 hover:text-green-700">
-            <i data-lucide="phone" class="h-4 w-4"></i>
-            7988300872
-          </a>
-
-          <a href="mailto:FreshMart@gmail.com" class="inline-flex items-center gap-2 hover:text-green-700">
-            <i data-lucide="mail" class="h-4 w-4"></i>
-            FreshMart@gmail.com
-          </a>
-        </div>
-      </div>
-    </section>
-
   </main>
 
-  <!-- FOOTER -->
-  <footer class="border-t border-slate-200 bg-white">
-    <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-7 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+  <footer>
+    <div class="footer-inner">
+      <p>© <span id="year"></span> FreshMart. All rights reserved.</p>
 
-      <a href="index.html" class="flex items-center gap-3">
-        <img src="images/logo.png" alt="FreshMart Logo" class="h-9 w-9 rounded-lg object-contain">
-        <span class="font-extrabold text-slate-900">FreshMart</span>
-      </a>
-
-      <nav class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-600">
-        <a href="terms.html" class="hover:text-green-700">Terms</a>
-        <a href="privacy.html" class="hover:text-green-700">Privacy</a>
-        <a href="delivery.html" class="hover:text-green-700">Delivery</a>
-        <a href="refund.html" class="hover:text-green-700">Refunds</a>
-        <a href="cancellation.html" class="hover:text-green-700">Cancellation</a>
-        <a href="help.html" class="hover:text-green-700">Support</a>
-      </nav>
-
-      <p class="text-sm text-slate-500">
-        © <span id="currentYear"></span> FreshMart. All rights reserved.
-      </p>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="delivery.html">Delivery</a>
+        <a href="refund.html">Refunds</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="help.html">Help</a>
+      </div>
     </div>
   </footer>
 
   <script>
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
+    function goBack() {
+      if (
+        document.referrer &&
+        new URL(document.referrer).origin === window.location.origin &&
+        window.history.length > 1
+      ) {
+        window.history.back();
+      } else {
+        window.location.href = "index.html";
+      }
+    }
+
+    document.getElementById("year").textContent = new Date().getFullYear();
 
     if (window.lucide) {
-      lucide.createIcons();
+      window.lucide.createIcons();
     }
   </script>
-
 </body>
 </html>
