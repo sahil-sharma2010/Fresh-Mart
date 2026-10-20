@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login / Sign Up | FreshMart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>tailwind.config={theme:{extend:{colors:{primary:{50:'#ecfdf5',100:'#d1fae5',500:'#10b981',600:'#059669',700:'#047857'}}}}}</script>
+    <!-- EmailJS Library -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body class="premium-bg min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+
+    <!-- Smart Back Button -->
+    <div class="absolute top-4 left-4 md:top-8 md:left-8 z-50">
+        <button onclick="window.location.href='index.html'" class="btn-3d w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-50 border border-gray-100">
+            <i data-lucide="arrow-left" class="w-6 h-6"></i>
+        </button>
+    </div>
+
+    <!-- Compact Auth Card -->
+    <div class="glass-card w-full max-w-[420px] bg-white/95 p-6 md:p-8 rounded-[2.5rem] shadow-2xl border border-gray-100 relative z-10 my-auto">
+        
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-black text-gray-900 tracking-tight title-dark">FreshMart Access</h2>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1 subtitle-dark">Premium Grocery Store</p>
+        </div>
+
+        <!-- Custom Tabs -->
+        <div class="flex p-1 bg-gray-100 rounded-full mb-6 relative shadow-inner">
+            <div id="tab-indicator" class="absolute top-1 left-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-full shadow-sm transition-transform duration-300"></div>
+            <button onclick="switchAuthTab('login')" id="tab-login" class="flex-1 py-2.5 text-sm font-extrabold z-10 text-primary-600 transition-colors">Secure Login</button>
+            <button onclick="switchAuthTab('signup')" id="tab-signup" class="flex-1 py-2.5 text-sm font-extrabold z-10 text-gray-500 transition-colors">Create Account</button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form id="form-login" class="space-y-4 transition-opacity duration-300 block" onsubmit="event.preventDefault(); handleLogin();">
+            <div>
+                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-2">Email or Mobile</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i data-lucide="user" class="w-4 h-4 text-gray-400"></i></div>
+                    <input type="text" id="login-id" required class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-[1.2rem] py-3.5 pl-11 pr-4 text-sm font-bold outline-none focus:border-primary-500 focus:bg-white transition shadow-inner input-dark" placeholder="Email or Mobile">
+                </div>
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-2">Password</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i data-lucide="lock" class="w-4 h-4 text-gray-400"></i></div>
+                    <input type="password" id="login-pass" required class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-[1.2rem] py-3.5 pl-11 pr-11 text-sm font-bold outline-none focus:border-primary-500 focus:bg-white transition shadow-inner input-dark" placeholder="Enter Password">
+                    <button type="button" onclick="togglePassword('login-pass')" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-primary-600 focus:outline-none"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                </div>
+            </div>
+            <div class="flex items-center justify-between px-1 pt-1">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" id="login-remember" class="w-3.5 h-3.5 text-primary-600 rounded focus:ring-primary-500 border-gray-300">
+                    <span class="text-xs font-bold text-gray-600">Remember Me</span>
+                </label>
+                <button type="button" onclick="handleForgotPassword()" class="text-xs font-extrabold text-primary-600 hover:underline">Forgot Password?</button>
+            </div>
+            <button type="submit" id="btn-login" class="btn-3d w-full bg-primary-600 text-white font-extrabold py-3.5 rounded-[1.2rem] shadow-xl shadow-primary-500/30 hover:bg-primary-700 transition tracking-wide text-sm mt-3 flex justify-center items-center gap-2">Login Now</button>
+        </form>
+
+        <!-- SIGN UP FORM -->
+        <form id="form-signup" class="space-y-3.5 transition-opacity duration-300 hidden" onsubmit="event.preventDefault();">
+            
+            <div id="signup-step-1">
+                <div>
+                    <label class="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-2">Full Name</label>
+                    <input type="text" id="reg-name" required class="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 text-sm font-bold outline-none focus:border-primary-500 focus:bg-white transition shadow-inner input-dark" placeholder="e.g. Sahil Sharma">
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-3">
+                    <div>
+                        <label class="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-2">Mobile</label>
+                        <input type="tel" id="reg-mobile" required maxlength="10" pattern="[0-9]{10}" class="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 text-sm font-bold outline-none focus:border-primary-500 focus:bg-white transition shadow-inner input-dark" placeholder="10 Digits">
+                    </div>
+                    <div>
+                        <label class="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-2">Email</label>
+                        <input type="email" id="reg-email" oninput="checkEmailFormat()" required class="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 text-sm font-bold outline-none focus:border-primary-500 focus:bg-white transition shadow-inner input-dark" placeholder="mail@example.com">
+                    </div>
+                </div>
+            </div>
+
+            <div id="signup-action-section" class="mt-3 hidden transition-all">
+                <button type="button" id="btn-init-register" onclick="initiateRegistration()" class="btn-3d w-full bg-gray-900 text-white font-extrabold py-3.5 rounded-[1.2rem] shadow-xl hover:bg-black transition tracking-wide text-sm flex justify-center items-center gap-2">Send OTP</button>
+            </div>
+
+            <!-- OTP Auto-Verify Section -->
+            <div id="signup-otp-section" class="hidden mt-3 bg-gray-50 p-4 rounded-2xl border border-gray-100 shadow-inner">
+                <div class="text-center mb-3">
+                    <p class="text-xs font-bold text-gray-600">OTP sent to your email.</p>
+                </div>
+                <div>
+                    <!-- TYPE CHANGED TO TEXT WITH NUMERIC INPUT MODE, 4 DIGITS -->
+                    <input type="text" inputmode="numeric" pattern="[0-9]*" id="reg-otp" maxlength="4" oninput="autoVerifyOTP(this.value)" class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-lg font-black text-center tracking-[1em] outline-none focus:border-primary-500 transition shadow-sm input-dark" placeholder="----">
+                </div>
+                <div class="text-center mt-3">
+                    <button type="button" onclick="cancelRegistration()" class="text-[10px] font-extrabold text-red-500 hover:underline uppercase tracking-widest">Cancel / Edit Email</button>
+                </div>
+            </div>
+
+            <div id="signup-final-section" class="hidden mt-3 space-y-3">
+                <div class="bg-green-50 text-green-700 text-xs font-bold p-3 rounded-xl mb-2 text-center border border-green-200 flex items-center justify-center gap-2">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i> OTP Verified
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="relative">
+                        <label class="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-2">Password</label>
+                        <input type="password" id="reg-pass" required minlength="7" class="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 pr-9 text-sm font-bold outline-none focus:border-primary-500 focus:bg-white transition shadow-inner input-dark" placeholder="Min 7 chars">
+                        <button type="button" onclick="togglePassword('reg-pass')" class="absolute bottom-2.5 right-3 text-gray-400 hover:text-primary-600"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                    </div>
+                    <div class="relative">
+                        <label class="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-2">Confirm</label>
+                        <input type="password" id="reg-pass-confirm" required minlength="7" class="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 pr-9 text-sm font-bold outline-none focus:border-primary-500 focus:bg-white transition shadow-inner input-dark" placeholder="Confirm">
+                    </div>
+                </div>
+                <label class="flex items-start gap-2 p-1.5 mt-2">
+                    <input type="checkbox" id="reg-terms" required class="w-3.5 h-3.5 text-primary-600 rounded focus:ring-primary-500 mt-0.5 border-gray-300">
+                    <span class="text-[10px] font-bold text-gray-500 leading-tight">I agree to the <a href="terms.html" target="_blank" class="text-primary-600 hover:underline font-extrabold">Terms & Conditions</a>.</span>
+                </label>
+                <button type="button" id="btn-final-register" onclick="handleRegisterFinal()" class="btn-3d w-full bg-primary-600 text-white font-extrabold py-3.5 rounded-[1.2rem] shadow-xl shadow-primary-500/30 hover:bg-primary-700 transition tracking-wide text-sm flex justify-center items-center gap-2">Create Account</button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Copyright Footer -->
+    <div class="absolute bottom-4 left-0 right-0 text-center z-10 pointer-events-none">
+        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">© 2026 FreshMart. All rights reserved.</p>
+    </div>
+
+    <!-- Premium Popup Modal Container -->
+    <div id="premium-alert-popup" class="premium-popup-overlay fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center p-4 backdrop-blur-md hidden">
+        <div class="premium-popup-box bg-white rounded-[2.5rem] w-full max-w-xs md:max-w-sm p-8 shadow-2xl flex flex-col items-center text-center relative border border-gray-100 card-dark border-dark">
+            <div id="alert-icon-container" class="w-16 h-16 bg-green-50 text-green-500 rounded-full flex items-center justify-center mb-4 mt-2 shadow-inner"><i data-lucide="check-circle" id="alert-icon" class="w-8 h-8"></i></div>
+            <h3 id="alert-title" class="text-xl font-extrabold text-gray-900 mb-2 tracking-tight title-dark">Success</h3>
+            <p id="alert-message" class="text-xs text-gray-500 mb-6 font-bold px-2 subtitle-dark"></p>
+            <div class="w-full"><button onclick="closePremiumAlert()" class="btn-3d w-full bg-gray-900 text-white font-extrabold py-3.5 rounded-full hover:bg-black transition shadow-xl text-xs uppercase tracking-widest">OK</button></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function switchAuthTab(tab) {
+            const formLogin = document.getElementById('form-login');
+            const formSignup = document.getElementById('form-signup');
+            const indicator = document.getElementById('tab-indicator');
+            const btnLogin = document.getElementById('tab-login');
+            const btnSignup = document.getElementById('tab-signup');
+
+            document.getElementById('signup-step-1').classList.remove('hidden');
+            document.getElementById('signup-action-section').classList.add('hidden');
+            document.getElementById('signup-otp-section').classList.add('hidden');
+            document.getElementById('signup-final-section').classList.add('hidden');
+            document.getElementById('reg-email').readOnly = false;
+            document.getElementById('reg-otp').value = '';
+            document.getElementById('reg-email').value = '';
+            document.getElementById('reg-mobile').value = '';
+            document.getElementById('reg-name').value = '';
+
+            if(tab === 'login') {
+                formSignup.classList.add('hidden'); formLogin.classList.remove('hidden');
+                indicator.style.transform = 'translateX(0)';
+                btnLogin.classList.replace('text-gray-500', 'text-primary-600');
+                btnSignup.classList.replace('text-primary-600', 'text-gray-500');
+            } else {
+                formLogin.classList.add('hidden'); formSignup.classList.remove('hidden');
+                indicator.style.transform = 'translateX(100%)';
+                btnSignup.classList.replace('text-gray-500', 'text-primary-600');
+                btnLogin.classList.replace('text-primary-600', 'text-gray-500');
+            }
+        }
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            input.type = input.type === "password" ? "text" : "password";
+        }
+    </script>
+</body>
+</html>
