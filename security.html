@@ -1,162 +1,806 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Account Security - FreshMart</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <script>
-        tailwind.config = { 
-            theme: { 
-                extend: { 
-                    colors: { primary: { 50: '#ecfdf5', 100: '#d1fae5', 500: '#10b981', 600: '#059669', 700: '#047857' } }, 
-                    fontFamily: { sans: ['Inter', 'sans-serif'] } 
-                } 
-            } 
-        }
-    </script>
-    <style>
-        .btn-3d { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        .btn-3d:active { transform: scale(0.95) translateY(2px); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4faf6">
+  <meta name="description" content="Learn how FreshMart helps protect your account, personal information, payments and shopping experience.">
+  <title>Security Center | FreshMart</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --green: #12834a;
+      --green-dark: #075c35;
+      --green-light: #eaf7ef;
+      --navy: #172b24;
+      --text: #52645a;
+      --muted: #7b8981;
+      --border: #e2ebe5;
+      --white: #ffffff;
+      --bg: #f5f9f6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 95px;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      font-size: 14px;
+      line-height: 1.85;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--green-dark);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 36px));
+      margin: auto;
+    }
+
+    /* Header */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--navy);
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .brand img {
+      width: 39px;
+      height: 39px;
+      object-fit: contain;
+    }
+
+    .brand span {
+      color: var(--green);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 15px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--navy);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px #173c2710;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-dark);
+      color: white;
+    }
+
+    /* Hero */
+
+    .hero {
+      padding: 65px 0 58px;
+      background:
+        radial-gradient(ellipse at 90% 15%, #bfe8cc80, transparent 35%),
+        linear-gradient(130deg, #eaf7ee, #ffffff 58%, #eff9f1);
+      border-bottom: 1px solid #e1eee5;
+    }
+
+    .hero-content {
+      max-width: 780px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border: 1px solid #d8ebde;
+      border-radius: 999px;
+      background: #ffffffd9;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 21px 0 15px;
+      color: var(--navy);
+      font-size: clamp(35px, 5vw, 54px);
+      line-height: 1.14;
+      letter-spacing: -2px;
+      font-weight: 800;
+    }
+
+    .hero h1 span {
+      color: var(--green);
+    }
+
+    .hero p {
+      max-width: 700px;
+      margin: 0;
+      color: #5c7063;
+      font-size: 15px;
+      line-height: 1.95;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 24px;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 11px;
+      border: 1px solid #dfebe2;
+      border-radius: 10px;
+      background: #ffffffd9;
+      color: #42594a;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .hero-tag i {
+      width: 15px;
+      height: 15px;
+      color: var(--green);
+    }
+
+    /* Main */
+
+    main {
+      padding: 34px 0 65px;
+    }
+
+    .section-title {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 24px;
+      line-height: 1.4;
+      letter-spacing: -.7px;
+    }
+
+    .section-description {
+      margin: 0 0 24px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .security-card {
+      padding: 23px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      box-shadow: 0 5px 20px #163b2405;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .security-card:hover {
+      transform: translateY(-3px);
+      border-color: #c7e3d0;
+      box-shadow: 0 12px 25px #163b2409;
+    }
+
+    .card-icon {
+      display: grid;
+      place-items: center;
+      width: 45px;
+      height: 45px;
+      margin-bottom: 16px;
+      border-radius: 13px;
+      background: var(--green-light);
+      color: var(--green);
+    }
+
+    .card-icon i {
+      width: 22px;
+      height: 22px;
+    }
+
+    .security-card h3 {
+      margin: 0 0 9px;
+      color: var(--navy);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .security-card p {
+      margin: 0;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    /* Important warning */
+
+    .safety-section {
+      margin-top: 38px;
+    }
+
+    .warning-card {
+      display: flex;
+      gap: 17px;
+      align-items: flex-start;
+      padding: 23px;
+      border: 1px solid #f0dfb9;
+      border-radius: 17px;
+      background: #fffaf0;
+    }
+
+    .warning-icon {
+      display: grid;
+      place-items: center;
+      flex: 0 0 43px;
+      height: 43px;
+      border-radius: 12px;
+      background: #fff0c9;
+      color: #956a14;
+    }
+
+    .warning-icon i {
+      width: 22px;
+      height: 22px;
+    }
+
+    .warning-card h3 {
+      margin: 0 0 8px;
+      color: #684b18;
+      font-size: 17px;
+    }
+
+    .warning-card p {
+      margin: 0;
+      color: #735f3a;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .safety-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 17px;
+    }
+
+    .safety-item {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: white;
+    }
+
+    .check-icon {
+      flex: 0 0 20px;
+      margin-top: 2px;
+      color: var(--green);
+    }
+
+    .safety-item strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--navy);
+      font-size: 13px;
+    }
+
+    .safety-item p {
+      margin: 0;
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    /* Contact */
+
+    .contact-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 22px;
+      align-items: center;
+      margin-top: 34px;
+      padding: 28px;
+      border: 1px solid #d9eadd;
+      border-radius: 18px;
+      background: linear-gradient(120deg, #eaf7ee, white);
+    }
+
+    .contact-card h2 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 22px;
+      line-height: 1.4;
+    }
+
+    .contact-card p {
+      margin: 0;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    /* Footer */
+
+    .footer {
+      padding: 26px 0;
+      border-top: 1px solid var(--border);
+      background: white;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .footer p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 850px) {
+      .security-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .contact-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        width: calc(100% - 28px);
+      }
+
+      .header-inner {
+        min-height: 64px;
+      }
+
+      .brand {
+        font-size: 20px;
+      }
+
+      .brand img {
+        width: 34px;
+        height: 34px;
+      }
+
+      .header-actions {
+        gap: 6px;
+      }
+
+      .header-actions .btn {
+        padding: 9px 10px;
+        font-size: 11px;
+      }
+
+      .hero {
+        padding: 43px 0 40px;
+      }
+
+      .hero h1 {
+        font-size: 37px;
+        letter-spacing: -1.4px;
+      }
+
+      .hero p {
+        font-size: 13px;
+      }
+
+      .security-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .security-card {
+        padding: 20px;
+      }
+
+      .safety-list {
+        grid-template-columns: 1fr;
+      }
+
+      .warning-card {
+        padding: 18px;
+        gap: 12px;
+      }
+
+      .contact-card {
+        padding: 21px;
+      }
+
+      .contact-actions {
+        flex-direction: column;
+      }
+
+      .contact-actions .btn {
+        width: 100%;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans pb-10 relative z-0">
 
-    <!-- Subtle Premium Background Watermark -->
-    <div class="fixed inset-0 z-[-1] opacity-[0.04] pointer-events-none" style="background-image: url('images/background.png'); background-size: cover; background-position: center; background-attachment: fixed;"></div>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="FreshMart home">
+        <img src="images/logo.png" alt="FreshMart logo"
+             onerror="this.style.display='none'">
+        <span style="color:#172b24">Fresh<span>Mart</span></span>
+      </a>
 
-    <!-- COMPACT MOBILE-FIRST HEADER -->
-    <header class="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 px-4 py-3 flex items-center shadow-sm">
-        <a href="index.html" class="btn-3d p-2 mr-2 bg-gray-100 hover:bg-gray-200 rounded-full transition text-gray-600">
-            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+      <div class="header-actions">
+        <button class="btn" type="button" onclick="goBack()">
+          <i data-lucide="arrow-left" width="16"></i>
+          Back
+        </button>
+        <a class="btn btn-primary" href="help.html">
+          <i data-lucide="headset" width="16"></i>
+          Support
         </a>
-        <img src="images/logo.png" alt="FreshMart" class="h-8 md:h-10 w-auto object-contain rounded-full shadow-sm border border-gray-100" onerror="this.style.display='none'">
-        <h1 class="text-lg md:text-xl font-extrabold text-gray-900 ml-2.5 tracking-tight">Account Security</h1>
-    </header>
+      </div>
+    </div>
+  </header>
 
-    <main class="max-w-[1200px] mx-auto px-4 mt-6 space-y-8">
-        
-        <!-- HEADER OVERVIEW SECTION -->
-        <div class="bg-white rounded-[2rem] p-6 md:p-8 text-center shadow-sm border border-gray-100">
-            <div class="w-14 h-14 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
-                <i data-lucide="shield-check" class="w-7 h-7"></i>
-            </div>
-            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2 tracking-tight">Your Account Security Matters</h2>
-            <p class="text-gray-500 text-sm md:text-base max-w-lg mx-auto font-medium">At FreshMart, we take reasonable steps to help protect your account and personal information. We encourage you to keep your login details private and use a strong password.</p>
+  <section class="hero">
+    <div class="container hero-content">
+      <div class="eyebrow">
+        <i data-lucide="shield-check" width="15"></i>
+        FreshMart Security Center
+      </div>
+
+      <h1>Your Security.<br><span>Our Priority.</span></h1>
+
+      <p>
+        Your trust matters to FreshMart. Learn how to keep your account safe,
+        protect your personal information and shop confidently. Follow these
+        simple security practices whenever you use our services.
+      </p>
+
+      <div class="hero-tags">
+        <span class="hero-tag">
+          <i data-lucide="user-round-check"></i>
+          Account Safety
+        </span>
+        <span class="hero-tag">
+          <i data-lucide="lock-keyhole"></i>
+          Privacy Awareness
+        </span>
+        <span class="hero-tag">
+          <i data-lucide="shield-check"></i>
+          Fraud Prevention
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+    <section aria-labelledby="protection-title">
+      <h2 class="section-title" id="protection-title">
+        Your shopping security
+      </h2>
+      <p class="section-description">
+        Important practices that help protect your FreshMart account and shopping experience.
+      </p>
+
+      <div class="security-grid">
+        <article class="security-card">
+          <div class="card-icon"><i data-lucide="user-round-check"></i></div>
+          <h3>Account Protection</h3>
+          <p>
+            Use a strong, unique password for your account. Keep your login
+            details private and sign out when using a shared device.
+          </p>
+        </article>
+
+        <article class="security-card">
+          <div class="card-icon"><i data-lucide="key-round"></i></div>
+          <h3>OTP Safety</h3>
+          <p>
+            Never share a verification code with anyone. Only use an OTP
+            when you have requested the related sign-in or account action.
+          </p>
+        </article>
+
+        <article class="security-card">
+          <div class="card-icon"><i data-lucide="credit-card"></i></div>
+          <h3>Payment Awareness</h3>
+          <p>
+            Review the final amount before confirming an order. Use trusted
+            payment methods and never disclose your card PIN or banking password.
+          </p>
+        </article>
+
+        <article class="security-card">
+          <div class="card-icon"><i data-lucide="fingerprint"></i></div>
+          <h3>Personal Information</h3>
+          <p>
+            Provide only the information needed for your account and orders.
+            Review our Privacy Policy to understand how personal information is handled.
+          </p>
+        </article>
+
+        <article class="security-card">
+          <div class="card-icon"><i data-lucide="mail-warning"></i></div>
+          <h3>Fraud Awareness</h3>
+          <p>
+            Be cautious of unexpected messages asking for money, OTPs,
+            passwords or sensitive information while claiming to represent FreshMart.
+          </p>
+        </article>
+
+        <article class="security-card">
+          <div class="card-icon"><i data-lucide="smartphone"></i></div>
+          <h3>Safe Device Usage</h3>
+          <p>
+            Keep your browser and device updated. Avoid saving passwords on
+            shared computers and secure your device when you leave it unattended.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="safety-section" aria-labelledby="important-title">
+      <h2 class="section-title" id="important-title">
+        Important security rules
+      </h2>
+      <p class="section-description">
+        Remember these points whenever you shop online.
+      </p>
+
+      <div class="warning-card">
+        <div class="warning-icon">
+          <i data-lucide="alert-triangle"></i>
+        </div>
+        <div>
+          <h3>Never share confidential verification details</h3>
+          <p>
+            Keep your passwords, OTPs, card PINs and banking credentials private.
+            Do not follow suspicious payment links or requests from unknown senders.
+          </p>
+        </div>
+      </div>
+
+      <div class="safety-list">
+        <div class="safety-item">
+          <i class="check-icon" data-lucide="check-circle"></i>
+          <div>
+            <strong>Check before you click</strong>
+            <p>Review links and sender details before opening unexpected messages.</p>
+          </div>
         </div>
 
-        <!-- MAIN SECURITY OPTIONS -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-            
-            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="p-3 bg-gray-50 rounded-full text-gray-600 shadow-inner flex-shrink-0"><i data-lucide="key" class="w-5 h-5"></i></div>
-                    <div>
-                        <h3 class="font-extrabold text-lg text-gray-900">Change Password</h3>
-                        <p class="text-sm font-medium text-gray-500 mt-1">Keep your account credentials up to date.</p>
-                    </div>
-                </div>
-                <!-- Connected to JS function for future backend integration -->
-                <button onclick="handleSecurityAction('password')" class="btn-3d w-full mt-2 bg-gray-100 text-gray-800 font-bold py-3.5 rounded-full hover:bg-gray-200 transition text-sm">Change Password</button>
-            </div>
-
-            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="p-3 bg-blue-50 rounded-full text-blue-500 shadow-inner flex-shrink-0"><i data-lucide="smartphone" class="w-5 h-5"></i></div>
-                    <div>
-                        <h3 class="font-extrabold text-lg text-gray-900">Mobile & Email</h3>
-                        <p class="text-sm font-medium text-gray-500 mt-1">Manage your contact information and verification.</p>
-                    </div>
-                </div>
-                <button onclick="handleSecurityAction('contact')" class="btn-3d w-full mt-2 bg-gray-100 text-gray-800 font-bold py-3.5 rounded-full hover:bg-gray-200 transition text-sm">Manage Details</button>
-            </div>
-
-            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="p-3 bg-indigo-50 rounded-full text-indigo-500 shadow-inner flex-shrink-0"><i data-lucide="lock" class="w-5 h-5"></i></div>
-                    <div>
-                        <h3 class="font-extrabold text-lg text-gray-900">Login & Account Access</h3>
-                        <p class="text-sm font-medium text-gray-500 mt-1">Manage your account access and available security options.</p>
-                    </div>
-                </div>
-                <button onclick="handleSecurityAction('access')" class="btn-3d w-full mt-2 bg-gray-100 text-gray-800 font-bold py-3.5 rounded-full hover:bg-gray-200 transition text-sm">View Access Settings</button>
-            </div>
-
-            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="p-3 bg-orange-50 rounded-full text-orange-500 shadow-inner flex-shrink-0"><i data-lucide="life-buoy" class="w-5 h-5"></i></div>
-                    <div>
-                        <h3 class="font-extrabold text-lg text-gray-900">Account Recovery</h3>
-                        <p class="text-sm font-medium text-gray-500 mt-1">Get help if you cannot access your account.</p>
-                    </div>
-                </div>
-                <button onclick="handleSecurityAction('recovery')" class="btn-3d w-full mt-2 bg-gray-100 text-gray-800 font-bold py-3.5 rounded-full hover:bg-gray-200 transition text-sm">Recover Account</button>
-            </div>
-
-            <!-- Danger Zone -->
-            <div class="bg-white p-6 rounded-[2rem] border border-red-100 shadow-sm hover:shadow-md transition md:col-span-2">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="p-3 bg-red-50 rounded-full text-red-500 shadow-inner flex-shrink-0"><i data-lucide="trash-2" class="w-5 h-5"></i></div>
-                    <div>
-                        <h3 class="font-extrabold text-lg text-red-600">Delete Account</h3>
-                        <p class="text-sm font-medium text-gray-500 mt-1">Request the deletion of your account and associated personal information, subject to applicable requirements.</p>
-                    </div>
-                </div>
-                <button onclick="handleDeleteRequest()" class="btn-3d w-full md:w-auto md:px-10 mt-2 bg-red-50 text-red-600 font-bold py-3.5 rounded-full border border-red-100 hover:bg-red-100 transition text-sm">Request Account Deletion</button>
-            </div>
+        <div class="safety-item">
+          <i class="check-icon" data-lucide="check-circle"></i>
+          <div>
+            <strong>Review your orders</strong>
+            <p>Check product details, delivery address and total amount before checkout.</p>
+          </div>
         </div>
 
-        <!-- SECURITY TIPS -->
-        <div class="bg-blue-50/80 p-6 md:p-8 rounded-[2.5rem] border border-blue-100 shadow-sm">
-            <h4 class="font-extrabold text-blue-900 mb-4 flex items-center gap-2 text-lg"><i data-lucide="info" class="w-6 h-6 text-blue-600"></i> Keep Your Account Safe</h4>
-            <ul class="text-sm text-blue-800 space-y-3 font-semibold">
-                <li class="flex gap-3"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5"></i> Use a strong, unique password.</li>
-                <li class="flex gap-3"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5"></i> Never share your password or verification codes.</li>
-                <li class="flex gap-3"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5"></i> Sign out when using a shared device.</li>
-                <li class="flex gap-3"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5"></i> Keep your contact information up to date.</li>
-                <li class="flex gap-3"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5"></i> Contact FreshMart if you notice unusual account activity.</li>
-            </ul>
+        <div class="safety-item">
+          <i class="check-icon" data-lucide="check-circle"></i>
+          <div>
+            <strong>Protect your password</strong>
+            <p>Do not reuse your FreshMart password on unrelated websites.</p>
+          </div>
         </div>
 
-        <!-- PRIVACY & SUPPORT LINKS -->
-        <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-gray-100 text-center">
-            <h3 class="font-extrabold text-lg text-gray-900 mb-4">Need More Information?</h3>
-            <div class="flex flex-wrap justify-center gap-3 mb-8">
-                <a href="privacy.html" class="btn-3d bg-gray-50 border border-gray-200 px-5 py-2.5 rounded-full text-sm font-bold text-gray-700 hover:text-primary-600 transition shadow-sm">Privacy Policy</a>
-                <a href="terms.html" class="btn-3d bg-gray-50 border border-gray-200 px-5 py-2.5 rounded-full text-sm font-bold text-gray-700 hover:text-primary-600 transition shadow-sm">Terms & Conditions</a>
-                <a href="help.html" class="btn-3d bg-gray-50 border border-gray-200 px-5 py-2.5 rounded-full text-sm font-bold text-gray-700 hover:text-primary-600 transition shadow-sm">Help & Support</a>
-            </div>
-
-            <div class="pt-6 border-t border-gray-100">
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Contact FreshMart Support</p>
-                <div class="flex flex-col md:flex-row items-center justify-center gap-4 text-sm font-bold text-gray-700">
-                    <a href="tel:7988300872" class="flex items-center gap-2 hover:text-primary-600 transition"><div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"><i data-lucide="phone" class="w-4 h-4"></i></div> +91 79883 00872</a>
-                    <a href="mailto:FreshMart@gmail.com" class="flex items-center gap-2 hover:text-primary-600 transition"><div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"><i data-lucide="mail" class="w-4 h-4"></i></div> FreshMart@gmail.com</a>
-                </div>
-            </div>
+        <div class="safety-item">
+          <i class="check-icon" data-lucide="check-circle"></i>
+          <div>
+            <strong>Report suspicious activity</strong>
+            <p>Contact support if you notice unexpected account activity or a suspicious order.</p>
+          </div>
         </div>
+      </div>
+    </section>
 
-    </main>
+    <section class="safety-section" aria-labelledby="privacy-title">
+      <h2 class="section-title" id="privacy-title">
+        Privacy and responsible use
+      </h2>
+      <p class="section-description">
+        Your account information should be treated with care and used responsibly.
+      </p>
 
-    <!-- Custom Script for basic UI interactions (Not storing sensitive info) -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            if(typeof lucide !== 'undefined') { lucide.createIcons(); }
-        });
+      <div class="security-grid">
+        <article class="security-card">
+          <div class="card-icon"><i data-lucide="file-text"></i></div>
+          <h3>Privacy Policy</h3>
+          <p>
+            Read our Privacy Policy for information about personal data,
+            its use and the choices available to you.
+            <br><a href="privacy.html">Read Privacy Policy →</a>
+          </p>
+        </article>
 
-        function handleSecurityAction(action) {
-            // Note: Backend integration required. Showing standard alert for now.
-            alert("This feature requires backend authentication setup. It will be available soon.");
-        }
+        <article class="security-card">
+          <div class="card-icon"><i data-lucide="shopping-bag"></i></div>
+          <h3>Safe Shopping</h3>
+          <p>
+            Use accurate account and delivery details. Review the applicable
+            terms and policies before placing an order.
+            <br><a href="terms.html">Read Terms & Conditions →</a>
+          </p>
+        </article>
 
-        function handleDeleteRequest() {
-            if(confirm("Are you sure you want to request account deletion? This action may permanently remove your account data according to our policies.")) {
-                alert("Account deletion request initiated. Our support team will process it shortly.");
-            }
-        }
-    </script>
+        <article class="security-card">
+          <div class="card-icon"><i data-lucide="message-circle"></i></div>
+          <h3>Need Help?</h3>
+          <p>
+            If you have a security concern, contact FreshMart through the
+            available support channels.
+            <br><a href="help.html">Visit Help & Support →</a>
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="contact-card">
+      <div>
+        <h2>Notice something unusual?</h2>
+        <p>
+          Contact FreshMart support if you suspect unauthorized account access,
+          a suspicious message or an issue with an order.
+        </p>
+      </div>
+
+      <div class="contact-actions">
+        <a class="btn btn-primary" href="help.html">
+          <i data-lucide="headset" width="16"></i>
+          Contact Support
+        </a>
+        <a class="btn" href="mailto:FreshMart@gmail.com">
+          <i data-lucide="mail" width="16"></i>
+          Email Us
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> FreshMart. All rights reserved.</p>
+
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="index.html">Home</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="help.html">Support</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function goBack() {
+      if (
+        document.referrer &&
+        new URL(document.referrer).origin === window.location.origin &&
+        window.history.length > 1
+      ) {
+        window.history.back();
+      } else {
+        window.location.href = "index.html";
+      }
+    }
+
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  </script>
 </body>
 </html>
