@@ -1,85 +1,638 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legal & Terms - FreshMart</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <script>tailwind.config={theme:{extend:{colors:{primary:{50:'#ecfdf5',500:'#10b981',600:'#059669',700:'#047857'}}}}}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4faf6">
+  <meta name="description" content="FreshMart legal information, customer policies, terms and important notices.">
+  <title>Legal Center | FreshMart</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --green: #12834a;
+      --green-dark: #075c35;
+      --green-light: #eaf7ef;
+      --navy: #172b24;
+      --text: #52645a;
+      --muted: #7b8981;
+      --border: #e2ebe5;
+      --white: #fff;
+      --bg: #f5f9f6;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 95px;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      font-size: 14px;
+      line-height: 1.85;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--green); text-decoration: none; }
+    a:hover { color: var(--green-dark); }
+    button { font: inherit; }
+
+    .container {
+      width: min(1120px, calc(100% - 36px));
+      margin: auto;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--navy);
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .brand img {
+      width: 39px;
+      height: 39px;
+      object-fit: contain;
+    }
+
+    .brand-name span { color: var(--green); }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 15px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--navy);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px #173c2710;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-dark);
+      color: white;
+    }
+
+    .hero {
+      padding: 65px 0 58px;
+      background:
+        radial-gradient(ellipse at 90% 15%, #bfe8cc80, transparent 35%),
+        linear-gradient(130deg, #eaf7ee, #fff 58%, #eff9f1);
+      border-bottom: 1px solid #e1eee5;
+    }
+
+    .hero-content { max-width: 790px; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border: 1px solid #d8ebde;
+      border-radius: 999px;
+      background: #ffffffd9;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 21px 0 15px;
+      color: var(--navy);
+      font-size: clamp(35px, 5vw, 54px);
+      line-height: 1.14;
+      letter-spacing: -2px;
+      font-weight: 800;
+    }
+
+    .hero h1 span { color: var(--green); }
+
+    .hero p {
+      max-width: 710px;
+      margin: 0;
+      color: #5c7063;
+      font-size: 15px;
+      line-height: 1.95;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 24px;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 11px;
+      border: 1px solid #dfebe2;
+      border-radius: 10px;
+      background: #ffffffd9;
+      color: #42594a;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .hero-tag i { width: 15px; height: 15px; color: var(--green); }
+
+    main { padding: 34px 0 65px; }
+
+    .section-title {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 24px;
+      line-height: 1.4;
+      letter-spacing: -.7px;
+    }
+
+    .section-description {
+      margin: 0 0 24px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .legal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .legal-card {
+      padding: 23px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      box-shadow: 0 5px 20px #163b2405;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .legal-card:hover {
+      transform: translateY(-3px);
+      border-color: #c7e3d0;
+      box-shadow: 0 12px 25px #163b2409;
+    }
+
+    .card-icon {
+      display: grid;
+      place-items: center;
+      width: 45px;
+      height: 45px;
+      margin-bottom: 16px;
+      border-radius: 13px;
+      background: var(--green-light);
+      color: var(--green);
+    }
+
+    .card-icon i { width: 22px; height: 22px; }
+
+    .legal-card h3 {
+      margin: 0 0 9px;
+      color: var(--navy);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .legal-card p {
+      margin: 0;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 15px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .content-section { margin-top: 38px; }
+
+    .content-panel {
+      padding: 25px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+    }
+
+    .content-panel h3 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 15px;
+    }
+
+    .content-panel p {
+      margin: 0 0 17px;
+      font-size: 13px;
+      line-height: 1.95;
+    }
+
+    .content-panel p:last-child { margin-bottom: 0; }
+
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      margin-top: 18px;
+      padding: 20px;
+      border: 1px solid #d9eadd;
+      border-radius: 15px;
+      background: #eef8f0;
+    }
+
+    .notice-icon {
+      display: grid;
+      place-items: center;
+      flex: 0 0 39px;
+      height: 39px;
+      border-radius: 11px;
+      background: #d9efdf;
+      color: var(--green);
+    }
+
+    .notice h3 {
+      margin: 0 0 6px;
+      color: var(--navy);
+      font-size: 15px;
+    }
+
+    .notice p {
+      margin: 0;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .contact-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 22px;
+      align-items: center;
+      margin-top: 34px;
+      padding: 28px;
+      border: 1px solid #d9eadd;
+      border-radius: 18px;
+      background: linear-gradient(120deg, #eaf7ee, white);
+    }
+
+    .contact-card h2 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 22px;
+      line-height: 1.4;
+    }
+
+    .contact-card p {
+      margin: 0;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .contact-actions { display: flex; flex-wrap: wrap; gap: 9px; }
+
+    .footer {
+      padding: 26px 0;
+      border-top: 1px solid var(--border);
+      background: white;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .footer p { margin: 0; color: var(--muted); font-size: 12px; }
+
+    .footer-links { display: flex; flex-wrap: wrap; gap: 15px; }
+
+    .footer-links a { font-size: 12px; font-weight: 600; }
+
+    @media (max-width: 850px) {
+      .legal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .contact-card { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .container { width: calc(100% - 28px); }
+      .header-inner { min-height: 64px; }
+      .brand { font-size: 20px; }
+      .brand img { width: 34px; height: 34px; }
+      .header-actions { gap: 6px; }
+      .header-actions .btn { padding: 9px 10px; font-size: 11px; }
+      .hero { padding: 43px 0 40px; }
+      .hero h1 { font-size: 37px; letter-spacing: -1.4px; }
+      .hero p { font-size: 13px; }
+      .legal-grid { grid-template-columns: 1fr; gap: 12px; }
+      .legal-card { padding: 20px; }
+      .content-panel { padding: 19px; }
+      .contact-card { padding: 21px; }
+      .contact-actions { flex-direction: column; }
+      .contact-actions .btn { width: 100%; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
 </head>
-<body class="premium-bg text-gray-800 font-sans pb-12 relative z-0">
-    <header class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 px-4 py-3 flex items-center shadow-sm">
-        <a href="index.html" class="btn-3d p-2 mr-2 bg-gray-100 hover:bg-gray-200 rounded-full transition text-gray-600"><i data-lucide="arrow-left" class="w-5 h-5"></i></a>
-        <img src="images/logo.png" alt="FreshMart" class="h-8 md:h-10 w-auto object-contain rounded-full shadow-sm" onerror="this.style.display='none'">
-        <h1 class="text-xl font-extrabold text-gray-900 ml-3 tracking-tight">Legal & Terms</h1>
-    </header>
 
-    <main class="max-w-[1000px] mx-auto px-4 mt-8 space-y-8">
-        <div class="text-center glass-card p-8 rounded-[2.5rem]">
-            <div class="w-14 h-14 bg-gray-100 text-gray-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner"><i data-lucide="scale" class="w-7 h-7"></i></div>
-            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2">Legal & Policies</h2>
-            <p class="text-gray-500 text-sm md:text-base font-medium max-w-lg mx-auto">Everything you need to know about our rules, your rights, and how we operate to give you a transparent shopping experience.</p>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="FreshMart home">
+        <img src="images/logo.png" alt="FreshMart logo"
+             onerror="this.style.display='none'">
+        <span class="brand-name">Fresh<span>Mart</span></span>
+      </a>
+
+      <div class="header-actions">
+        <button class="btn" type="button" onclick="goBack()">
+          <i data-lucide="arrow-left" width="16"></i>
+          Back
+        </button>
+        <a class="btn btn-primary" href="help.html">
+          <i data-lucide="headset" width="16"></i>
+          Support
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-content">
+      <div class="eyebrow">
+        <i data-lucide="scale" width="15"></i>
+        FreshMart Legal Center
+      </div>
+
+      <h1>Legal <span>Information</span></h1>
+
+      <p>
+        Welcome to the FreshMart Legal Center. Here you can review the
+        policies and important information that help explain your shopping
+        experience, account responsibilities, privacy and customer support options.
+      </p>
+
+      <div class="hero-tags">
+        <span class="hero-tag">
+          <i data-lucide="file-check-2"></i>
+          Clear Policies
+        </span>
+        <span class="hero-tag">
+          <i data-lucide="handshake"></i>
+          Customer Information
+        </span>
+        <span class="hero-tag">
+          <i data-lucide="book-open-check"></i>
+          Policy Access
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+    <section aria-labelledby="policies-title">
+      <h2 class="section-title" id="policies-title">Explore our policies</h2>
+      <p class="section-description">
+        Find the policy relevant to your FreshMart account and orders.
+      </p>
+
+      <div class="legal-grid">
+        <article class="legal-card">
+          <div class="card-icon"><i data-lucide="file-text"></i></div>
+          <h3>Terms & Conditions</h3>
+          <p>Understand the general terms that apply when using FreshMart.</p>
+          <a class="card-link" href="terms.html">Read terms <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="legal-card">
+          <div class="card-icon"><i data-lucide="shield-check"></i></div>
+          <h3>Privacy Policy</h3>
+          <p>Learn about personal information and privacy-related choices.</p>
+          <a class="card-link" href="privacy.html">Read privacy policy <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="legal-card">
+          <div class="card-icon"><i data-lucide="truck"></i></div>
+          <h3>Delivery Policy</h3>
+          <p>Review delivery information and what to do if an order has an issue.</p>
+          <a class="card-link" href="delivery.html">Read delivery policy <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="legal-card">
+          <div class="card-icon"><i data-lucide="wallet"></i></div>
+          <h3>Refund Policy</h3>
+          <p>Understand the process for reporting an issue and requesting a refund.</p>
+          <a class="card-link" href="refund.html">Read refund policy <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="legal-card">
+          <div class="card-icon"><i data-lucide="calendar-x"></i></div>
+          <h3>Cancellation Policy</h3>
+          <p>Find information about order cancellation and related requests.</p>
+          <a class="card-link" href="cancellation.html">Read cancellation policy <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="legal-card">
+          <div class="card-icon"><i data-lucide="shield"></i></div>
+          <h3>Security Center</h3>
+          <p>Learn practical ways to protect your account and recognise suspicious activity.</p>
+          <a class="card-link" href="security.html">Visit security center <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="legal-card">
+          <div class="card-icon"><i data-lucide="store"></i></div>
+          <h3>About FreshMart</h3>
+          <p>Learn more about FreshMart and the shopping experience we aim to provide.</p>
+          <a class="card-link" href="about.html">About us <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="legal-card">
+          <div class="card-icon"><i data-lucide="headset"></i></div>
+          <h3>Help & Support</h3>
+          <p>Find assistance with account, order and policy-related questions.</p>
+          <a class="card-link" href="help.html">Get support <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="legal-card">
+          <div class="card-icon"><i data-lucide="mail"></i></div>
+          <h3>Contact FreshMart</h3>
+          <p>Contact our support team if you need help understanding a policy.</p>
+          <a class="card-link" href="mailto:FreshMart@gmail.com">Email support <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section" aria-labelledby="responsibility-title">
+      <h2 class="section-title" id="responsibility-title">Important information</h2>
+      <p class="section-description">
+        A few useful points when reviewing FreshMart policies.
+      </p>
+
+      <div class="content-panel">
+        <h3>Read the policy relevant to your request</h3>
+        <p>
+          Different topics, such as delivery, cancellation, refunds and
+          privacy, may be explained on separate pages. Review the relevant
+          policy before taking action or contacting support.
+        </p>
+
+        <h3>Keep order information available</h3>
+        <p>
+          If your question relates to a purchase, keep the order details and
+          a clear description of the issue ready when contacting support.
+        </p>
+
+        <h3>Policy updates</h3>
+        <p>
+          Published policies may be updated as services and applicable
+          requirements change. The website should display current, accurate
+          information that reflects FreshMart's actual practices.
+        </p>
+
+        <h3>Applicable rights</h3>
+        <p>
+          Nothing on this page is intended to exclude consumer rights or
+          protections that apply under relevant law.
+        </p>
+      </div>
+
+      <div class="notice">
+        <div class="notice-icon"><i data-lucide="info"></i></div>
+        <div>
+          <h3>Please note</h3>
+          <p>
+            This page is a navigation hub for FreshMart's policies. Specific
+            terms and conditions are explained in the linked policy pages.
+            Ensure those pages are accurate and suitable for your actual business
+            before publishing.
+          </p>
         </div>
+      </div>
+    </section>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <a href="terms.html" class="glass-card p-6 rounded-[2rem] hover:shadow-lg transition transform hover:-translate-y-1 flex items-center gap-5 btn-3d">
-                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center shadow-inner flex-shrink-0"><i data-lucide="file-text" class="w-6 h-6"></i></div>
-                <div class="flex-1">
-                    <h3 class="font-extrabold text-lg text-gray-900">Terms & Conditions</h3>
-                    <p class="text-xs text-gray-500 font-medium mt-1">Rules for using our website and placing orders.</p>
-                </div>
-                <i data-lucide="chevron-right" class="text-gray-400 w-5 h-5"></i>
-            </a>
+    <section class="contact-card">
+      <div>
+        <h2>Need help understanding a policy?</h2>
+        <p>
+          Contact FreshMart Support if you have a question about your account,
+          order or the information on this page.
+        </p>
+      </div>
 
-            <a href="privacy.html" class="glass-card p-6 rounded-[2rem] hover:shadow-lg transition transform hover:-translate-y-1 flex items-center gap-5 btn-3d">
-                <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center shadow-inner flex-shrink-0"><i data-lucide="shield" class="w-6 h-6"></i></div>
-                <div class="flex-1">
-                    <h3 class="font-extrabold text-lg text-gray-900">Privacy Policy</h3>
-                    <p class="text-xs text-gray-500 font-medium mt-1">How we collect and protect your personal information.</p>
-                </div>
-                <i data-lucide="chevron-right" class="text-gray-400 w-5 h-5"></i>
-            </a>
+      <div class="contact-actions">
+        <a class="btn btn-primary" href="help.html">
+          <i data-lucide="headset" width="16"></i>
+          Contact Support
+        </a>
+        <a class="btn" href="mailto:FreshMart@gmail.com">
+          <i data-lucide="mail" width="16"></i>
+          Email Us
+        </a>
+      </div>
+    </section>
+  </main>
 
-            <a href="delivery.html" class="glass-card p-6 rounded-[2rem] hover:shadow-lg transition transform hover:-translate-y-1 flex items-center gap-5 btn-3d">
-                <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center shadow-inner flex-shrink-0"><i data-lucide="truck" class="w-6 h-6"></i></div>
-                <div class="flex-1">
-                    <h3 class="font-extrabold text-lg text-gray-900">Delivery Policy</h3>
-                    <p class="text-xs text-gray-500 font-medium mt-1">Delivery coverage, timelines, and applicable charges.</p>
-                </div>
-                <i data-lucide="chevron-right" class="text-gray-400 w-5 h-5"></i>
-            </a>
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> FreshMart. All rights reserved.</p>
 
-            <a href="refund.html" class="glass-card p-6 rounded-[2rem] hover:shadow-lg transition transform hover:-translate-y-1 flex items-center gap-5 btn-3d">
-                <div class="w-12 h-12 bg-red-50 text-red-600 rounded-full flex items-center justify-center shadow-inner flex-shrink-0"><i data-lucide="refresh-ccw" class="w-6 h-6"></i></div>
-                <div class="flex-1">
-                    <h3 class="font-extrabold text-lg text-gray-900">Return & Refund Policy</h3>
-                    <p class="text-xs text-gray-500 font-medium mt-1">Process for damaged, incorrect, or missing items.</p>
-                </div>
-                <i data-lucide="chevron-right" class="text-gray-400 w-5 h-5"></i>
-            </a>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="index.html">Home</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="refund.html">Refunds</a>
+        <a href="security.html">Security</a>
+        <a href="help.html">Support</a>
+      </nav>
+    </div>
+  </footer>
 
-            <a href="cancellation.html" class="glass-card p-6 rounded-[2rem] hover:shadow-lg transition transform hover:-translate-y-1 flex items-center gap-5 btn-3d">
-                <div class="w-12 h-12 bg-yellow-50 text-yellow-600 rounded-full flex items-center justify-center shadow-inner flex-shrink-0"><i data-lucide="x-circle" class="w-6 h-6"></i></div>
-                <div class="flex-1">
-                    <h3 class="font-extrabold text-lg text-gray-900">Cancellation Policy</h3>
-                    <p class="text-xs text-gray-500 font-medium mt-1">Rules for cancelling orders and refund eligibility.</p>
-                </div>
-                <i data-lucide="chevron-right" class="text-gray-400 w-5 h-5"></i>
-            </a>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-            <a href="about.html" class="glass-card p-6 rounded-[2rem] hover:shadow-lg transition transform hover:-translate-y-1 flex items-center gap-5 btn-3d">
-                <div class="w-12 h-12 bg-green-50 text-green-600 rounded-full flex items-center justify-center shadow-inner flex-shrink-0"><i data-lucide="info" class="w-6 h-6"></i></div>
-                <div class="flex-1">
-                    <h3 class="font-extrabold text-lg text-gray-900">About FreshMart</h3>
-                    <p class="text-xs text-gray-500 font-medium mt-1">Our mission and customer service information.</p>
-                </div>
-                <i data-lucide="chevron-right" class="text-gray-400 w-5 h-5"></i>
-            </a>
-        </div>
-    </main>
-    <script>if(typeof lucide !== 'undefined') lucide.createIcons();</script>
+    function goBack() {
+      if (
+        document.referrer &&
+        new URL(document.referrer).origin === window.location.origin &&
+        window.history.length > 1
+      ) {
+        window.history.back();
+      } else {
+        window.location.href = "index.html";
+      }
+    }
+
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  </script>
 </body>
 </html>
