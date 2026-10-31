@@ -1,0 +1,1229 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Privacy Policy | FreshMart</title>
+  <meta name="description" content="FreshMart Privacy Policy explains how customer information is collected, used, stored, protected and managed when using our online store.">
+  <meta name="robots" content="index, follow">
+
+  <style>
+    :root {
+      --fresh: #079b70;
+      --fresh-dark: #08775b;
+      --navy: #14213a;
+      --text: #536078;
+      --muted: #8490a4;
+      --mint: #eaf8f2;
+      --background: #f7faf8;
+      --white: #ffffff;
+      --border: #e5eee9;
+      --shadow: 0 12px 40px rgba(20, 33, 58, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 100px;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      min-height: 78px;
+      padding: 12px 24px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      font-size: 29px;
+      font-weight: 800;
+      letter-spacing: -1.4px;
+      line-height: 1.2;
+    }
+
+    .brand-fresh {
+      color: var(--fresh);
+    }
+
+    .brand-mart {
+      color: var(--navy);
+    }
+
+    .brand-subtitle {
+      display: block;
+      margin-top: 3px;
+      color: #98a3b4;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 17px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: 0.2s ease;
+    }
+
+    .home-link {
+      color: var(--navy);
+      background: #f0f4f2;
+    }
+
+    .home-link:hover {
+      background: #e2ece7;
+    }
+
+    .back-button {
+      border: none;
+      cursor: pointer;
+      color: white;
+      background: var(--fresh);
+    }
+
+    .back-button:hover {
+      background: var(--fresh-dark);
+    }
+
+    .page-container {
+      width: min(1160px, calc(100% - 40px));
+      margin: 36px auto 55px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 48px;
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      background: linear-gradient(135deg, #ffffff 0%, #edf9f3 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -65px;
+      top: -100px;
+      width: 290px;
+      height: 290px;
+      border-radius: 50%;
+      background: rgba(7, 155, 112, 0.07);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 13px;
+      border-radius: 30px;
+      color: var(--fresh-dark);
+      background: #e0f5eb;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      position: relative;
+      z-index: 1;
+      margin: 18px 0 10px;
+      color: var(--navy);
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1.2;
+      letter-spacing: -1.5px;
+    }
+
+    .hero p {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      font-size: 15px;
+    }
+
+    .hero-meta {
+      position: relative;
+      z-index: 1;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .content-layout {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      align-items: start;
+      gap: 26px;
+      margin-top: 28px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 100px;
+      padding: 23px 20px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin-bottom: 14px;
+      color: var(--navy);
+      font-size: 15px;
+    }
+
+    .toc a {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.5;
+      text-decoration: none;
+      transition: 0.2s ease;
+    }
+
+    .toc a:hover {
+      color: var(--fresh-dark);
+      background: var(--mint);
+    }
+
+    .privacy-content {
+      min-width: 0;
+      padding: 32px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .privacy-section {
+      padding: 0 0 25px;
+      margin-bottom: 25px;
+      border-bottom: 1px solid var(--border);
+      scroll-margin-top: 105px;
+    }
+
+    .privacy-section:last-child {
+      padding-bottom: 0;
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 13px;
+    }
+
+    .section-number {
+      display: inline-flex;
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      color: var(--fresh-dark);
+      background: var(--mint);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .section-heading h2 {
+      padding-top: 3px;
+      color: var(--navy);
+      font-size: 19px;
+      line-height: 1.5;
+    }
+
+    .privacy-section p {
+      margin: 0 0 12px;
+      font-size: 14px;
+    }
+
+    .privacy-section ul {
+      padding-left: 23px;
+      margin: 10px 0 12px;
+    }
+
+    .privacy-section li {
+      margin: 6px 0;
+      padding-left: 3px;
+      font-size: 14px;
+    }
+
+    .privacy-section a {
+      color: var(--fresh-dark);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .privacy-section a:hover {
+      color: var(--fresh);
+    }
+
+    .privacy-note {
+      padding: 17px 19px;
+      border: 1px solid #d7eee3;
+      border-radius: 14px;
+      background: #f2fbf6;
+    }
+
+    /* FreshMart policies-only footer */
+
+    .fm-footer {
+      width: 100%;
+      margin-top: 45px;
+      padding: 34px 5% 0;
+      border: 1px solid var(--border);
+      border-radius: 24px 24px 0 0;
+      background: linear-gradient(135deg, #ffffff 0%, #f2faf6 100%);
+      color: var(--navy);
+    }
+
+    .fm-footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .fm-footer-heading {
+      margin-bottom: 20px;
+    }
+
+    .fm-footer-logo {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      line-height: 1.2;
+      text-decoration: none;
+    }
+
+    .fm-footer-logo .fresh {
+      color: var(--fresh);
+    }
+
+    .fm-footer-logo .mart {
+      color: var(--navy);
+    }
+
+    .fm-footer-heading h2 {
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .fm-policy-links {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: 28px;
+    }
+
+    .fm-policy-links a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      font-size: 13px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .fm-policy-links a span {
+      color: #718096;
+      font-size: 21px;
+      line-height: 1;
+    }
+
+    .fm-policy-links a:hover,
+    .fm-policy-links a:hover span {
+      color: var(--fresh-dark);
+    }
+
+    .fm-footer-bottom {
+      margin-top: 28px;
+      padding: 20px 0;
+      border-top: 1px solid #dfe9e4;
+    }
+
+    .fm-footer-bottom p {
+      margin: 0;
+      color: #657087;
+      font-size: 12px;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 24px;
+      bottom: 22px;
+      z-index: 90;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 17px;
+      border: 1px solid #d9eee4;
+      border-radius: 30px;
+      color: var(--fresh-dark);
+      background: #e9f7f0;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 5px 20px rgba(20, 33, 58, 0.08);
+    }
+
+    .back-to-top:hover {
+      background: #d9f1e5;
+    }
+
+    @media (max-width: 900px) {
+      .content-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .toc {
+        position: static;
+      }
+
+      .toc-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 3px 10px;
+      }
+
+      .fm-policy-links {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      html {
+        scroll-padding-top: 85px;
+      }
+
+      .header-inner {
+        min-height: 68px;
+        padding: 10px 16px;
+        gap: 8px;
+      }
+
+      .brand {
+        font-size: 25px;
+      }
+
+      .brand-subtitle {
+        font-size: 8px;
+        letter-spacing: 1.5px;
+      }
+
+      .header-actions {
+        gap: 7px;
+      }
+
+      .header-link {
+        min-height: 37px;
+        padding: 8px 11px;
+        font-size: 11px;
+      }
+
+      .back-button {
+        display: none;
+      }
+
+      .page-container {
+        width: calc(100% - 24px);
+        margin: 20px auto 30px;
+      }
+
+      .hero {
+        padding: 29px 22px;
+        border-radius: 20px;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .hero p {
+        font-size: 13px;
+      }
+
+      .content-layout {
+        gap: 16px;
+        margin-top: 17px;
+      }
+
+      .toc {
+        padding: 19px 15px;
+        border-radius: 16px;
+      }
+
+      .toc-list {
+        grid-template-columns: 1fr;
+      }
+
+      .privacy-content {
+        padding: 23px 17px;
+        border-radius: 17px;
+      }
+
+      .section-heading {
+        gap: 10px;
+      }
+
+      .section-heading h2 {
+        font-size: 17px;
+      }
+
+      .privacy-section p,
+      .privacy-section li {
+        font-size: 13px;
+      }
+
+      .fm-footer {
+        margin-top: 28px;
+        padding: 26px 20px 0;
+        border-radius: 20px 20px 0 0;
+      }
+
+      .fm-footer-logo {
+        font-size: 25px;
+      }
+
+      .fm-policy-links {
+        grid-template-columns: 1fr;
+      }
+
+      .fm-policy-links a {
+        padding: 14px 0;
+        font-size: 13px;
+      }
+
+      .fm-footer-bottom {
+        margin-top: 22px;
+      }
+
+      .back-to-top {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body id="top">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="FreshMart home">
+        <span>
+          <span class="brand-fresh">Fresh</span><span class="brand-mart">Mart</span>
+          <span class="brand-subtitle">DAILY NEEDS STORE</span>
+        </span>
+      </a>
+
+      <div class="header-actions">
+        <a class="header-link home-link" href="index.html">Home</a>
+        <button class="header-link back-button" id="backButton" type="button">
+          ← Back
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-container">
+
+    <section class="hero">
+      <span class="eyebrow">Your Privacy Matters</span>
+
+      <h1>Privacy Policy</h1>
+
+      <p>
+        At FreshMart, we respect your privacy. This policy explains what
+        information may be collected when you browse our store, place orders,
+        manage your cart or contact us, and how that information may be used,
+        stored and protected.
+      </p>
+
+      <div class="hero-meta">
+        Effective date: 29 October 2026
+      </div>
+    </section>
+
+    <div class="content-layout">
+
+      <aside class="toc">
+        <h2>On This Page</h2>
+
+        <nav class="toc-list" aria-label="Privacy policy contents">
+          <a href="#introduction">01. Introduction</a>
+          <a href="#information">02. Information We Collect</a>
+          <a href="#collection">03. How Information Is Collected</a>
+          <a href="#use">04. How We Use Information</a>
+          <a href="#orders">05. Orders &amp; Store Data</a>
+          <a href="#payments">06. Payments</a>
+          <a href="#sharing">07. Sharing Information</a>
+          <a href="#cookies">08. Cookies &amp; Storage</a>
+          <a href="#security">09. Data Security</a>
+          <a href="#retention">10. Data Retention</a>
+          <a href="#rights">11. Your Privacy Rights</a>
+          <a href="#children">12. Children's Privacy</a>
+          <a href="#third-party">13. Third-Party Services</a>
+          <a href="#changes">14. Policy Updates</a>
+          <a href="#contact">15. Contact Us</a>
+        </nav>
+      </aside>
+
+      <article class="privacy-content">
+
+        <section class="privacy-section" id="introduction">
+          <div class="section-heading">
+            <span class="section-number">01</span>
+            <h2>Introduction</h2>
+          </div>
+
+          <p>
+            FreshMart is an online store for groceries, beverages, snacks,
+            household essentials and other daily-use products. This Privacy
+            Policy describes how information is handled when you visit or
+            use our website.
+          </p>
+
+          <p>
+            This policy applies to information processed through FreshMart's
+            website and its enabled shopping features. The exact information
+            processed depends on which features you use and which services
+            are active.
+          </p>
+
+          <p>
+            By using the website, you acknowledge that you have had the
+            opportunity to read this policy. Where consent is legally
+            required for a particular activity, we will seek that consent
+            as applicable.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="information">
+          <div class="section-heading">
+            <span class="section-number">02</span>
+            <h2>Information We Collect</h2>
+          </div>
+
+          <p>
+            Depending on the features you use, FreshMart may process the
+            following categories of information:
+          </p>
+
+          <ul>
+            <li>
+              <strong>Contact information:</strong> name, mobile number,
+              email address and delivery address when you provide them.
+            </li>
+            <li>
+              <strong>Account information:</strong> account identifiers
+              and profile details needed to provide account features.
+            </li>
+            <li>
+              <strong>Order information:</strong> products ordered,
+              quantities, order totals, order history, delivery details
+              and order status.
+            </li>
+            <li>
+              <strong>Shopping preferences:</strong> cart items, wishlist
+              entries and other shopping selections, if these features
+              are enabled.
+            </li>
+            <li>
+              <strong>Support communications:</strong> information you
+              include in messages or requests sent to us.
+            </li>
+            <li>
+              <strong>Technical information:</strong> information such as
+              browser type, device information, timestamps and basic
+              diagnostic data where collected by the website or its
+              service providers.
+            </li>
+            <li>
+              <strong>Payment status:</strong> transaction references,
+              payment method information or payment status where required
+              to process or reconcile an order.
+            </li>
+          </ul>
+
+          <p>
+            We do not need your account password, payment PIN or one-time
+            verification code through ordinary customer-support messages.
+            Never send these credentials to anyone claiming to represent
+            FreshMart.
+          </p>
+
+          <p>
+            Please provide only information needed for the service you
+            are using.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="collection">
+          <div class="section-heading">
+            <span class="section-number">03</span>
+            <h2>How Information Is Collected</h2>
+          </div>
+
+          <p>Information may be obtained in the following ways:</p>
+
+          <ul>
+            <li>When you enter information into forms or account fields.</li>
+            <li>When you add products to a cart or wishlist.</li>
+            <li>When you submit an order or provide delivery information.</li>
+            <li>When you contact us for assistance.</li>
+            <li>
+              Through essential website technologies and service providers,
+              where applicable.
+            </li>
+          </ul>
+
+          <p>
+            Some information is necessary to complete an order or provide
+            a requested feature. If you do not provide required information,
+            we may be unable to provide that service.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="use">
+          <div class="section-heading">
+            <span class="section-number">04</span>
+            <h2>How We Use Information</h2>
+          </div>
+
+          <p>
+            FreshMart may use relevant information for legitimate business
+            purposes, including:
+          </p>
+
+          <ul>
+            <li>Creating and managing customer accounts, where available.</li>
+            <li>Processing orders and coordinating delivery.</li>
+            <li>Maintaining cart, wishlist and shopping features.</li>
+            <li>Communicating order confirmations and important updates.</li>
+            <li>Responding to customer questions and complaints.</li>
+            <li>Maintaining website functionality and troubleshooting errors.</li>
+            <li>Preventing fraud, abuse, unauthorized access and misuse.</li>
+            <li>Meeting applicable legal, tax and accounting obligations.</li>
+            <li>
+              Improving our services using appropriate information and
+              safeguards.
+            </li>
+          </ul>
+
+          <p>
+            Where required by applicable law, we will obtain consent before
+            using personal information for a purpose that requires consent.
+            Optional marketing communications should be distinguishable
+            from essential order-related messages.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="orders">
+          <div class="section-heading">
+            <span class="section-number">05</span>
+            <h2>Orders, Accounts &amp; Shopping Data</h2>
+          </div>
+
+          <p>
+            When you use shopping features, relevant information may be
+            processed to maintain your cart, wishlist, profile and orders.
+            If these features are connected to an account, the information
+            may be associated with that account.
+          </p>
+
+          <p>
+            Order details may be used to fulfil purchases, confirm payment
+            status, coordinate delivery, handle cancellations and manage
+            eligible refunds or customer-support requests.
+          </p>
+
+          <p>
+            Please check your delivery address and contact information
+            before submitting an order. Contact us promptly if you notice
+            an error.
+          </p>
+
+          <p>
+            Our <a href="terms.html">Terms &amp; Conditions</a>,
+            <a href="delivery.html">Delivery Policy</a>,
+            <a href="refund.html">Return &amp; Refund Policy</a> and
+            <a href="cancellation.html">Cancellation Policy</a>
+            explain the relevant shopping rules.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="payments">
+          <div class="section-heading">
+            <span class="section-number">06</span>
+            <h2>Payments &amp; Transaction Security</h2>
+          </div>
+
+          <p>
+            Payment processing depends on the payment options enabled
+            on the website. If a third-party payment provider is used,
+            that provider may process payment information under its own
+            terms and privacy policy.
+          </p>
+
+          <p>
+            FreshMart should collect or retain only the payment information
+            necessary for its actual payment workflow. Do not store full
+            card details, card security codes, UPI PINs or payment passwords
+            in ordinary website tables, order notes or customer profiles.
+          </p>
+
+          <p>
+            A payment provider may return a transaction identifier or
+            payment status so an order can be reconciled. Such information
+            should be handled with appropriate access controls.
+          </p>
+
+          <p>
+            The exact payment data handled by FreshMart depends on the
+            payment integration in use. This policy does not imply that
+            a particular payment provider or payment method is currently
+            enabled.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="sharing">
+          <div class="section-heading">
+            <span class="section-number">07</span>
+            <h2>When We Share Information</h2>
+          </div>
+
+          <p>
+            We may disclose relevant information when reasonably necessary
+            for the following purposes:
+          </p>
+
+          <ul>
+            <li>
+              <strong>Service providers:</strong> hosting, database,
+              website operations, communications, delivery or payment
+              services used to provide the requested service.
+            </li>
+            <li>
+              <strong>Legal requirements:</strong> responding to valid
+              legal obligations or lawful requests by competent authorities.
+            </li>
+            <li>
+              <strong>Safety and security:</strong> investigating suspected
+              fraud, misuse, security incidents or threats to users.
+            </li>
+            <li>
+              <strong>Business changes:</strong> handling a potential
+              business transfer or restructuring, subject to applicable
+              privacy requirements.
+            </li>
+          </ul>
+
+          <p>
+            Information should be shared only to the extent reasonably
+            necessary for the relevant purpose and subject to applicable
+            safeguards.
+          </p>
+
+          <p>
+            FreshMart should not sell personal information as a business
+            practice. If the website uses advertising, analytics or other
+            tracking services, their operation and any required consent
+            must be disclosed accurately.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="cookies">
+          <div class="section-heading">
+            <span class="section-number">08</span>
+            <h2>Cookies, Local Storage &amp; Preferences</h2>
+          </div>
+
+          <p>
+            The website may use cookies, browser local storage or similar
+            technologies to support features such as shopping carts,
+            saved preferences, session management and security.
+          </p>
+
+          <p>
+            Which technologies are used depends on the features implemented
+            on the website. Browser storage can remain on your device until
+            it expires or you clear it, depending on the technology.
+          </p>
+
+          <p>
+            Clearing browser storage may remove saved cart items or
+            preferences that have not been stored in your account or
+            database.
+          </p>
+
+          <p>
+            Where non-essential cookies or tracking technologies require
+            consent, they should not be activated before the required
+            consent is obtained.
+          </p>
+
+          <ul>
+            <li><a href="cookie-policy.html">Read Cookie Policy</a></li>
+            <li><a href="cookie-settings.html">Cookie Settings</a></li>
+          </ul>
+        </section>
+
+        <section class="privacy-section" id="security">
+          <div class="section-heading">
+            <span class="section-number">09</span>
+            <h2>Data Security &amp; Database Protection</h2>
+          </div>
+
+          <p>
+            We should use reasonable technical and organizational measures
+            to protect personal information against unauthorized access,
+            loss, alteration, disclosure or misuse.
+          </p>
+
+          <p>Appropriate measures may include:</p>
+
+          <ul>
+            <li>Using HTTPS for website connections.</li>
+            <li>Restricting access to customer and order information.</li>
+            <li>Using database permissions and access policies.</li>
+            <li>Keeping passwords and secret keys out of public website code.</li>
+            <li>Reviewing access permissions and security settings.</li>
+            <li>Keeping necessary software and services updated.</li>
+          </ul>
+
+          <p>
+            If FreshMart uses Supabase or another database service, database
+            access should be restricted according to the user's permissions.
+            Public website code must not contain service-role keys, private
+            credentials or other secrets that grant unrestricted access.
+          </p>
+
+          <p>
+            Security measures reduce risk but cannot guarantee absolute
+            security. If a personal-data incident occurs, applicable
+            notification and response obligations will be followed.
+          </p>
+
+          <p>
+            Read our <a href="security-policy.html">Security Policy</a>
+            for additional information.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="retention">
+          <div class="section-heading">
+            <span class="section-number">10</span>
+            <h2>Data Retention &amp; Deletion</h2>
+          </div>
+
+          <p>
+            We should retain personal information only for as long as
+            reasonably necessary for the purposes described in this policy,
+            including order fulfilment, customer support, security and
+            applicable legal or accounting requirements.
+          </p>
+
+          <p>
+            Retention periods may differ for account records, order history,
+            transaction records, support communications and technical logs.
+            The period depends on the purpose, applicable requirements and
+            the services being used.
+          </p>
+
+          <p>
+            When information is no longer required, it should be securely
+            deleted or anonymized where appropriate, subject to lawful
+            retention obligations and technical limitations.
+          </p>
+
+          <p>
+            Deleting an account or removing a record from the visible
+            website does not necessarily remove every backup, transaction
+            record or copy held by a service provider immediately.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="rights">
+          <div class="section-heading">
+            <span class="section-number">11</span>
+            <h2>Your Privacy Rights &amp; Choices</h2>
+          </div>
+
+          <p>
+            Depending on applicable law and the circumstances, you may
+            be able to request:
+          </p>
+
+          <ul>
+            <li>Information about personal data processed about you.</li>
+            <li>Correction of inaccurate or incomplete information.</li>
+            <li>Deletion of eligible personal information.</li>
+            <li>Withdrawal of consent where processing relies on consent.</li>
+            <li>Help with applicable complaints or grievance procedures.</li>
+          </ul>
+
+          <p>
+            These rights may be subject to identity verification, legal
+            requirements, exceptions and legitimate retention needs.
+          </p>
+
+          <p>
+            To make a privacy request, use the support or contact channel
+            provided on the FreshMart website. Include enough information
+            for us to understand and verify your request, but do not send
+            passwords, payment PINs or verification codes.
+          </p>
+
+          <p>
+            If you are in India, applicable data-protection rights and
+            obligations depend on the laws and provisions in force and
+            applicable to the circumstances.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="children">
+          <div class="section-heading">
+            <span class="section-number">12</span>
+            <h2>Children's Privacy</h2>
+          </div>
+
+          <p>
+            FreshMart is a general shopping website and is not intended
+            to encourage children to provide personal information
+            independently where parental involvement or consent is required.
+          </p>
+
+          <p>
+            Where applicable law requires parental consent or additional
+            safeguards for a child's personal information, those requirements
+            must be followed.
+          </p>
+
+          <p>
+            If you believe that personal information has been submitted
+            inappropriately, please contact us so the matter can be reviewed.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="third-party">
+          <div class="section-heading">
+            <span class="section-number">13</span>
+            <h2>Third-Party Websites &amp; Services</h2>
+          </div>
+
+          <p>
+            FreshMart may link to external websites or use third-party
+            services for hosting, databases, payments, communications
+            or other functions.
+          </p>
+
+          <p>
+            External websites and service providers may have their own
+            privacy policies, terms and security practices. We encourage
+            you to review those policies when using their services.
+          </p>
+
+          <p>
+            A link to an external service does not, by itself, mean that
+            FreshMart operates or controls that service.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="changes">
+          <div class="section-heading">
+            <span class="section-number">14</span>
+            <h2>Changes to This Privacy Policy</h2>
+          </div>
+
+          <p>
+            We may update this policy when website features, data practices,
+            service providers or applicable legal requirements change.
+            The revised version will be published on this page with an
+            updated effective date where appropriate.
+          </p>
+
+          <p>
+            We encourage you to review this page periodically so you can
+            understand how information is handled.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="contact">
+          <div class="section-heading">
+            <span class="section-number">15</span>
+            <h2>Contact &amp; Privacy Requests</h2>
+          </div>
+
+          <div class="privacy-note">
+            <p>
+              For questions about this Privacy Policy, requests relating
+              to your personal information, or privacy concerns, please
+              use the contact details or support options published on
+              the FreshMart website.
+            </p>
+
+            <p>
+              <a href="help-support.html">Visit Help &amp; Support</a>
+            </p>
+          </div>
+        </section>
+
+      </article>
+    </div>
+  </main>
+
+  <!-- Policies-only footer -->
+  <footer class="fm-footer">
+    <div class="fm-footer-inner">
+
+      <div class="fm-footer-heading">
+        <a class="fm-footer-logo" href="index.html" aria-label="FreshMart home">
+          <span class="fresh">Fresh</span><span class="mart">Mart</span>
+        </a>
+
+        <h2>Policies &amp; Legal Information</h2>
+      </div>
+
+      <nav class="fm-policy-links" aria-label="Policies and legal information">
+        <a href="delivery.html">
+          Delivery Policy <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="refund.html">
+          Return &amp; Refund Policy <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="cancellation.html">
+          Cancellation Policy <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="privacy.html" aria-current="page">
+          Privacy Policy <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="terms.html">
+          Terms &amp; Conditions <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="security-policy.html">
+          Security Policy <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="legal.html">
+          Legal Notice <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="cookie-policy.html">
+          Cookie Policy <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="cookie-settings.html">
+          Cookie Settings <span aria-hidden="true">›</span>
+        </a>
+      </nav>
+
+      <div class="fm-footer-bottom">
+        <p>
+          © <span id="fm-year"></span> FreshMart. All rights reserved.
+        </p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Desktop only: back to top -->
+  <a class="back-to-top" href="#top">
+    <span aria-hidden="true">↑</span> Back to top
+  </a>
+
+  <script>
+    // Automatically update copyright year.
+    document.getElementById("fm-year").textContent =
+      new Date().getFullYear();
+
+    // Back button: previous page or home page.
+    document.getElementById("backButton").addEventListener("click", function () {
+      if (window.history.length > 1 && document.referrer) {
+        window.history.back();
+      } else {
+        window.location.href = "index.html";
+      }
+    });
+  </script>
+
+</body>
+</html>

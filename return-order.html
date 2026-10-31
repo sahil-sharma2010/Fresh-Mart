@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Return Order &amp; My Complaints | FreshMart</title>
+    <meta name="description" content="Report a problem with your FreshMart order, upload 4 photos and 1 video, and track your complaint status.">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        if (window.tailwind) tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: {
+                            50: '#eefbf3',
+                            100: '#d6f5e3',
+                            500: '#10b981',
+                            600: '#08794f',
+                            700: '#065f3e',
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        :root {
+            --fm-green: #08794f;
+            --fm-green-dark: #065f3e;
+            --fm-green-light: #e8f7ee;
+            --fm-border: #dcebe1;
+            --fm-text: #14213a;
+            --fm-muted: #64748b;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background:
+                radial-gradient(ellipse at 12% 8%, #e2f5e8 0, transparent 36%),
+                radial-gradient(ellipse at 88% 15%, #ebf8ee 0, transparent 32%),
+                linear-gradient(180deg, #f4faf6 0%, #eef6f1 100%);
+            color: var(--fm-text);
+            min-height: 100vh;
+            padding-bottom: 84px;
+            -webkit-font-smoothing: antialiased;
+        }
+        @media (min-width: 768px) {
+            body { padding-bottom: 48px; }
+        }
+
+        /* Mobile hides top Back/Home buttons (uses bottom nav + swipe); PC/Laptop shows Premium 3D Back & Home buttons */
+        @media (max-width: 767px) {
+            .header-actions,
+            .desktop-top-nav-actions,
+            .desktop-top-nav-actions .nav-btn,
+            .desktop-top-nav-actions .home-link {
+                display: none !important;
+            }
+        }
+        @media (min-width: 768px) {
+            .premium-3d-back-btn {
+                display: inline-flex !important;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 9px 18px !important;
+                border-radius: 999px !important;
+                font-size: 13px !important;
+                font-weight: 800 !important;
+                color: #0f172a !important;
+                background: linear-gradient(180deg, #ffffff 0%, #f1f8f4 100%) !important;
+                border: 1.5px solid #cce3d4 !important;
+                box-shadow: 0 4px 0 #b8d8c5, 0 8px 18px rgba(15, 23, 42, 0.08), inset 0 1px 0 #ffffff !important;
+                cursor: pointer;
+                transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1) !important;
+            }
+            .premium-3d-back-btn:hover {
+                transform: translateY(-2px) !important;
+                color: #08794f !important;
+                border-color: #10b981 !important;
+                background: linear-gradient(180deg, #f4fbf7 0%, #e2f5ea 100%) !important;
+                box-shadow: 0 6px 0 #9ecbb2, 0 14px 24px rgba(8, 121, 79, 0.16), inset 0 1px 0 #ffffff !important;
+            }
+            .premium-3d-back-btn:active {
+                transform: translateY(2px) !important;
+                box-shadow: 0 1px 0 #9ecbb2, 0 4px 10px rgba(8, 121, 79, 0.12) !important;
+            }
+
+            .premium-3d-home-btn {
+                display: inline-flex !important;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 9px 20px !important;
+                border-radius: 999px !important;
+                font-size: 13px !important;
+                font-weight: 800 !important;
+                color: #ffffff !important;
+                background: linear-gradient(135deg, #10b981 0%, #08794f 100%) !important;
+                border: 1.5px solid #065f3e !important;
+                box-shadow: 0 4px 0 #04432b, 0 10px 22px rgba(8, 121, 79, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+                cursor: pointer;
+                text-decoration: none !important;
+                transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1) !important;
+            }
+            .premium-3d-home-btn:hover {
+                transform: translateY(-2px) !important;
+                background: linear-gradient(135deg, #059669 0%, #065f3e 100%) !important;
+                box-shadow: 0 6px 0 #033723, 0 14px 28px rgba(8, 121, 79, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+            }
+            .premium-3d-home-btn:active {
+                transform: translateY(2px) !important;
+                box-shadow: 0 1px 0 #033723, 0 4px 10px rgba(8, 121, 79, 0.22) !important;
+            }
+        }
+
+        /* Single Centered Container — Shows either Return Order OR My Complaints cleanly */
+        .ro-shell {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 16px 36px;
+        }
+        .ro-card {
+            background: #ffffff;
+            border: 1px solid #dfece3;
+            border-radius: 24px;
+            box-shadow: 0 16px 40px rgba(8, 121, 79, 0.06), 0 3px 0 #d5e6db;
+            padding: 22px 20px;
+        }
+        @media (min-width: 640px) {
+            .ro-card { padding: 28px; }
+        }
+
+        /* 3-Step Progress Bar matching Reference UI */
+        .step-progress {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            margin: 18px 0 22px;
+            padding: 0 12px;
+        }
+        .step-progress-line-bg {
+            position: absolute;
+            left: 44px;
+            right: 44px;
+            top: 16px;
+            height: 2.5px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+        .step-progress-line-fill {
+            position: absolute;
+            left: 44px;
+            top: 16px;
+            height: 2.5px;
+            background: var(--fm-green);
+            z-index: 2;
+            transition: width 0.3s ease;
+        }
+        .step-node {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .step-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 800;
+            background: #f1f5f9;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+            transition: all 0.25s ease;
+        }
+        .step-node.active .step-circle,
+        .step-node.completed .step-circle {
+            background: var(--fm-green);
+            color: #ffffff;
+            border-color: var(--fm-green);
+            box-shadow: 0 4px 12px rgba(8, 121, 79, 0.25);
+        }
+        .step-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+        }
+        .step-node.active .step-label,
+        .step-node.completed .step-label {
+            color: var(--fm-green);
+            font-weight: 800;
+        }
+
+        /* Input Group with Left Icon & Background Example Placeholder */
+        .ro-field-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 6px;
+        }
+        .ro-input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #f9fcfa;
+            border: 1.5px solid #dbe7df;
+            border-radius: 14px;
+            transition: all 0.2s ease;
+        }
+        .ro-input-wrap:focus-within {
+            background: #ffffff;
+            border-color: var(--fm-green);
+            box-shadow: 0 0 0 3px rgba(8, 121, 79, 0.10);
+        }
+        .ro-input-icon {
+            padding-left: 13px;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .ro-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 12px 13px 12px 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #0f172a;
+            outline: none;
+        }
+        .ro-input::placeholder,
+        .ro-textarea::placeholder {
+            color: #94a3b8;
+            font-weight: 500;
+            opacity: 1;
+        }
+        .ro-textarea-wrap {
+            position: relative;
+            background: #f9fcfa;
+            border: 1.5px solid #dbe7df;
+            border-radius: 14px;
+            padding: 11px 13px 26px 38px;
+            transition: all 0.2s ease;
+        }
+        .ro-textarea-wrap:focus-within {
+            background: #ffffff;
+            border-color: var(--fm-green);
+            box-shadow: 0 0 0 3px rgba(8, 121, 79, 0.10);
+        }
+        .ro-textarea-icon {
+            position: absolute;
+            left: 13px;
+            top: 13px;
+            color: #94a3b8;
+        }
+        .ro-textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-weight: 500;
+            color: #0f172a;
+            outline: none;
+            resize: vertical;
+            min-height: 86px;
+            line-height: 1.5;
+        }
+        .ro-char-counter {
+            position: absolute;
+            right: 12px;
+            bottom: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #94a3b8;
+        }
+
+        /* Primary Green 3D Action Button */
+        .ro-btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, #0b875b 0%, #08794f 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 14px;
+            padding: 14px 18px;
+            font-size: 14px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #054f33, 0 10px 20px rgba(8, 121, 79, 0.22);
+            transition: all 0.18s ease;
+        }
+        .ro-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 0 #054f33, 0 14px 24px rgba(8, 121, 79, 0.28);
+        }
+        .ro-btn-primary:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #054f33;
+        }
+        .ro-btn-outline {
+            background: #ffffff;
+            color: #1e293b;
+            border: 1.5px solid #d5e4da;
+            border-radius: 14px;
+            padding: 11px 16px;
+            font-size: 12.5px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            cursor: pointer;
+            box-shadow: 0 2px 0 #e2ece5;
+            transition: all 0.18s ease;
+        }
+        .ro-btn-outline:hover {
+            border-color: var(--fm-green);
+            color: var(--fm-green);
+            background: #f2fbf6;
+        }
+
+        /* Media Thumbnails matching Reference UI */
+        .media-thumb-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 10px 0 12px;
+        }
+        .media-thumb-item {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1.5px solid #d5e4da;
+            background: #f8fafc;
+        }
+        .media-thumb-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .media-rm-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.78);
+            color: #ffffff;
+            border: none;
+            font-size: 11px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Radio Cards in Step 3 */
+        .method-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 13px 15px;
+            border-radius: 15px;
+            border: 1.5px solid #dbe7df;
+            background: #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .method-card.selected {
+            border-color: var(--fm-green);
+            background: #eefbf3;
+            box-shadow: 0 4px 12px rgba(8, 121, 79, 0.08);
+        }
+
+        /* Status Badges */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+        .status-Received { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+        .status-UnderReview, .status-Processing { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .status-Approved { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+        .status-Resolved { background: #d1fae5; color: #047857; border: 1px solid #a7f3d0; }
+        .status-Rejected { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+    </style>
+</head>
+<body>
+
+    <!-- Top Brand Header (Mobile: NO Top Back/Home Buttons; PC/Laptop: Premium 3D Back & Home Buttons) -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-emerald-100/90 shadow-xs">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 md:h-20 flex items-center justify-between gap-3">
+            <a href="index.html" class="flex items-center gap-2.5">
+                <div class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-[#10b981] to-[#08794f] text-white flex items-center justify-center shadow-md shadow-emerald-600/20">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <div class="text-lg md:text-xl font-black tracking-tight text-slate-900 leading-none">
+                        <span class="text-[#08794f]">Fresh</span>Mart
+                    </div>
+                    <span class="block text-[8px] font-extrabold tracking-[0.2em] text-slate-400 mt-0.5 uppercase">FRESHER CHOICES</span>
+                </div>
+            </a>
+
+            <!-- View Switcher Tabs (Return Order vs My Complaints) -->
+            <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-full border border-slate-200/70">
+                <button type="button" id="tab-btn-form" onclick="switchPortalTab('form')" class="px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-[#08794f] text-white shadow-xs transition cursor-pointer">
+                    Return Order
+                </button>
+                <button type="button" id="tab-btn-list" onclick="switchPortalTab('list')" class="px-3.5 py-1.5 rounded-full text-xs font-extrabold text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5 cursor-pointer">
+                    <span>My Complaints</span>
+                    <span id="nav-complaints-count" class="px-1.5 py-0.2 rounded-full bg-emerald-100 text-[#08794f] text-[10px] font-black hidden">0</span>
+                </button>
+            </div>
+
+            <!-- PC / Laptop Smart 3D Premium Back & Home Buttons (Hidden on Mobile via @media max-width: 767px) -->
+            <div class="header-actions desktop-top-nav-actions hidden md:flex items-center gap-3">
+                <button type="button" onclick="goBackSmart()" class="nav-btn premium-3d-back-btn" aria-label="Back">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span>Back</span>
+                </button>
+                <a href="index.html" class="home-link premium-3d-home-btn" aria-label="Home">
+                    <i data-lucide="home" class="w-4 h-4"></i>
+                    <span>Home</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container: Shows EITHER Return Order Form OR My Complaints Status (Never cluttered together) -->
+    <main class="ro-shell">
+
+        <!-- ==================================================================
+             VIEW 1: 3-STEP RETURN ORDER WIZARD (Screens 2, 3, 4 of Reference UI)
+             ================================================================== -->
+        <section id="portal-form-section" class="ro-card">
+            <div>
+                <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Return Order</h1>
+                <p class="text-xs font-semibold text-slate-500 mt-0.5">Report a problem with your order</p>
+            </div>
+
+            <!-- 3-Step Progress Bar (1 Details — 2 Media — 3 Review) -->
+            <div class="step-progress" aria-label="Return Order Progress">
+                <div class="step-progress-line-bg"></div>
+                <div id="step-line-fill" class="step-progress-line-fill" style="width: 0%;"></div>
+
+                <div id="step-node-1" class="step-node active">
+                    <div class="step-circle" id="step-circle-1">1</div>
+                    <span class="step-label">Details</span>
+                </div>
+                <div id="step-node-2" class="step-node">
+                    <div class="step-circle" id="step-circle-2">2</div>
+                    <span class="step-label">Media</span>
+                </div>
+                <div id="step-node-3" class="step-node">
+                    <div class="step-circle" id="step-circle-3">3</div>
+                    <span class="step-label">Review</span>
+                </div>
+            </div>
+
+            <!-- Global Alert Banner -->
+            <div id="ro-status-alert" class="hidden mb-4 p-3.5 rounded-2xl text-xs font-bold"></div>
+
+            <form id="return-order-form" novalidate onsubmit="return false;">
+
+                <!-- ==========================================================
+                     STEP 1: CUSTOMER & ORDER DETAILS (Empty fields + Background Examples Only!)
+                     ========================================================== -->
+                <div id="wizard-step-1" class="space-y-3.5">
+                    <!-- Green Info Notice Box -->
+                    <div class="flex items-start gap-2.5 p-3 rounded-2xl bg-[#eaf8f0] border border-[#cbead7] text-[11.5px] font-semibold text-[#1b4332]">
+                        <i data-lucide="alert-circle" class="w-4 h-4 text-[#08794f] shrink-0 mt-0.5"></i>
+                        <span>Please provide correct details and clear photos/videos to help us resolve your issue faster.</span>
+                    </div>
+
+                    <!-- 1. Customer Name (Empty value, background placeholder example only) -->
+                    <div>
+                        <label for="ro-name" class="ro-field-label">Customer Name <span class="text-red-500">*</span></label>
+                        <div class="ro-input-wrap">
+                            <span class="ro-input-icon"><i data-lucide="user" class="w-4 h-4"></i></span>
+                            <input type="text" id="ro-name" class="ro-input" placeholder="e.g. Rahul Sharma" value="" autocomplete="off" required>
+                        </div>
+                    </div>
+
+                    <!-- 2. Order Number / Order ID (Empty value, background placeholder example + optional order picker) -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label for="ro-order-id" class="ro-field-label !mb-0">Order Number <span class="text-red-500">*</span></label>
+                            <button type="button" id="btn-pick-order" class="text-[11px] font-extrabold text-[#08794f] hover:underline flex items-center gap-1">
+                                <i data-lucide="package-search" class="w-3.5 h-3.5"></i> View My Orders
+                            </button>
+                        </div>
+                        <div class="ro-input-wrap">
+                            <span class="ro-input-icon"><i data-lucide="package" class="w-4 h-4"></i></span>
+                            <input type="text" id="ro-order-id" list="ro-orders-datalist" class="ro-input" placeholder="e.g. FM1234567890 or FM-9901" value="" autocomplete="off" required>
+                            <button type="button" onclick="document.getElementById('order-picker-box').classList.toggle('hidden')" class="pr-3 text-[#08794f]" title="Select from Order History">
+                                <i data-lucide="scan-line" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <datalist id="ro-orders-datalist"></datalist>
+                        <div id="order-picker-box" class="hidden mt-2 p-2.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-1.5">
+                            <div class="text-[11px] font-extrabold text-slate-700 px-1">Tap an Order to Select Its Order Number:</div>
+                            <div id="order-picker-list" class="space-y-1 max-h-40 overflow-y-auto"></div>
+                        </div>
+                    </div>
+
+                    <!-- Issue / Reason Category -->
+                    <div>
+                        <label for="ro-issue-type" class="ro-field-label">Issue / Complaint Type <span class="text-red-500">*</span></label>
+                        <div class="ro-input-wrap">
+                            <span class="ro-input-icon"><i data-lucide="alert-triangle" class="w-4 h-4"></i></span>
+                            <select id="ro-issue-type" class="ro-input cursor-pointer">
+                                <option value="Damaged Product Received">Damaged Product Received</option>
+                                <option value="Wrong Product Delivered">Wrong Product Delivered</option>
+                                <option value="Missing Items">Missing Items</option>
+                                <option value="Product Quality Issue">Product Quality Issue</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 3. Registered Mobile Number (Empty value, background placeholder example only) -->
+                    <div>
+                        <label for="ro-mobile" class="ro-field-label">Mobile Number <span class="text-red-500">*</span></label>
+                        <div class="ro-input-wrap">
+                            <span class="ro-input-icon"><i data-lucide="phone" class="w-4 h-4"></i></span>
+                            <input type="tel" id="ro-mobile" class="ro-input" maxlength="10" inputmode="numeric" placeholder="e.g. 9876543210" value="" autocomplete="off" required>
+                        </div>
+                    </div>
+
+                    <!-- 4. Email Address (Empty value, background placeholder example only) -->
+                    <div>
+                        <label for="ro-email" class="ro-field-label">Email Address <span class="text-red-500">*</span></label>
+                        <div class="ro-input-wrap">
+                            <span class="ro-input-icon"><i data-lucide="mail" class="w-4 h-4"></i></span>
+                            <input type="email" id="ro-email" class="ro-input" placeholder="e.g. rahulsharma@example.com" value="" autocomplete="off" required>
+                        </div>
+                    </div>
+
+                    <!-- 5. Complete Order Address (Empty value, background placeholder example only) -->
+                    <div>
+                        <label for="ro-address" class="ro-field-label">Order Address <span class="text-red-500">*</span></label>
+                        <div class="ro-input-wrap">
+                            <span class="ro-input-icon"><i data-lucide="map-pin" class="w-4 h-4"></i></span>
+                            <input type="text" id="ro-address" class="ro-input" placeholder="e.g. 123, Green Park Road, Near City Mall, Hisar - 125001" value="" autocomplete="off" required>
+                        </div>
+                    </div>
+
+                    <!-- 6. Complaint Description with Character Counter (0/500, empty value, background example only) -->
+                    <div>
+                        <label for="ro-description" class="ro-field-label">Complaint Description <span class="text-red-500">*</span></label>
+                        <div class="ro-textarea-wrap">
+                            <span class="ro-textarea-icon"><i data-lucide="file-text" class="w-4 h-4"></i></span>
+                            <textarea id="ro-description" maxlength="500" class="ro-textarea" placeholder="e.g. I received a damaged product. The packaging was torn and the product is not in usable condition. Please check and arrange a return." required></textarea>
+                            <span id="ro-char-count" class="ro-char-counter">0/500</span>
+                        </div>
+                    </div>
+
+                    <!-- Step 1 Next Button -->
+                    <div class="pt-2">
+                        <button type="button" id="btn-step1-next" class="ro-btn-primary">
+                            <span>Next: Upload Images &amp; Video</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     STEP 2: UPLOAD IMAGES & VIDEO (Screen 3 of Reference UI)
+                     ========================================================== -->
+                <div id="wizard-step-2" class="space-y-5 hidden">
+
+                    <!-- Upload Images Section (Mandatory 4 Images: Min 4, Max 4) -->
+                    <div class="p-4 rounded-2xl border border-emerald-100 bg-slate-50/60">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xs sm:text-sm font-black text-slate-900">Upload Images (Max 4)</h3>
+                                <p class="text-[11px] font-medium text-slate-500 mt-0.5">Upload clear images of the product, packaging and issue</p>
+                            </div>
+                            <span id="ro-img-counter" class="text-xs font-black text-[#08794f]">0/4</span>
+                        </div>
+
+                        <!-- 4-Column Thumbnail Grid -->
+                        <div id="ro-images-preview" class="media-thumb-grid"></div>
+
+                        <!-- Hidden File Input + Styled Outlined Button -->
+                        <input type="file" id="ro-images-input" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" multiple class="hidden">
+                        <button type="button" onclick="document.getElementById('ro-images-input').click()" class="ro-btn-outline w-full">
+                            <i data-lucide="camera" class="w-4 h-4 text-[#08794f]"></i>
+                            <span id="btn-add-img-label">Add More Images (4 Required)</span>
+                        </button>
+                    </div>
+
+                    <!-- Upload Video Section (Mandatory 1 Video: Min 1, Max 1) -->
+                    <div class="p-4 rounded-2xl border border-emerald-100 bg-slate-50/60">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xs sm:text-sm font-black text-slate-900">Upload Video (Max 1)</h3>
+                                <p class="text-[11px] font-medium text-slate-500 mt-0.5">Upload a short video showing the product and issue</p>
+                            </div>
+                            <span id="ro-vid-counter" class="text-xs font-black text-[#08794f]">0/1</span>
+                        </div>
+
+                        <!-- Video Preview Container -->
+                        <div id="ro-video-preview" class="my-3"></div>
+
+                        <input type="file" id="ro-video-input" accept=".mp4,.mov,.webm,video/mp4,video/quicktime,video/webm" class="hidden">
+                        <button type="button" onclick="document.getElementById('ro-video-input').click()" class="ro-btn-outline w-full">
+                            <i data-lucide="video" class="w-4 h-4 text-[#08794f]"></i>
+                            <span id="btn-add-vid-label">Upload Video (1 Required)</span>
+                        </button>
+                    </div>
+
+                    <!-- Upload Progress Bar -->
+                    <div id="ro-upload-progress-wrap" class="hidden space-y-1">
+                        <div class="flex justify-between text-[11px] font-extrabold text-[#08794f]">
+                            <span id="ro-upload-progress-label">Media verified &amp; ready</span>
+                            <span id="ro-upload-progress-pct">100%</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-emerald-100 overflow-hidden">
+                            <div id="ro-upload-progress-bar" class="h-full bg-[#08794f] transition-all duration-300" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Tips for better resolution Box (Exact match to Reference UI Screen 3) -->
+                    <div class="p-4 rounded-2xl bg-[#eaf8f0] border border-[#cbead7] space-y-1.5">
+                        <div class="flex items-center gap-2 text-xs font-extrabold text-[#14213a]">
+                            <span>💡</span>
+                            <span>Tips for better resolution:</span>
+                        </div>
+                        <ul class="text-[11.5px] font-medium text-[#2d4a3e] space-y-1 pl-4 list-disc">
+                            <li>Upload clear and bright images</li>
+                            <li>Show product, packaging and damage (if any)</li>
+                            <li>Upload a short video (max 1 minute)</li>
+                            <li>Maximum 4 images and 1 video allowed</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 2 Navigation Buttons (← Back & Next: Review →) -->
+                    <div class="grid grid-cols-2 gap-3 pt-1">
+                        <button type="button" id="btn-step2-back" class="ro-btn-outline !py-3.5">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                            <span>Back</span>
+                        </button>
+                        <button type="button" id="btn-step2-next" class="ro-btn-primary !py-3.5">
+                            <span>Next: Review</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     STEP 3: REVIEW & SUBMIT (Screen 4 of Reference UI)
+                     ========================================================== -->
+                <div id="wizard-step-3" class="space-y-4 hidden">
+                    <div>
+                        <h2 class="text-base font-black text-slate-900">Review Your Complaint</h2>
+                        <p class="text-xs font-medium text-slate-500">Please verify all details before submitting.</p>
+                    </div>
+
+                    <!-- Summary Card 1: Customer Details -->
+                    <div class="p-4 rounded-2xl border border-slate-200/90 bg-slate-50/50 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-extrabold text-slate-900">Customer Details</h3>
+                            <button type="button" onclick="goToWizardStep(1)" class="text-xs font-extrabold text-blue-600 hover:underline">Edit</button>
+                        </div>
+                        <div class="space-y-1.5 text-xs">
+                            <div class="flex items-start gap-2.5">
+                                <span class="text-slate-400 w-28 shrink-0 flex items-center gap-1.5"><i data-lucide="user" class="w-3.5 h-3.5"></i> Name</span>
+                                <span id="rev-name" class="font-bold text-slate-900"></span>
+                            </div>
+                            <div class="flex items-start gap-2.5">
+                                <span class="text-slate-400 w-28 shrink-0 flex items-center gap-1.5"><i data-lucide="package" class="w-3.5 h-3.5"></i> Order Number</span>
+                                <span id="rev-order" class="font-bold text-slate-900"></span>
+                            </div>
+                            <div class="flex items-start gap-2.5">
+                                <span class="text-slate-400 w-28 shrink-0 flex items-center gap-1.5"><i data-lucide="phone" class="w-3.5 h-3.5"></i> Mobile Number</span>
+                                <span id="rev-mobile" class="font-bold text-slate-900"></span>
+                            </div>
+                            <div class="flex items-start gap-2.5">
+                                <span class="text-slate-400 w-28 shrink-0 flex items-center gap-1.5"><i data-lucide="mail" class="w-3.5 h-3.5"></i> Email Address</span>
+                                <span id="rev-email" class="font-bold text-slate-900 break-all"></span>
+                            </div>
+                            <div class="flex items-start gap-2.5">
+                                <span class="text-slate-400 w-28 shrink-0 flex items-center gap-1.5"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Order Address</span>
+                                <span id="rev-address" class="font-bold text-slate-900"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Card 2: Complaint Description -->
+                    <div class="p-4 rounded-2xl border border-slate-200/90 bg-slate-50/50 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-extrabold text-slate-900">Complaint Description</h3>
+                            <button type="button" onclick="goToWizardStep(1)" class="text-xs font-extrabold text-blue-600 hover:underline">Edit</button>
+                        </div>
+                        <div id="rev-issue-badge" class="inline-block text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-emerald-50 text-[#08794f] border border-emerald-200"></div>
+                        <p id="rev-description" class="text-xs font-medium text-slate-700 leading-relaxed"></p>
+                    </div>
+
+                    <!-- Summary Card 3: Uploaded Media (4 Images + 1 Video) -->
+                    <div class="p-4 rounded-2xl border border-slate-200/90 bg-slate-50/50 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-extrabold text-slate-900">Uploaded Media</h3>
+                            <button type="button" onclick="goToWizardStep(2)" class="text-xs font-extrabold text-blue-600 hover:underline">Edit</button>
+                        </div>
+                        <div id="rev-media-strip" class="grid grid-cols-5 gap-2"></div>
+                    </div>
+
+                    <!-- Choose Submission Method (Option A: Direct FreshMart vs Option B: Send via WhatsApp) -->
+                    <div class="space-y-2.5">
+                        <h3 class="text-xs font-extrabold text-slate-900">Choose Submission Method</h3>
+
+                        <!-- Option A: Direct Submit through FreshMart -->
+                        <div id="method-card-direct" onclick="selectSubmissionMethod('direct')" class="method-card selected">
+                            <div class="flex items-center gap-3">
+                                <div id="radio-icon-direct" class="w-5 h-5 rounded-full bg-[#08794f] text-white flex items-center justify-center text-xs font-black">✓</div>
+                                <div>
+                                    <div class="text-xs font-extrabold text-slate-900">Send Complaint</div>
+                                    <div class="text-[11px] font-medium text-slate-500">Submit directly through FreshMart</div>
+                                </div>
+                            </div>
+                            <span class="w-3.5 h-3.5 rounded-full border-2 border-[#08794f] bg-[#08794f]"></span>
+                        </div>
+
+                        <!-- Option B: Send via WhatsApp (+91 79883 00872) -->
+                        <div id="method-card-whatsapp" onclick="selectSubmissionMethod('whatsapp')" class="method-card">
+                            <div class="flex items-center gap-3">
+                                <div class="w-7 h-7 rounded-full bg-[#25D366] text-white flex items-center justify-center text-xs font-black shadow-xs">
+                                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-extrabold text-slate-900">Send via WhatsApp</div>
+                                    <div class="text-[11px] font-medium text-slate-500">Send to +91 79883 00872</div>
+                                </div>
+                            </div>
+                            <span id="radio-dot-whatsapp" class="w-3.5 h-3.5 rounded-full border-2 border-slate-300"></span>
+                        </div>
+
+                        <div id="whatsapp-method-notice" class="hidden p-3 rounded-xl bg-amber-50 border border-amber-200 text-[11px] font-semibold text-amber-900">
+                            <strong>Note:</strong> Opening WhatsApp prepares your complaint message for <strong>+91 79883 00872</strong>. Please send the prepared message in WhatsApp so our support team can manually verify your request.
+                        </div>
+                    </div>
+
+                    <!-- Final Submit Button -->
+                    <div class="flex gap-3 pt-2">
+                        <button type="button" onclick="goToWizardStep(2)" class="ro-btn-outline !px-4">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        </button>
+                        <button type="button" id="ro-submit-btn" class="ro-btn-primary flex-1">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                            <span id="ro-submit-btn-label">Send Complaint</span>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </section>
+
+        <!-- ==================================================================
+             VIEW 2: MY COMPLAINTS STATUS (Standalone Clean View — Hidden until opened)
+             ================================================================== -->
+        <section id="portal-list-section" class="ro-card space-y-4 hidden">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3.5">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">My Complaints</h2>
+                    <p class="text-xs font-semibold text-slate-500 mt-0.5">Track your return/complaint requests</p>
+                </div>
+                <span id="tracker-badge-count" class="text-[11px] font-extrabold px-3 py-1 rounded-full bg-emerald-50 text-[#08794f] border border-emerald-200 hidden">
+                    0 Active
+                </span>
+            </div>
+
+            <!-- Dynamic Customer Complaints List (Shows ONLY clean English empty message if no complaints exist) -->
+            <div id="complaints-history-list" class="space-y-3"></div>
+        </section>
+
+    </main>
+
+    <!-- ======================================================================
+         COMPLAINT FULL DETAILS & STATUS HISTORY MODAL
+         ====================================================================== -->
+    <div id="complaint-detail-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full max-h-[88vh] overflow-y-auto p-5 sm:p-6 shadow-2xl border border-emerald-100 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div>
+                    <div id="cdm-id" class="text-sm font-black text-slate-900">Complaint Details</div>
+                    <div id="cdm-date" class="text-[11px] font-semibold text-slate-400"></div>
+                </div>
+                <button type="button" onclick="closeComplaintDetailModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-black flex items-center justify-center hover:bg-slate-200">✕</button>
+            </div>
+            <div id="cdm-body" class="space-y-4 text-xs"></div>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation Bar (Visible ONLY on Mobile max-width: 767px) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-gray-200 px-2 py-1.5 flex justify-around items-center shadow-[0_-8px_25px_rgba(0,0,0,0.05)]">
+        <a href="index.html" class="flex flex-col items-center py-1 px-3 text-gray-500 hover:text-[#08794f]">
+            <i data-lucide="home" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold mt-0.5">Home</span>
+        </a>
+        <a href="index.html#categories" class="flex flex-col items-center py-1 px-3 text-gray-500 hover:text-[#08794f]">
+            <i data-lucide="grid" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold mt-0.5">Categories</span>
+        </a>
+        <a href="index.html#cart" class="flex flex-col items-center py-1 px-3 text-gray-500 hover:text-[#08794f]">
+            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold mt-0.5">Cart</span>
+        </a>
+        <a href="return-order.html" class="flex flex-col items-center py-1 px-3 text-[#08794f]">
+            <i data-lucide="user" class="w-5 h-5"></i>
+            <span class="text-[10px] font-extrabold mt-0.5">Profile</span>
+        </a>
+    </nav>
+
+    <script src="script.js"></script>
+    <script>
+        function goBackSmart() {
+            if (window.history.length > 1 && document.referrer) {
+                window.history.back();
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Mobile left-edge swipe gesture for natural back navigation
+        (function initSwipeBack() {
+            let startX = 0, startY = 0;
+            document.addEventListener('touchstart', e => {
+                if (!e.touches || !e.touches[0]) return;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            }, { passive: true });
+            document.addEventListener('touchend', e => {
+                if (!e.changedTouches || !e.changedTouches[0]) return;
+                const dx = e.changedTouches[0].clientX - startX;
+                const dy = Math.abs(e.changedTouches[0].clientY - startY);
+                if (startX < 44 && dx > 85 && dy < 65) goBackSmart();
+            }, { passive: true });
+        })();
+
+        // Switch cleanly between "Return Order" form and "My Complaints" view on ALL screen sizes!
+        function switchPortalTab(tab) {
+            const formSec = document.getElementById('portal-form-section');
+            const listSec = document.getElementById('portal-list-section');
+            const btnForm = document.getElementById('tab-btn-form');
+            const btnList = document.getElementById('tab-btn-list');
+
+            if (tab === 'list') {
+                formSec.classList.add('hidden');
+                listSec.classList.remove('hidden');
+                btnList.className = 'px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-[#08794f] text-white shadow-xs transition flex items-center gap-1.5 cursor-pointer';
+                btnForm.className = 'px-3.5 py-1.5 rounded-full text-xs font-extrabold text-slate-600 hover:text-slate-900 transition cursor-pointer';
+            } else {
+                listSec.classList.add('hidden');
+                formSec.classList.remove('hidden');
+                btnForm.className = 'px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-[#08794f] text-white shadow-xs transition cursor-pointer';
+                btnList.className = 'px-3.5 py-1.5 rounded-full text-xs font-extrabold text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5 cursor-pointer';
+            }
+        }
+
+        let currentWizardStep = 1;
+        let selectedSubmissionMethod = 'direct';
+        let uploadedImages = [];
+        let uploadedVideos = [];
+        let lastGeneratedComplaintId = null;
+
+        function goToWizardStep(step) {
+            currentWizardStep = step;
+            document.getElementById('wizard-step-1').classList.toggle('hidden', step !== 1);
+            document.getElementById('wizard-step-2').classList.toggle('hidden', step !== 2);
+            document.getElementById('wizard-step-3').classList.toggle('hidden', step !== 3);
+
+            const lineFill = document.getElementById('step-line-fill');
+            if (lineFill) {
+                lineFill.style.width = step === 1 ? '0%' : (step === 2 ? '45%' : '88%');
+            }
+
+            [1, 2, 3].forEach(n => {
+                const node = document.getElementById('step-node-' + n);
+                const circle = document.getElementById('step-circle-' + n);
+                node.classList.remove('active', 'completed');
+                if (n < step) {
+                    node.classList.add('completed');
+                    circle.innerHTML = '✓';
+                } else if (n === step) {
+                    node.classList.add('active');
+                    circle.textContent = String(n);
+                } else {
+                    circle.textContent = String(n);
+                }
+            });
+
+            if (step === 3) {
+                populateReviewSummary();
+            }
+        }
+
+        function selectSubmissionMethod(method) {
+            selectedSubmissionMethod = method;
+            const directCard = document.getElementById('method-card-direct');
+            const waCard = document.getElementById('method-card-whatsapp');
+            const waNotice = document.getElementById('whatsapp-method-notice');
+            const btnLabel = document.getElementById('ro-submit-btn-label');
+
+            if (method === 'direct') {
+                directCard.classList.add('selected');
+                waCard.classList.remove('selected');
+                waNotice.classList.add('hidden');
+                btnLabel.textContent = 'Send Complaint';
+            } else {
+                waCard.classList.add('selected');
+                directCard.classList.remove('selected');
+                waNotice.classList.remove('hidden');
+                btnLabel.textContent = 'Send via WhatsApp (+91 79883 00872)';
+            }
+        }
+
+        function populateReviewSummary() {
+            document.getElementById('rev-name').textContent = document.getElementById('ro-name').value.trim();
+            document.getElementById('rev-order').textContent = document.getElementById('ro-order-id').value.trim();
+            document.getElementById('rev-mobile').textContent = '+91 ' + document.getElementById('ro-mobile').value.replace(/\D/g, '').slice(-10);
+            document.getElementById('rev-email').textContent = document.getElementById('ro-email').value.trim();
+            document.getElementById('rev-address').textContent = document.getElementById('ro-address').value.trim();
+            document.getElementById('rev-issue-badge').textContent = document.getElementById('ro-issue-type').value;
+            document.getElementById('rev-description').textContent = document.getElementById('ro-description').value.trim();
+
+            const strip = document.getElementById('rev-media-strip');
+            const imgHtml = uploadedImages.map(img => `
+                <div class="aspect-square rounded-xl overflow-hidden border border-slate-200 bg-white">
+                    <img src="${img.previewUrl}" alt="${img.name}" class="w-full h-full object-cover">
+                </div>
+            `).join('');
+            const vidHtml = uploadedVideos.map(vid => `
+                <div class="aspect-square rounded-xl overflow-hidden border border-emerald-300 bg-slate-900 relative flex items-center justify-center text-white">
+                    <div class="w-7 h-7 rounded-full bg-white/25 backdrop-blur-xs flex items-center justify-center text-xs font-black">▶</div>
+                    <span class="absolute bottom-1 right-1 text-[9px] font-extrabold bg-black/70 px-1 rounded">${vid.durationLabel || '00:28'}</span>
+                </div>
+            `).join('');
+            strip.innerHTML = imgHtml + vidHtml;
+        }
+
+        function closeComplaintDetailModal() {
+            const modal = document.getElementById('complaint-detail-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        (function initReturnPortal() {
+            const WHATSAPP_NUMBER = '917988300872';
+            const nameInput = document.getElementById('ro-name');
+            const orderIdInput = document.getElementById('ro-order-id');
+            const issueInput = document.getElementById('ro-issue-type');
+            const mobileInput = document.getElementById('ro-mobile');
+            const emailInput = document.getElementById('ro-email');
+            const addressInput = document.getElementById('ro-address');
+            const descInput = document.getElementById('ro-description');
+            const charCount = document.getElementById('ro-char-count');
+            const imgInput = document.getElementById('ro-images-input');
+            const vidInput = document.getElementById('ro-video-input');
+            const imgCounter = document.getElementById('ro-img-counter');
+            const vidCounter = document.getElementById('ro-vid-counter');
+            const imgPreview = document.getElementById('ro-images-preview');
+            const vidPreview = document.getElementById('ro-video-preview');
+            const statusAlert = document.getElementById('ro-status-alert');
+            const complaintsListEl = document.getElementById('complaints-history-list');
+
+            // Ensure all inputs start completely EMPTY (only background placeholder examples are shown!)
+            nameInput.value = '';
+            orderIdInput.value = '';
+            mobileInput.value = '';
+            emailInput.value = '';
+            addressInput.value = '';
+            descInput.value = '';
+
+            function showAlert(msg, type = 'error') {
+                statusAlert.className = 'mb-4 p-3.5 rounded-2xl text-xs font-bold block ' + (
+                    type === 'error'
+                        ? 'bg-red-50 text-red-700 border border-red-200'
+                        : 'bg-emerald-50 text-[#08794f] border border-emerald-200'
+                );
+                statusAlert.innerHTML = msg;
+            }
+
+            function hideAlert() {
+                statusAlert.className = 'hidden mb-4 p-3.5 rounded-2xl text-xs font-bold';
+            }
+
+            // Character Counter (0/500)
+            descInput.addEventListener('input', function() {
+                charCount.textContent = `${this.value.length}/500`;
+            });
+
+            // Load order history for order selector dropdown (without pre-filling the input!)
+            let customerOrders = [];
+            try {
+                const rawOrders = JSON.parse(localStorage.getItem('freshmart_orders') || '[]');
+                customerOrders = Array.isArray(rawOrders) && rawOrders.length > 0 ? rawOrders : [
+                    { id: 'FM-9901', customer: 'Sahil Sharma', date: '30 Oct 2026', total: 350, status: 'Delivered', productSummary: 'Aashirvaad Shudh Chakki Atta & Amul Taaza Milk' },
+                    { id: 'FM-9902', customer: 'Sahil Sharma', date: '28 Oct 2026', total: 820, status: 'Delivered', productSummary: 'Fortune Sunlite Oil & Tata Sampann Toor Dal' }
+                ];
+            } catch (e) {
+                customerOrders = [
+                    { id: 'FM-9901', customer: 'Sahil Sharma', date: '30 Oct 2026', total: 350, status: 'Delivered', productSummary: 'Aashirvaad Shudh Chakki Atta & Amul Taaza Milk' },
+                    { id: 'FM-9902', customer: 'Sahil Sharma', date: '28 Oct 2026', total: 820, status: 'Delivered', productSummary: 'Fortune Sunlite Oil & Tata Sampann Toor Dal' }
+                ];
+            }
+
+            const datalist = document.getElementById('ro-orders-datalist');
+            const pickerList = document.getElementById('order-picker-list');
+            if (datalist) {
+                datalist.innerHTML = customerOrders.map(o => `<option value="${o.id}">Order #${o.id} — ₹${o.total || 350} (${o.status || 'Delivered'})</option>`).join('');
+            }
+            if (pickerList) {
+                pickerList.innerHTML = customerOrders.map(o => `
+                    <button type="button" data-pick-ord="${o.id}" class="w-full text-left p-2 rounded-xl bg-white hover:bg-emerald-100/60 border border-emerald-100 flex items-center justify-between text-xs">
+                        <div>
+                            <span class="font-black text-slate-900">#${o.id}</span>
+                            <span class="text-slate-500 font-medium ml-1">• ${o.productSummary || 'FreshMart Grocery Order'}</span>
+                        </div>
+                        <span class="font-extrabold text-[#08794f]">₹${o.total || 350}</span>
+                    </button>
+                `).join('');
+                pickerList.querySelectorAll('[data-pick-ord]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        orderIdInput.value = this.getAttribute('data-pick-ord');
+                        document.getElementById('order-picker-box').classList.add('hidden');
+                    });
+                });
+            }
+            document.getElementById('btn-pick-order').addEventListener('click', function() {
+                document.getElementById('order-picker-box').classList.toggle('hidden');
+            });
+
+            // Step 1 -> Step 2 Validation
+            document.getElementById('btn-step1-next').addEventListener('click', function() {
+                hideAlert();
+                const name = nameInput.value.trim();
+                const ordId = orderIdInput.value.trim().replace(/^#/, '');
+                const mobile = mobileInput.value.replace(/\D/g, '').trim();
+                const email = emailInput.value.trim();
+                const address = addressInput.value.trim();
+                const desc = descInput.value.trim();
+
+                if (!name) return showAlert('Please enter your Customer Name.');
+                if (!ordId) return showAlert('Please enter or select your Order Number.');
+                if (!/^[6-9][0-9]{9}$/.test(mobile)) {
+                    return showAlert('Please enter a valid 10-digit Mobile Number.');
+                }
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    return showAlert('Please enter a valid Email Address.');
+                }
+                if (!address || address.length < 6) {
+                    return showAlert('Please enter your complete Order Address.');
+                }
+                if (!desc || desc.length < 10) {
+                    return showAlert('Please describe your issue in the Complaint Description box (at least 10 characters).');
+                }
+                goToWizardStep(2);
+            });
+
+            // Render Media Previews in Step 2
+            function renderMediaPreviews() {
+                imgCounter.textContent = `${uploadedImages.length}/4`;
+                vidCounter.textContent = `${uploadedVideos.length}/1`;
+
+                document.getElementById('btn-add-img-label').textContent =
+                    uploadedImages.length === 0 ? 'Add Images (4 Required)' :
+                    (uploadedImages.length < 4 ? `Add More Images (${4 - uploadedImages.length} More Needed)` : 'Replace Images (4/4 Uploaded)');
+
+                document.getElementById('btn-add-vid-label').textContent =
+                    uploadedVideos.length === 0 ? 'Upload Video (1 Required)' : 'Replace Video (Optional)';
+
+                let slotsHtml = '';
+                for (let i = 0; i < 4; i++) {
+                    const img = uploadedImages[i];
+                    if (img) {
+                        slotsHtml += `
+                            <div class="media-thumb-item">
+                                <img src="${img.previewUrl}" alt="${img.name}">
+                                <button type="button" data-rm-img="${i}" class="media-rm-btn" title="Remove image">✕</button>
+                            </div>
+                        `;
+                    } else {
+                        slotsHtml += `
+                            <div onclick="document.getElementById('ro-images-input').click()" class="media-thumb-item flex flex-col items-center justify-center text-slate-300 hover:border-[#08794f] hover:text-[#08794f] cursor-pointer">
+                                <span class="text-lg font-bold">+</span>
+                                <span class="text-[9px] font-bold">Photo ${i + 1}</span>
+                            </div>
+                        `;
+                    }
+                }
+                imgPreview.innerHTML = slotsHtml;
+
+                if (uploadedVideos.length > 0) {
+                    const vid = uploadedVideos[0];
+                    vidPreview.innerHTML = `
+                        <div class="relative rounded-2xl overflow-hidden border border-emerald-200 bg-slate-900 h-40 flex items-center justify-center">
+                            ${vid.previewUrl ? `<video src="${vid.previewUrl}" class="w-full h-full object-cover opacity-85" muted playsinline></video>` : ''}
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div class="w-12 h-12 rounded-full bg-black/55 border-2 border-white text-white flex items-center justify-center text-base font-black shadow-lg">▶</div>
+                            </div>
+                            <span class="absolute bottom-2.5 right-3 bg-black/75 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md">${vid.durationLabel || '00:28'}</span>
+                            <span class="absolute bottom-2.5 left-3 bg-black/65 text-white text-[10px] font-bold px-2 py-0.5 rounded-md truncate max-w-[70%]">${vid.name}</span>
+                            <button type="button" id="btn-rm-video" class="media-rm-btn !top-2.5 !right-2.5 !w-6 !h-6">✕</button>
+                        </div>
+                    `;
+                    document.getElementById('btn-rm-video')?.addEventListener('click', function() {
+                        uploadedVideos = [];
+                        renderMediaPreviews();
+                    });
+                } else {
+                    vidPreview.innerHTML = '';
+                }
+
+                imgPreview.querySelectorAll('[data-rm-img]').forEach(btn => {
+                    btn.addEventListener('click', function(ev) {
+                        ev.stopPropagation();
+                        const idx = parseInt(this.getAttribute('data-rm-img'), 10);
+                        uploadedImages.splice(idx, 1);
+                        renderMediaPreviews();
+                    });
+                });
+            }
+
+            // Image File Input Handler (Accepts JPG, JPEG, PNG, WEBP; Max 4 Images)
+            imgInput.addEventListener('change', function(e) {
+                hideAlert();
+                const files = Array.from(e.target.files || []);
+                if (!files.length) return;
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+
+                if (uploadedImages.length === 4) {
+                    uploadedImages = [];
+                }
+
+                for (const file of files) {
+                    const extOk = /\.(jpe?g|png|webp)$/i.test(file.name);
+                    if (!allowedTypes.includes(file.type) && !extOk) {
+                        showAlert(`Invalid image format "${file.name}". Only JPG, JPEG, PNG and WEBP images are allowed.`);
+                        continue;
+                    }
+                    if (file.size > 8 * 1024 * 1024) {
+                        showAlert(`Image "${file.name}" exceeds the 8 MB size limit.`);
+                        continue;
+                    }
+                    if (uploadedImages.length >= 4) {
+                        showAlert('Maximum 4 images allowed.');
+                        break;
+                    }
+                    const reader = new FileReader();
+                    const objUrl = URL.createObjectURL(file);
+                    const imgEntry = {
+                        name: file.name,
+                        type: file.type || 'image/jpeg',
+                        size: file.size || 150000,
+                        previewUrl: objUrl
+                    };
+                    uploadedImages.push(imgEntry);
+                    reader.onload = function(evt) {
+                        if (evt.target && evt.target.result) {
+                            imgEntry.dataUrl = evt.target.result;
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+                imgInput.value = '';
+                renderMediaPreviews();
+            });
+
+            // Video File Input Handler (Accepts MP4, MOV, WEBM; Max 1 Video)
+            vidInput.addEventListener('change', function(e) {
+                hideAlert();
+                const files = Array.from(e.target.files || []);
+                if (!files.length) return;
+                const file = files[0];
+                const allowedVid = ['video/mp4', 'video/quicktime', 'video/webm', 'video/x-m4v'];
+                const extOk = /\.(mp4|mov|webm|m4v)$/i.test(file.name);
+                if (!allowedVid.includes(file.type) && !extOk) {
+                    return showAlert(`Invalid video format "${file.name}". Please upload an MP4, MOV, or WEBM video.`);
+                }
+                if (file.size > 30 * 1024 * 1024) {
+                    return showAlert('Video file exceeds the 30 MB limit. Please upload a short video (max 1 minute).');
+                }
+                const objUrl = URL.createObjectURL(file);
+                uploadedVideos = [{
+                    name: file.name,
+                    type: file.type || 'video/mp4',
+                    size: file.size || 4200000,
+                    durationLabel: '00:28',
+                    previewUrl: objUrl
+                }];
+                vidInput.value = '';
+                renderMediaPreviews();
+            });
+
+            document.getElementById('btn-step2-back').addEventListener('click', function() {
+                hideAlert();
+                goToWizardStep(1);
+            });
+
+            // Step 2 -> Step 3 Strict Media Validation
+            document.getElementById('btn-step2-next').addEventListener('click', function() {
+                hideAlert();
+                if (uploadedImages.length < 4) {
+                    return showAlert(`Mandatory Requirement: Please upload 4 images showing the product, packaging, and issue (currently ${uploadedImages.length}/4 uploaded).`);
+                }
+                if (uploadedVideos.length < 1) {
+                    return showAlert('Mandatory Requirement: Please upload 1 video showing the full order condition (currently 0/1 uploaded).');
+                }
+                goToWizardStep(3);
+            });
+
+            // Fetch customer's submitted complaints
+            async function fetchCustomerComplaints() {
+                let all = [];
+                try {
+                    all = JSON.parse(localStorage.getItem('freshmart_return_complaints') || '[]');
+                } catch (e) {}
+                if (!Array.isArray(all) || !all.length) {
+                    all = window.__memComplaints || [];
+                }
+                return all;
+            }
+
+            function getStatusPillHtml(status) {
+                const s = String(status || 'Received');
+                if (s === 'Approved') return `<span class="status-pill status-Approved">✓ Approved</span>`;
+                if (s === 'Resolved') return `<span class="status-pill status-Resolved">✓ Resolved</span>`;
+                if (s === 'Rejected') return `<span class="status-pill status-Rejected">✕ Rejected</span>`;
+                if (s === 'Processing') return `<span class="status-pill status-Processing">● Processing</span>`;
+                if (s === 'Under Review') return `<span class="status-pill status-UnderReview">● Under Review</span>`;
+                return `<span class="status-pill status-Received">✓ Received</span>`;
+            }
+
+            // Point 1: If no complaints exist, show ONLY a clean English empty-state message and nothing else!
+            async function renderMyComplaints() {
+                const list = await fetchCustomerComplaints();
+                const badgeCount = document.getElementById('tracker-badge-count');
+                const navCount = document.getElementById('nav-complaints-count');
+
+                if (list.length === 0) {
+                    if (badgeCount) badgeCount.classList.add('hidden');
+                    if (navCount) navCount.classList.add('hidden');
+                    complaintsListEl.innerHTML = `
+                        <div class="py-12 px-6 rounded-2xl bg-slate-50/70 border border-slate-200/80 text-center">
+                            <div class="w-14 h-14 rounded-full bg-emerald-50 text-[#08794f] border border-emerald-200 flex items-center justify-center mx-auto mb-3.5 shadow-xs">
+                                <i data-lucide="check-circle-2" class="w-7 h-7"></i>
+                            </div>
+                            <h3 class="text-base font-black text-slate-900">You Have No Active Complaints</h3>
+                            <p class="text-xs font-medium text-slate-500 mt-1.5 max-w-sm mx-auto leading-relaxed">
+                                You have not submitted any return or complaint requests yet. When you submit a complaint, its live status (Received, Processing, Approved, or Rejected) will appear here.
+                            </p>
+                        </div>
+                    `;
+                    if (window.lucide) window.lucide.createIcons();
+                    return;
+                }
+
+                if (badgeCount) {
+                    badgeCount.textContent = `${list.length} ${list.length === 1 ? 'Complaint' : 'Complaints'}`;
+                    badgeCount.classList.remove('hidden');
+                }
+                if (navCount) {
+                    navCount.textContent = String(list.length);
+                    navCount.classList.remove('hidden');
+                }
+
+                complaintsListEl.innerHTML = list.map(item => {
+                    const thumb = (item.images && item.images[0] && (item.images[0].dataUrl || item.images[0].previewUrl)) || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&q=80';
+                    return `
+                        <div data-open-cmp="${item.id}" class="p-3.5 rounded-2xl bg-white border border-slate-200/90 hover:border-[#08794f] shadow-xs transition cursor-pointer">
+                            <div class="flex items-start gap-3">
+                                <img src="${thumb}" alt="${item.orderId}" class="w-16 h-16 rounded-xl object-cover border border-slate-200 shrink-0 bg-slate-100">
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between gap-2 text-[10.5px] font-bold text-slate-400">
+                                        <span class="truncate">#${item.orderId} • ${item.id}</span>
+                                        <span class="shrink-0">${item.dateFormatted || '31 Oct 2026'}</span>
+                                    </div>
+                                    <div class="text-xs sm:text-sm font-black text-slate-900 truncate mt-0.5">${item.issueType || item.productName || 'Order Return Request'}</div>
+                                    <div class="flex items-center justify-between mt-1.5">
+                                        ${getStatusPillHtml(item.status)}
+                                        <span class="text-slate-400 font-black text-sm">›</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-[11.5px] font-medium text-slate-600 line-clamp-2 mt-2.5 leading-relaxed">
+                                ${item.description}
+                            </p>
+                        </div>
+                    `;
+                }).join('');
+
+                complaintsListEl.querySelectorAll('[data-open-cmp]').forEach(card => {
+                    card.addEventListener('click', function() {
+                        const cid = this.getAttribute('data-open-cmp');
+                        const found = list.find(c => c.id === cid);
+                        if (found) openComplaintDetailModal(found);
+                    });
+                });
+
+                if (window.lucide) window.lucide.createIcons();
+            }
+
+            function openComplaintDetailModal(c) {
+                const modal = document.getElementById('complaint-detail-modal');
+                document.getElementById('cdm-id').textContent = `Complaint #${c.id} (Order #${c.orderId})`;
+                document.getElementById('cdm-date').textContent = `Submitted on ${c.submittedAtFormatted || c.dateFormatted || '31 Oct 2026'}`;
+
+                const imgs = Array.isArray(c.images) ? c.images : [];
+                const history = Array.isArray(c.statusHistory) && c.statusHistory.length ? c.statusHistory : [
+                    { status: c.status || 'Received', note: c.latestUpdate || 'Your complaint has been received successfully. Our team will review your request.', time: c.submittedAtFormatted || c.dateFormatted }
+                ];
+
+                document.getElementById('cdm-body').innerHTML = `
+                    <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div>
+                            <div class="text-[10px] font-extrabold text-slate-400 uppercase">Current Status</div>
+                            <div class="text-xs font-black text-slate-900 mt-0.5">${c.productName || c.issueType}</div>
+                        </div>
+                        ${getStatusPillHtml(c.status)}
+                    </div>
+
+                    <div class="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-emerald-950 space-y-1">
+                        <div class="font-extrabold text-[11px] uppercase tracking-wider text-[#08794f]">Latest Update &amp; Resolution</div>
+                        <p class="font-semibold leading-relaxed">${c.resolutionMessage || c.latestUpdate || 'Your complaint has been received successfully. Our team will review your request.'}</p>
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="font-extrabold text-slate-800">Complaint Description</div>
+                        <p class="p-3 rounded-xl bg-slate-50 border border-slate-100 text-slate-700 font-medium leading-relaxed">${c.description}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 text-[11px] p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <div><span class="text-slate-400 font-bold">Customer:</span> <strong class="text-slate-800">${c.customerName}</strong></div>
+                        <div><span class="text-slate-400 font-bold">Mobile:</span> <strong class="text-slate-800">+91 ${c.mobile}</strong></div>
+                        <div class="col-span-2"><span class="text-slate-400 font-bold">Email:</span> <strong class="text-slate-800">${c.email}</strong></div>
+                        <div class="col-span-2"><span class="text-slate-400 font-bold">Address:</span> <strong class="text-slate-800">${c.address}</strong></div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <div class="font-extrabold text-slate-800">Uploaded Photos (${imgs.length}) &amp; Video (${c.videoCount || 1})</div>
+                        <div class="grid grid-cols-4 gap-2">
+                            ${imgs.map(im => `<img src="${im.dataUrl || im.previewUrl || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&q=80'}" class="w-full h-16 object-cover rounded-xl border border-slate-200">`).join('')}
+                        </div>
+                        <div class="text-[11px] font-bold text-[#08794f] pt-1">🎥 Video Attached: ${(c.video && c.video.name) || (c.videoNames && c.videoNames[0]) || 'Order Video'}</div>
+                    </div>
+
+                    <div class="space-y-2 pt-2 border-t border-slate-100">
+                        <div class="font-extrabold text-slate-800">Status History</div>
+                        <div class="space-y-2">
+                            ${history.map(h => `
+                                <div class="flex items-start gap-2.5 text-[11px]">
+                                    <span class="w-2 h-2 rounded-full bg-[#08794f] mt-1.5 shrink-0"></span>
+                                    <div>
+                                        <div class="font-extrabold text-slate-900">${h.status} <span class="text-slate-400 font-semibold">• ${h.time || ''}</span></div>
+                                        <div class="text-slate-600 font-medium">${h.note || ''}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+
+            // Step 3 Final Submission Handler
+            document.getElementById('ro-submit-btn').addEventListener('click', async function() {
+                hideAlert();
+                if (uploadedImages.length !== 4 || uploadedVideos.length !== 1) {
+                    return showAlert('Mandatory media missing: Exactly 4 images and 1 video are required before submitting.');
+                }
+
+                const customerName = nameInput.value.trim();
+                const orderId = orderIdInput.value.trim().replace(/^#/, '');
+                const mobile = mobileInput.value.replace(/\D/g, '').slice(-10);
+                const email = emailInput.value.trim();
+                const address = addressInput.value.trim();
+                const issueType = issueInput.value;
+                const description = descInput.value.trim();
+
+                if (selectedSubmissionMethod === 'whatsapp') {
+                    const waLines = [
+                        `*FreshMart Return Order Request*`,
+                        `--------------------------------`,
+                        lastGeneratedComplaintId ? `*Complaint ID:* #${lastGeneratedComplaintId}` : `*Complaint ID:* Pending Manual Verification`,
+                        `*Customer Name:* ${customerName}`,
+                        `*Order ID:* #${orderId}`,
+                        `*Mobile Number:* +91 ${mobile}`,
+                        `*Email Address:* ${email}`,
+                        `*Order Address:* ${address}`,
+                        `*Issue Type:* ${issueType}`,
+                        `*Complaint Description:* ${description}`,
+                        `*Media Ready:* 4 Order Photos (${uploadedImages.map(i => i.name).join(', ')}) + 1 Video (${uploadedVideos[0].name})`
+                    ];
+                    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waLines.join('\n'))}`;
+                    window.open(waUrl, '_blank', 'noopener');
+                    showAlert(
+                        `WhatsApp has been opened with your prepared complaint message for <strong>+91 79883 00872</strong>. Please send the message in WhatsApp for manual verification.`,
+                        'success'
+                    );
+                    return;
+                }
+
+                const submitBtn = this;
+                submitBtn.disabled = true;
+                const now = new Date();
+                const dateFormatted = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+                const submittedAtFormatted = now.toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+                const cmpId = 'CMP-' + Math.floor(100000 + Math.random() * 900000);
+                const savedRecord = {
+                    id: cmpId,
+                    customerName,
+                    orderId,
+                    productName: issueType,
+                    mobile,
+                    email,
+                    address,
+                    issueType,
+                    description,
+                    images: uploadedImages.map(im => ({
+                        name: im.name,
+                        type: im.type || 'image/jpeg',
+                        size: im.size || 150000,
+                        previewUrl: im.dataUrl || im.previewUrl
+                    })),
+                    video: {
+                        name: uploadedVideos[0].name,
+                        type: uploadedVideos[0].type || 'video/mp4',
+                        size: uploadedVideos[0].size || 4200000,
+                        durationLabel: uploadedVideos[0].durationLabel || '00:28'
+                    },
+                    imageCount: 4,
+                    videoCount: 1,
+                    imageNames: uploadedImages.map(i => i.name),
+                    videoNames: [uploadedVideos[0].name],
+                    status: 'Received',
+                    statusCode: 'received',
+                    statusLabel: 'Received',
+                    latestUpdate: 'Your complaint has been received successfully. Our team will review your request.',
+                    resolutionMessage: '',
+                    internalNotes: '',
+                    investigationFinding: '',
+                    dateFormatted,
+                    submittedAtFormatted,
+                    createdAt: Date.now(),
+                    statusHistory: [
+                        {
+                            status: 'Received',
+                            note: 'Your complaint has been received successfully. Our team will review your request.',
+                            time: submittedAtFormatted
+                        }
+                    ]
+                };
+
+                window.__memComplaints = window.__memComplaints || [];
+                window.__memComplaints.unshift(savedRecord);
+
+                if (window.FreshMartReturns && window.FreshMartReturns.addComplaint) {
+                    await window.FreshMartReturns.addComplaint(savedRecord);
+                } else {
+                    try {
+                        const existing = JSON.parse(localStorage.getItem('freshmart_return_complaints') || '[]');
+                        existing.unshift(savedRecord);
+                        localStorage.setItem('freshmart_return_complaints', JSON.stringify(existing));
+                    } catch (e) {}
+                }
+
+                submitBtn.disabled = false;
+                lastGeneratedComplaintId = savedRecord.id;
+                await renderMyComplaints();
+
+                // Automatically switch to My Complaints view so user sees their newly submitted complaint status!
+                switchPortalTab('list');
+            });
+
+            renderMediaPreviews();
+            renderMyComplaints();
+
+            // Check if opened via #my-complaints link from Settings
+            if (window.location.hash === '#my-complaints') {
+                switchPortalTab('list');
+            }
+            window.addEventListener('hashchange', function() {
+                if (window.location.hash === '#my-complaints') {
+                    switchPortalTab('list');
+                } else {
+                    switchPortalTab('form');
+                }
+            });
+
+            if (window.lucide) window.lucide.createIcons();
+        })();
+    </script>
+</body>
+</html>

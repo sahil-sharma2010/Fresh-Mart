@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f4faf5">
+<meta name="description" content="Manage your FreshMart Cookie Settings for essential, preference, analytics and advertising technologies.">
+<title>Cookie Settings | FreshMart</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+:root {
+  --green: #08794f;
+  --green-light: #0b875b;
+  --ink: #1b2922;
+  --muted: #7b897e;
+  --line: #e1ebe3;
+  --burgundy: #4a303b;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+body {
+  margin: 0;
+    font-family: Inter, Arial, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse at 8% 8%,#dff2e4 0,transparent 34%),
+    radial-gradient(ellipse at 95% 22%,#eaf5e9 0,transparent 30%),
+    linear-gradient(135deg,#f7faf6,#fff 55%,#f0f7f0);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+
+.topline {
+  height: 4px;
+  background: linear-gradient(90deg,var(--burgundy),#765966,var(--green));
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255,255,255,.88);
+  border-bottom: 1px solid rgba(221,234,223,.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.header-inner {
+  width: min(1160px,calc(100% - 48px));
+  min-height: 70px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.brand-name {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.brand-name span { color: var(--green-light); }
+
+.brand-sub {
+  display: block;
+  margin-top: 5px;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.1px;
+  color: #98a49a;
+}
+
+.header-actions {
+  display: flex;
+  gap: 9px;
+  margin-left: auto;
+}
+
+.nav-btn {
+  width: 39px;
+  height: 39px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e9e3;
+  border-radius: 50%;
+  background: white;
+  color: #47564b;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.nav-btn:hover {
+  background: #eff8f1;
+  border-color: #b9ddc3;
+  color: var(--green);
+  transform: translateY(-2px);
+}
+
+.nav-btn svg { width: 18px; height: 18px; }
+
+main {
+  width: min(1000px,calc(100% - 48px));
+  margin: auto;
+  padding: 40px 0 65px;
+}
+
+/* Hero */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(27px,5vw,48px);
+  border: 1px solid rgba(255,255,255,.98);
+  border-radius: 27px;
+  background: linear-gradient(120deg,rgba(255,255,255,.95),rgba(239,249,241,.88));
+  box-shadow: 0 20px 58px rgba(32,76,45,.065);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 230px;
+  height: 230px;
+  right: -65px;
+  top: -100px;
+  border: 1px solid #0b875b1c;
+  border-radius: 50%;
+  box-shadow: 0 0 0 25px #0b875b07,0 0 0 52px #0b875b05;
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.kicker svg { width: 18px; height: 18px; }
+
+h1 {
+  margin: 17px 0 13px;
+  font-size: clamp(30px,4vw,43px);
+  font-weight: 800;
+  letter-spacing: -1.7px;
+  line-height: 1.17;
+}
+
+h1 span { color: var(--green-light); }
+
+.hero-copy {
+  max-width: 680px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.95;
+  color: #78867b;
+}
+
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 23px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 13px;
+  border: 1px solid #dfede1;
+  border-radius: 30px;
+  background: rgba(255,255,255,.85);
+  color: #52685a;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.tag svg { width: 16px; height: 16px; color: var(--green); }
+
+/* Notice */
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin: 23px 0 30px;
+  padding: 18px;
+  border: 1px solid #d6ebdb;
+  border-radius: 18px;
+  background: linear-gradient(110deg,rgba(237,248,239,.98),rgba(255,255,255,.9));
+}
+
+.notice-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid #d5ebda;
+  border-radius: 13px;
+  background: white;
+  color: var(--green);
+}
+
+.notice-icon svg { width: 21px; height: 21px; }
+
+.notice strong {
+  display: block;
+  margin: 1px 0 5px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #244e35;
+}
+
+.notice p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.85;
+  color: #62786a;
+}
+
+/* Policy cards */
+
+.section-label {
+  margin: 31px 0 15px 2px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+  color: #87958a;
+}
+
+.policy-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 16px;
+}
+
+.policy-card {
+  min-width: 0;
+  padding: 23px;
+  border: 1px solid rgba(255,255,255,.98);
+  border-radius: 21px;
+  background: rgba(255,255,255,.86);
+  box-shadow: 0 12px 35px rgba(31,55,37,.045);
+  backdrop-filter: blur(17px);
+  -webkit-backdrop-filter: blur(17px);
+  transition: transform .2s,box-shadow .2s;
+}
+
+.policy-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 38px rgba(31,75,44,.07);
+}
+
+.card-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.card-icon {
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid #deeee1;
+  border-radius: 14px;
+  background: linear-gradient(145deg,#f7fcf7,#eaf6ed);
+  color: var(--green);
+}
+
+.card-icon svg { width: 21px; height: 21px; }
+
+h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -.25px;
+  line-height: 1.55;
+}
+
+.policy-card p,
+.policy-card li {
+  font-size: 11px;
+  line-height: 1.9;
+  color: #748177;
+  overflow-wrap: anywhere;
+}
+
+.policy-card p { margin: 7px 0; }
+.policy-card ul { margin: 10px 0 0; padding-left: 18px; }
+.policy-card li { padding: 2px 0; }
+.policy-card li::marker { color: #43a16d; }
+.policy-card strong { color: #3b5041; }
+
+/* Preference settings */
+
+.settings-panel {
+  margin-top: 25px;
+  padding: 25px;
+  border: 1px solid #dcebe0;
+  border-radius: 22px;
+  background: linear-gradient(115deg,rgba(239,249,241,.96),rgba(255,255,255,.92));
+  box-shadow: 0 12px 35px rgba(31,55,37,.04);
+}
+
+.settings-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.settings-heading .card-icon { background: white; }
+
+.settings-panel > p {
+  margin: 0 0 18px;
+  font-size: 12px;
+  line-height: 1.9;
+  color: #748177;
+}
+
+.preference-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 15px 0;
+  border-top: 1px solid #dfeae1;
+}
+
+.preference-copy { min-width: 0; }
+
+.preference-copy strong {
+  display: block;
+  font-size: 12px;
+  color: #33483a;
+}
+
+.preference-copy p {
+  margin: 5px 0 0;
+  font-size: 11px;
+  line-height: 1.7;
+  color: #829086;
+}
+
+.toggle {
+  width: 44px;
+  height: 25px;
+  flex-shrink: 0;
+  position: relative;
+  border: 0;
+  border-radius: 30px;
+  background: #cbd6ce;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.toggle::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 4px #0002;
+  transition: transform .2s;
+}
+
+.toggle[aria-checked="true"] { background: var(--green); }
+.toggle[aria-checked="true"]::after { transform: translateX(19px); }
+.toggle:disabled { cursor: not-allowed; opacity: .75; }
+
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 19px;
+}
+
+.btn {
+  min-height: 43px;
+  padding: 11px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #dbe7dd;
+  border-radius: 12px;
+  background: white;
+  color: #435347;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.btn:hover { border-color: #b6d9bf; background: #f8fcf8; }
+.btn svg { width: 16px; height: 16px; }
+
+.btn.primary {
+  border-color: var(--green);
+  background: linear-gradient(110deg,#08794f,#11895d);
+  color: white;
+  box-shadow: 0 7px 17px #08794f1b;
+}
+
+.btn.primary:hover { transform: translateY(-1px); }
+
+.settings-message {
+  display: none;
+  margin-top: 12px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--green);
+}
+
+.settings-message.show { display: block; }
+
+.footer {
+  padding: 21px 14px 24px;
+  text-align: center;
+  border-top: 1px solid #e4ebe5;
+  background: rgba(255,255,255,.78);
+}
+
+.footer strong { font-size: 12px; color: #3b493e; }
+
+.footer p {
+  margin: 7px 0 0;
+  font-size: 10px;
+  line-height: 1.7;
+  color: #89958b;
+}
+
+/* Cookie consent banner */
+
+.cookie-banner {
+  position: fixed;
+  z-index: 100;
+  left: 20px;
+  right: 20px;
+  bottom: 18px;
+  width: min(850px,calc(100% - 40px));
+  margin: auto;
+  display: none;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #dce9de;
+  border-radius: 21px;
+  background: rgba(255,255,255,.98);
+  color: var(--ink);
+  box-shadow: 0 20px 70px rgba(20,44,28,.2);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+.cookie-banner.show { display: flex; }
+
+.banner-icon {
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #edf7ef;
+  color: var(--green);
+}
+
+.banner-icon svg { width: 22px; height: 22px; }
+.banner-content { min-width: 0; flex: 1; }
+.banner-content h2 { font-size: 15px; }
+
+.banner-content p {
+  margin: 7px 0 0;
+  font-size: 11px;
+  line-height: 1.8;
+  color: #758278;
+}
+
+.banner-content a {
+  color: var(--green);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.banner-actions .btn {
+  min-height: 39px;
+  padding: 9px 12px;
+  font-size: 10px;
+}
+
+.banner-close {
+  position: absolute;
+  top: 10px;
+  right: 11px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #718076;
+  cursor: pointer;
+}
+
+.banner-close:hover { background: #f0f5f0; }
+.banner-close svg { width: 17px; height: 17px; }
+
+@media(max-width:800px) {
+  main { width: min(720px,calc(100% - 34px)); padding: 30px 0 45px; }
+  .header-inner { width: calc(100% - 34px); }
+  .policy-grid { gap: 13px; }
+  .policy-card { padding: 20px; }
+}
+
+@media(max-width:620px) {
+  .header-inner { width: calc(100% - 26px); min-height: 63px; }
+  main { width: calc(100% - 28px); padding: 23px 0 35px; }
+  .hero { padding: 25px 20px; border-radius: 22px; }
+  h1 { font-size: clamp(28px,7vw,34px); letter-spacing: -1.1px; }
+  .hero-copy { font-size: 12px; }
+  .hero-tags { gap: 7px; margin-top: 19px; }
+  .tag { padding: 8px 10px; font-size: 9px; }
+  .notice { padding: 14px; gap: 10px; }
+  .notice-icon { width: 37px; height: 37px; border-radius: 11px; }
+  .notice p { font-size: 10px; }
+  .policy-grid { grid-template-columns: 1fr; gap: 13px; }
+  .policy-card { padding: 21px; }
+  .settings-panel { padding: 20px 16px; }
+  .cookie-banner { bottom: 10px; left: 10px; width: calc(100% - 20px); padding: 17px; gap: 10px; }
+  .banner-icon { width: 36px; height: 36px; }
+  .banner-actions { gap: 7px; }
+  .banner-actions .btn { flex: 1; }
+}
+
+@media(max-width:390px) {
+  .header-inner { width: calc(100% - 20px); }
+  .logo { width: 29px; height: 29px; }
+  .brand { gap: 7px; }
+  .brand-name { font-size: 20px; }
+  .brand-sub { font-size: 7px; }
+  .nav-btn { width: 34px; height: 34px; }
+  main { width: calc(100% - 22px); padding-top: 18px; }
+  .hero { padding: 22px 16px; }
+  .kicker { font-size: 9px; letter-spacing: 1px; }
+  h1 { font-size: 27px; }
+  .tag { font-size: 8px; padding: 8px; }
+  .policy-card { padding: 18px 15px; }
+  .settings-actions { flex-direction: column; }
+  .settings-actions .btn { width: 100%; }
+  .cookie-banner { padding: 14px; }
+  .banner-icon { display: none; }
+  .banner-content p { font-size: 10px; }
+  .banner-actions { flex-direction: column; }
+  .banner-actions .btn { width: 100%; }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Mobile header navigation buttons visible */
+</style>
+</head>
+
+<body>
+<div class="topline"></div>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="brand" aria-label="FreshMart Home">
+      <img src="images/logo.png" alt="FreshMart" class="logo"
+           onerror="this.onerror=null;this.style.display='none'">
+      <div>
+        <div class="brand-name"><span>Fresh</span>Mart</div>
+        <span class="brand-sub">DAILY NEEDS STORE</span>
+      </div>
+    </a>
+
+    <div class="header-actions">
+      <button class="nav-btn" type="button" onclick="goBackPage()" aria-label="Go Back" title="Go Back">
+        <i data-lucide="arrow-left"></i>
+        <span>Back</span>
+      </button>
+      <a class="nav-btn home-btn" href="index.html" aria-label="Home" title="FreshMart Home">
+        <i data-lucide="home"></i>
+        <span>Home</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="kicker"><i data-lucide="sliders-horizontal"></i> FRESHMART PRIVACY CENTER</div>
+    <h1>Cookie <span>Settings.</span></h1>
+    <p class="hero-copy">
+      Manage your optional cookie and browser storage preferences below.
+      Essential technologies remain active for core shopping and security features.
+      To learn more about how cookies work, read our <a href="cookie-policy.html" style="color:var(--green);font-weight:800;text-decoration:underline;">Cookie Policy</a>.
+    </p>
+    <div class="hero-tags">
+      <span class="tag"><i data-lucide="shield-check"></i> Privacy Awareness</span>
+      <span class="tag"><i data-lucide="sliders-horizontal"></i> Your Preferences</span>
+      <span class="tag"><i data-lucide="lock-keyhole"></i> Account Safety</span>
+    </div>
+  </section>
+
+  <section class="notice">
+    <div class="notice-icon"><i data-lucide="info"></i></div>
+    <div>
+      <strong>We believe in clear privacy choices.</strong>
+      <p>
+        Essential technologies may be needed for requested website functions.
+        Optional analytics and advertising technologies should only be activated
+        when permitted by the user's saved choice and applicable requirements.
+      </p>
+    </div>
+  </section>
+
+  <div class="section-label">YOUR COOKIE PREFERENCES</div>
+
+  <section class="settings-panel" id="cookie-settings">
+    <div class="settings-heading">
+      <div class="card-icon"><i data-lucide="sliders-horizontal"></i></div>
+      <h2>Manage Cookie Settings</h2>
+    </div>
+
+    <p>
+      Choose whether to allow optional categories. Preferences are saved in
+      this browser. Your website's optional scripts must also respect these
+      choices before they load.
+    </p>
+
+    <div class="preference-row">
+      <div class="preference-copy">
+        <strong>Essential</strong>
+        <p>Core security and website functions, where necessary.</p>
+      </div>
+      <button class="toggle" type="button" role="switch"
+        aria-checked="true" aria-label="Essential technologies always enabled" disabled></button>
+    </div>
+
+    <div class="preference-row">
+      <div class="preference-copy">
+        <strong>Preferences</strong>
+        <p>Remember optional settings and personalization choices.</p>
+      </div>
+      <button class="toggle" type="button" role="switch"
+        data-category="preferences" aria-checked="false"
+        aria-label="Toggle preference technologies"></button>
+    </div>
+
+    <div class="preference-row">
+      <div class="preference-copy">
+        <strong>Analytics</strong>
+        <p>Measure page use and improve site performance, if enabled.</p>
+      </div>
+      <button class="toggle" type="button" role="switch"
+        data-category="analytics" aria-checked="false"
+        aria-label="Toggle analytics technologies"></button>
+    </div>
+
+    <div class="preference-row">
+      <div class="preference-copy">
+        <strong>Advertising</strong>
+        <p>Advertising measurement or personalization, if used.</p>
+      </div>
+      <button class="toggle" type="button" role="switch"
+        data-category="advertising" aria-checked="false"
+        aria-label="Toggle advertising technologies"></button>
+    </div>
+
+    <div class="settings-actions">
+      <button class="btn primary" type="button" id="save-preferences">
+        <i data-lucide="check-circle-2"></i> Save Preferences
+      </button>
+
+      <button class="btn" type="button" id="reject-optional">
+        <i data-lucide="ban"></i> Reject Optional
+      </button>
+
+      <button class="btn" type="button" id="accept-all">
+        <i data-lucide="check"></i> Accept All
+      </button>
+
+      <button class="btn" type="button" id="reopen-banner">
+        <i data-lucide="settings-2"></i> Show Cookie Banner
+      </button>
+    </div>
+
+    <div class="settings-message" id="settings-message" role="status" aria-live="polite"></div>
+  </section>
+</main>
+
+<footer class="footer">
+  <strong>FreshMart Privacy Center</strong>
+  <p>Respecting your choices is part of a safer shopping experience.</p>
+  <p style="margin-top:8px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap;font-size:11px;font-weight:700;">
+    <a href="index.html" style="color:var(--green);">Home</a>
+    <a href="cookie-policy.html" style="color:var(--green);">Cookie Policy</a>
+    <a href="privacy.html" style="color:var(--green);">Privacy Policy</a>
+    <a href="terms.html" style="color:var(--green);">Terms &amp; Conditions</a>
+    <a href="help-support.html" style="color:var(--green);">Help &amp; Support</a>
+  </p>
+  <p style="margin-top:6px;">© 2026 FreshMart. All rights reserved.</p>
+</footer>
+
+<!-- Consent banner -->
+<section class="cookie-banner" id="cookie-banner"
+  role="dialog" aria-label="Cookie preferences"
+  aria-describedby="cookie-banner-description">
+
+  <div class="banner-icon"><i data-lucide="cookie"></i></div>
+
+  <div class="banner-content">
+    <h2>Your privacy matters</h2>
+
+    <p id="cookie-banner-description">
+      FreshMart may use essential technologies for core website functions.
+      You can choose whether to allow optional preferences, analytics and
+      advertising technologies. Read our
+      <a href="cookie-policy.html">Cookie Policy</a>.
+    </p>
+
+    <div class="banner-actions">
+      <button class="btn primary" type="button" id="banner-accept">Accept All</button>
+      <button class="btn" type="button" id="banner-reject">Reject Optional</button>
+      <button class="btn" type="button" id="banner-settings">Cookie Settings</button>
+    </div>
+  </div>
+
+  <button type="button" class="banner-close" id="banner-close" aria-label="Close cookie banner">
+    <i data-lucide="x"></i>
+  </button>
+</section>
+
+<script src="script.js"></script>
+<script>
+function goBackPage() {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.href = "index.html";
+  }
+}
+
+(function () {
+  "use strict";
+
+  const STORAGE_KEY = "freshmart_cookie_preferences_v1";
+  const banner = document.getElementById("cookie-banner");
+  const status = document.getElementById("settings-message");
+
+  const defaults = {
+    essential: true,
+    preferences: false,
+    analytics: false,
+    advertising: false,
+    decided: false
+  };
+
+  function readPreferences() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) return { ...defaults };
+
+      const data = JSON.parse(saved);
+
+      return {
+        essential: true,
+        preferences: data.preferences === true,
+        analytics: data.analytics === true,
+        advertising: data.advertising === true,
+        decided: data.decided === true
+      };
+    } catch {
+      return { ...defaults };
+    }
+  }
+
+  let preferences = readPreferences();
+
+  function updateToggles() {
+    document.querySelectorAll("[data-category]").forEach(toggle => {
+      const category = toggle.dataset.category;
+      toggle.setAttribute(
+        "aria-checked",
+        String(preferences[category] === true)
+      );
+    });
+  }
+
+  function showMessage(text) {
+    status.textContent = text;
+    status.classList.add("show");
+  }
+
+  function showBanner() {
+    banner.classList.add("show");
+  }
+
+  function hideBanner() {
+    banner.classList.remove("show");
+  }
+
+  function savePreferences(next, message) {
+    const updated = {
+      essential: true,
+      preferences: next.preferences === true,
+      analytics: next.analytics === true,
+      advertising: next.advertising === true,
+      decided: true
+    };
+
+    try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      localStorage.setItem("freshmart_cookie_consent", JSON.stringify({
+        essential: true,
+        preferences: updated.preferences,
+        analytics: updated.analytics,
+        marketing: updated.advertising,
+        advertising: updated.advertising,
+        decided: true,
+        timestamp: new Date().toISOString()
+      }));
+    } catch (error) {
+      showMessage(
+        "Could not save preferences in this browser. Check browser storage settings."
+      );
+      return;
+    }
+
+    preferences = updated;
+    updateToggles();
+    hideBanner();
+    showMessage(message);
+
+    /*
+      Optional integrations can listen for this event and respond to consent.
+      They must also avoid loading before consent has been granted.
+    */
+    window.dispatchEvent(new CustomEvent(
+      "freshmart:cookie-preferences",
+      { detail: { ...preferences } }
+    ));
+  }
+
+  function acceptAll() {
+    savePreferences(
+      { preferences: true, analytics: true, advertising: true },
+      "Your preferences have been saved. Optional services must respect your choice."
+    );
+  }
+
+  function rejectOptional() {
+    savePreferences(
+      { preferences: false, analytics: false, advertising: false },
+      "Optional categories have been rejected for this browser."
+    );
+  }
+
+  document.querySelectorAll("[data-category]").forEach(toggle => {
+    toggle.addEventListener("click", function () {
+      const category = toggle.dataset.category;
+      preferences[category] = !preferences[category];
+      updateToggles();
+    });
+  });
+
+  document.getElementById("save-preferences")
+    .addEventListener("click", function () {
+      savePreferences(
+        preferences,
+        "Your selected cookie preferences have been saved."
+      );
+    });
+
+  document.getElementById("accept-all")
+    .addEventListener("click", acceptAll);
+
+  document.getElementById("reject-optional")
+    .addEventListener("click", rejectOptional);
+
+  document.getElementById("banner-accept")
+    .addEventListener("click", acceptAll);
+
+  document.getElementById("banner-reject")
+    .addEventListener("click", rejectOptional);
+
+  document.getElementById("banner-settings")
+    .addEventListener("click", function () {
+      hideBanner();
+
+      document.getElementById("cookie-settings").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    });
+
+  document.getElementById("reopen-banner")
+    .addEventListener("click", showBanner);
+
+  document.getElementById("banner-close")
+    .addEventListener("click", function () {
+      // Closing the banner does not mean acceptance or rejection.
+      hideBanner();
+    });
+
+  window.FreshMartCookiePreferences = {
+    get: function () {
+      return { ...preferences };
+    },
+
+    openSettings: function () {
+      updateToggles();
+
+      document.getElementById("cookie-settings").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    },
+
+    showBanner: showBanner,
+    acceptAll: acceptAll,
+    rejectOptional: rejectOptional
+  };
+
+  updateToggles();
+
+  if (!preferences.decided) {
+    showBanner();
+  }
+})();
+
+if (window.lucide) {
+  window.lucide.createIcons();
+}
+</script>
+
+
+<nav class="fm-mobile-bottom-nav" aria-label="Mobile Navigation">
+  <a href="index.html"><i data-lucide="home"></i><span>Home</span></a>
+  <a href="return-order.html"><i data-lucide="rotate-ccw"></i><span>Return</span></a>
+  <a href="cookie-settings.html" class="active"><i data-lucide="sliders-horizontal"></i><span>Cookies</span></a>
+  <a href="help-support.html"><i data-lucide="headphones"></i><span>Help</span></a>
+</nav>
+
+</body>
+</html>

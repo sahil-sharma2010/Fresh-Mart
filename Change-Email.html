@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08794f">
+  <title>Change Email Address | FreshMart</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --green: #08794f;
+      --green-light: #0b875b;
+      --ink: #1b2922;
+      --muted: #849188;
+      --line: #dfe8e1;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      min-height: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(135deg, #f4f8f4, #fbfcfa 55%, #eef6ef);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: url("images/background.png") center / cover no-repeat;
+      opacity: 0.035;
+    }
+
+    button, input, select, textarea { font: inherit; }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .topline {
+      height: 4px;
+      flex: 0 0 4px;
+      background: #4a303b;
+      position: relative;
+      z-index: 3;
+    }
+
+    .header {
+      position: relative;
+      z-index: 3;
+      flex: 0 0 auto;
+      background: rgba(255,255,255,.92);
+      border-bottom: 1px solid #e1e9e2;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .header-inner {
+      width: min(1200px, calc(100% - 40px));
+      min-height: 66px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .logo {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -.8px;
+      line-height: 1;
+    }
+
+    .brand-name span { color: var(--green-light); }
+
+    .brand-sub {
+      display: block;
+      margin-top: 4px;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #98a49a;
+    }
+
+    .header-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      height: 40px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      border: 1px solid rgba(16, 185, 129, 0.28);
+      border-radius: 999px;
+      background: linear-gradient(145deg, #ffffff 0%, #f0fdf4 100%);
+      color: #065f46;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 16px -4px rgba(15, 23, 42, 0.08),
+                  0 3px 0 0 rgba(16, 185, 129, 0.28),
+                  inset 0 1px 0 0 #ffffff;
+      transition: transform .22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .22s ease, background .2s ease;
+    }
+
+    .nav-btn:hover {
+      background: linear-gradient(145deg, #ecfdf5 0%, #d1fae5 100%);
+      color: #047857;
+      border-color: #10b981;
+      transform: perspective(500px) translate3d(0, -2px, 4px);
+      box-shadow: 0 12px 22px -6px rgba(16, 185, 129, 0.24),
+                  0 4px 0 0 rgba(5, 150, 105, 0.36),
+                  inset 0 1px 0 0 #ffffff;
+    }
+
+    .nav-btn:active {
+      transform: scale(0.96);
+    }
+
+    .nav-btn svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      flex: 1 1 auto;
+      min-height: 0;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .layout {
+      width: min(1440px, 100%);
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 clamp(30px, 6vw, 105px);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(400px, .96fr);
+      align-items: stretch;
+      gap: clamp(32px, 5.5vw, 90px);
+    }
+
+    /* Left-side information stays fixed on desktop while right-side form scrolls */
+    .intro {
+      min-width: 0;
+      height: 100%;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px 0;
+      overflow: hidden;
+    }
+
+    .intro-content {
+      width: 100%;
+      max-width: 470px;
+      flex: 0 0 auto;
+    }
+
+    .kicker {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      color: var(--green);
+      text-transform: uppercase;
+    }
+
+    .intro h1 {
+      margin: 14px 0 12px;
+      font-size: clamp(32px, 3vw, 44px);
+      line-height: 1.14;
+      letter-spacing: -1.2px;
+      font-weight: 800;
+    }
+
+    .intro h1 span { color: var(--green-light); }
+
+    .intro p {
+      max-width: 440px;
+      margin: 0;
+      font-size: 14.5px;
+      line-height: 1.75;
+      color: #6e7d71;
+    }
+
+    .art {
+      position: relative;
+      width: 280px;
+      height: 210px;
+      max-width: 100%;
+      margin: 20px 0 0 12px;
+      display: grid;
+      place-items: center;
+      flex: 0 1 auto;
+      perspective: 700px;
+    }
+
+    .orbit {
+      position: absolute;
+      width: 190px;
+      height: 170px;
+      border: 1px solid #0b875b2b;
+      border-radius: 50%;
+      transform: rotateX(63deg) rotateZ(-22deg);
+      animation: orbit 24s linear infinite;
+    }
+
+    .orbit::before {
+      content: "";
+      position: absolute;
+      inset: -16px;
+      border: 1px solid #0b875b17;
+      border-radius: 50%;
+    }
+
+    .glow {
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: radial-gradient(circle,#0b875b1b,transparent 70%);
+      animation: glow 4s ease-in-out infinite;
+    }
+
+    .art-shield {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      display: grid;
+      place-items: center;
+      border: 1px solid white;
+      border-radius: 28px;
+      background: linear-gradient(145deg,rgba(255,255,255,.97),rgba(233,246,236,.85));
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: inset 0 1px 0 #fff,0 18px 35px #244c3216;
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .art-shield::before {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      border: 1px solid #0b875b1a;
+      border-radius: 21px;
+    }
+
+    .art-shield svg {
+      width: 50px;
+      height: 50px;
+      color: var(--green);
+    }
+
+    .float-chip {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 11px 12px;
+      border: 1px solid white;
+      border-radius: 14px;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 8px 22px #203c2910;
+      animation: chip 5s ease-in-out infinite;
+    }
+
+    .float-chip svg {
+      width: 18px;
+      height: 18px;
+      color: var(--green);
+      flex-shrink: 0;
+    }
+
+    .float-chip strong {
+      font-size: 10px;
+      display: block;
+    }
+
+    .float-chip small {
+      font-size: 9px;
+      color: #8a958c;
+      display: block;
+      margin-top: 3px;
+    }
+
+    .chip-left { left: -5px; top: 20px; }
+    .chip-right { right: -5px; bottom: 12px; animation-delay: -2s; }
+
+    /* Right-side form scroll container */
+    .form-scroll {
+      height: 100%;
+      min-height: 0;
+      min-width: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: #b6cdbb transparent;
+      padding: 24px 5px 28px 0;
+      scroll-behavior: smooth;
+    }
+
+    .form-scroll::-webkit-scrollbar { width: 7px; }
+    .form-scroll::-webkit-scrollbar-track { background: transparent; }
+    .form-scroll::-webkit-scrollbar-thumb { background: #c4d7c8; border-radius: 20px; }
+    .form-scroll::-webkit-scrollbar-thumb:hover { background: #91b69a; }
+
+    .card {
+      position: relative;
+      width: 100%;
+      padding: 26px;
+      border: 1px solid rgba(255,255,255,.96);
+      border-radius: 25px;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      box-shadow: 0 18px 48px rgba(31,55,37,.075),inset 0 1px 0 white;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 26px;
+      right: 26px;
+      height: 3px;
+      border-radius: 0 0 8px 8px;
+      background: linear-gradient(90deg,#08794f,#b8dfc3,transparent);
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding-bottom: 18px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid #e9eee9;
+    }
+
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: #edf7ef;
+      border: 1px solid #dceee0;
+      color: var(--green);
+    }
+
+    .card-icon svg { width: 25px; height: 25px; }
+
+    .card-title h2 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -.4px;
+      font-weight: 800;
+    }
+
+    .card-title p {
+      margin: 5px 0 0;
+      font-size: 12px;
+      line-height: 1.55;
+      color: #879288;
+    }
+
+    .section-label {
+      margin: 20px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--green);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+    }
+
+    .section-number {
+      width: 29px;
+      height: 29px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid #d7e9db;
+      border-radius: 50%;
+      background: #edf7ef;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .field { margin-bottom: 15px; }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #5b6a5e;
+      letter-spacing: .2px;
+    }
+
+    .input {
+      display: block;
+      width: 100%;
+      height: 48px;
+      padding: 0 15px;
+      border: 1.5px solid #dfe8e0;
+      border-radius: 13px;
+      background: rgba(248,250,248,.96);
+      color: #233128;
+      font-size: 13.5px;
+      font-weight: 600;
+      outline: none;
+      transition: border-color .2s,box-shadow .2s,background .2s;
+    }
+
+    .input:focus {
+      border-color: #08794f;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(8, 121, 79, 0.12);
+    }
+
+    .input::placeholder { color: #a1ada3; font-weight: 500; }
+
+    .input.invalid {
+      border-color: #c94a54;
+      box-shadow: 0 0 0 2px #c94a5410;
+    }
+
+    .otp-input {
+      text-align: center;
+      letter-spacing: .55em;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .field-help {
+      margin: 7px 0 0;
+      color: #829084;
+      font-size: 11.5px;
+      line-height: 1.55;
+    }
+
+    .otp-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .otp-timer {
+      color: #718075;
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+
+    .otp-timer strong {
+      color: var(--green);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .otp-timer svg {
+      width: 15px;
+      height: 15px;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    .text-btn {
+      border: 0;
+      padding: 4px 0;
+      background: transparent;
+      color: var(--green);
+      font-size: 11.5px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .text-btn:disabled {
+      color: #9aa79e;
+      cursor: not-allowed;
+    }
+
+    .password-wrap { position: relative; }
+    .password-wrap .input { padding-right: 46px; }
+
+    .toggle-password {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 45px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 0 13px 13px 0;
+      background: transparent;
+      color: #7b8a7f;
+      cursor: pointer;
+    }
+
+    .toggle-password svg { width: 18px; height: 18px; }
+    .toggle-password:hover { color: var(--green); }
+
+    .strength-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 10px 0 7px;
+      color: #89958b;
+      font-size: 11px;
+    }
+
+    .strength-heading strong { color: var(--green); }
+
+    .strength-bars { display: flex; gap: 6px; }
+    .strength-bar {
+      flex: 1;
+      height: 5px;
+      border-radius: 10px;
+      background: #e5ece7;
+      transition: background .25s ease;
+    }
+
+    .password-rules {
+      margin: 10px 0 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+      list-style: none;
+    }
+
+    .password-rules li {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      color: #89958b;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .password-rules li svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .password-rules li.met { color: var(--green); font-weight: 700; }
+
+    .match-message {
+      margin-top: 7px;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .primary-btn {
+      width: 100%;
+      min-height: 49px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 12px 15px;
+      border: 1px solid #08794f;
+      border-radius: 14px;
+      background: linear-gradient(110deg,#08794f,#11895d);
+      color: white;
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 9px 19px #08794f22;
+      transition: transform .2s,box-shadow .2s;
+    }
+
+    .primary-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 23px #08794f30;
+    }
+
+    .primary-btn:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .primary-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .secondary-btn {
+      width: 100%;
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 14px;
+      border: 1.5px solid #cde4d3;
+      border-radius: 13px;
+      background: #f2faf4;
+      color: #08794f;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .secondary-btn:hover:not(:disabled) {
+      background: #e3f5e8;
+      border-color: #08794f;
+    }
+
+    .status {
+      display: none;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 11px 13px;
+      margin-bottom: 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      line-height: 1.55;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .status.show,
+    .status:not(.hidden) { display: flex; }
+    .status.hidden { display: none !important; }
+
+    .status.error {
+      color: #a83248;
+      background: #fff2f3;
+      border: 1px solid #f7d8dd;
+    }
+
+    .status.success {
+      color: #087451;
+      background: #eff8f1;
+      border: 1px solid #d1ead7;
+    }
+
+    .status.info {
+      color: #315d75;
+      background: #eff7fb;
+      border: 1px solid #d6e9f1;
+    }
+
+    .limit-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px;
+      margin: 16px 0;
+      border: 1px solid #dcece0;
+      border-radius: 13px;
+      background: #f2f8f3;
+      color: #68766b;
+      font-size: 11.5px;
+      line-height: 1.6;
+    }
+
+    .limit-note svg {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      margin-top: 1px;
+      color: var(--green);
+    }
+
+    .limit-note strong { color: var(--green); }
+
+    .login-link {
+      padding: 6px 0 2px;
+      text-align: center;
+      font-size: 12px;
+      color: #849188;
+    }
+
+    .login-link a {
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .login-link a:hover { text-decoration: underline; }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0) rotateX(6deg) rotateY(-8deg); }
+      50% { transform: translateY(-7px) rotateX(9deg) rotateY(-3deg); }
+    }
+    @keyframes orbit {
+      from { transform: rotateX(63deg) rotateZ(-22deg); }
+      to { transform: rotateX(63deg) rotateZ(338deg); }
+    }
+    @keyframes chip {
+      0%,100% { translate: 0 0; }
+      50% { translate: 0 -4px; }
+    }
+    @keyframes glow {
+      0%,100% { opacity: .7; scale: .96; }
+      50% { opacity: 1; scale: 1.04; }
+    }
+
+    @media (min-width:801px) and (max-height:760px) {
+      .layout { gap: 38px; }
+      .intro { padding: 12px 0; }
+      .intro h1 { font-size: 34px; margin: 12px 0 9px; }
+      .intro p { font-size: 13px; line-height: 1.7; }
+      .art { width: 240px; height: 165px; margin-top: 10px; }
+      .art-shield { width: 90px; height: 90px; }
+      .art-shield svg { width: 40px; height: 40px; }
+      .orbit { width: 150px; height: 140px; }
+      .glow { width: 130px; height: 130px; }
+      .card { padding: 22px; }
+    }
+
+    /* Mobile Responsive Layout + Hide Top Back/Home Buttons on Mobile */
+    @media (max-width:800px) {
+      html { height: auto; min-height: 100%; }
+
+      body {
+        height: auto;
+        min-height: 100vh;
+        min-height: 100dvh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding-bottom: 74px;
+      }
+
+      /* Point 3: No top Back or Home buttons on mobile! */
+      .header-actions {
+        display: none !important;
+      }
+
+      main {
+        flex: 1 0 auto;
+        min-height: auto;
+        overflow: visible;
+      }
+
+      .header-inner {
+        width: calc(100% - 28px);
+        min-height: 60px;
+      }
+
+      .logo { width: 35px; height: 35px; }
+      .brand-name { font-size: 21px; }
+      .brand-sub { font-size: 8px; }
+
+      .layout {
+        height: auto;
+        width: min(500px, calc(100% - 28px));
+        padding: 0;
+        grid-template-columns: 1fr;
+        align-items: start;
+        gap: 16px;
+      }
+
+      .intro {
+        height: auto;
+        min-height: auto;
+        overflow: visible;
+        padding: 20px 0 0;
+        justify-content: flex-start;
+      }
+
+      .intro-content { max-width: 100%; }
+      .kicker { font-size: 10px; letter-spacing: 1.2px; }
+      .intro h1 { font-size: 28px; margin: 8px 0 7px; }
+      .intro p { font-size: 12.5px; line-height: 1.65; }
+      .art { display: none; }
+
+      .form-scroll {
+        height: auto;
+        min-height: auto;
+        overflow: visible;
+        padding: 0 0 24px;
+      }
+
+      .card { padding: 20px 18px; border-radius: 21px; }
+      .card-title { gap: 11px; padding-bottom: 14px; margin-bottom: 15px; }
+      .card-icon { width: 44px; height: 44px; border-radius: 13px; }
+      .card-title h2 { font-size: 18.5px; }
+      .card-title p { font-size: 11px; }
+      .input { height: 47px; font-size: 15px; }
+      .toggle-password { height: 47px; }
+      .primary-btn { min-height: 48px; font-size: 13px; }
+    }
+
+    /* Mobile Bottom App Navigation Bar (for gesture + bottom bar navigation on mobile) */
+    .mob-sec-bottom-bar {
+      display: none;
+    }
+    @media (max-width: 767px) {
+      .mob-sec-bottom-bar {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(16px);
+        border-top: 1px solid #e2e8f0;
+        height: 62px;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 8px;
+      }
+      .mob-sec-bottom-bar a,
+      .mob-sec-bottom-bar button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        font-size: 9px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #64748b;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+      }
+      .mob-sec-bottom-bar a.active,
+      .mob-sec-bottom-bar button.active {
+        color: #08794f;
+      }
+    }
+
+    /* Hide cookie preference popups on security pages */
+    .cookie-consent-banner,
+    #freshmart-cookie-banner {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topline"></div>
+
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="brand" aria-label="FreshMart Home">
+        <img src="images/logo.png" alt="FreshMart" class="logo" onerror="this.onerror=null;this.style.display='none'">
+        <div>
+          <div class="brand-name"><span>Fresh</span>Mart</div>
+          <span class="brand-sub">DAILY NEEDS STORE</span>
+        </div>
+      </a>
+
+      <div class="header-actions">
+        <button type="button" class="nav-btn" onclick="goBackSecurityPage('account-security.html')" aria-label="Back">
+          <i data-lucide="arrow-left"></i>
+          <span>Back</span>
+        </button>
+        <a class="nav-btn" href="index.html" aria-label="Home">
+          <i data-lucide="house"></i>
+          <span>Home</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="layout">
+
+      <!-- Fixed Left-Side Intro & 3D Illustration (Same as Forgot Password) -->
+      <section class="intro">
+        <div class="intro-content">
+          <div class="kicker">YOUR ACCOUNT, YOUR CONTROL</div>
+          <h1>
+            Change your<br>
+            <span>email address.</span>
+          </h1>
+          <p>
+            Securely update your FreshMart registered email address.
+            All fields are displayed together on one page so you can verify your OTP and save your new email smoothly.
+          </p>
+        </div>
+
+        <div class="art" aria-hidden="true">
+          <div class="glow"></div>
+          <div class="orbit"></div>
+          <div class="art-shield">
+            <i data-lucide="mail-check"></i>
+          </div>
+
+          <div class="float-chip chip-left">
+            <i data-lucide="shield-check"></i>
+            <div>
+              <strong>Email Verification</strong>
+              <small>EmailJS OTP protected</small>
+            </div>
+          </div>
+
+          <div class="float-chip chip-right">
+            <i data-lucide="lock-keyhole"></i>
+            <div>
+              <strong>Account Safety</strong>
+              <small>Instant profile sync</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scrollable Right-Side Form (All Fields Visible Together — No Hidden Steps!) -->
+      <div class="form-scroll" id="form-scroll">
+        <section class="card">
+
+          <div class="card-title">
+            <div class="card-icon">
+              <i data-lucide="mail-check"></i>
+            </div>
+            <div>
+              <h2>Change Email Address</h2>
+              <p>Complete all fields below to update your registered email</p>
+            </div>
+          </div>
+
+          <div id="ce-status-box" class="status hidden" role="status" aria-live="polite"></div>
+
+          <!-- SECTION 1: CURRENT REGISTERED EMAIL -->
+          <div id="ce-step-old">
+            <div class="section-label">
+              <span class="section-number">1</span>
+              <span>CURRENT REGISTERED EMAIL</span>
+            </div>
+
+            <div class="field">
+              <label for="ce-old-email">OLD / REGISTERED EMAIL ADDRESS</label>
+              <input
+                type="email"
+                id="ce-old-email"
+                class="input"
+                autocomplete="email"
+                placeholder="Enter your current registered email"
+                required
+              >
+              <p class="field-help">We will send a verification OTP to this email address via EmailJS.</p>
+            </div>
+
+            <button type="button" id="ce-send-otp-btn" onclick="window.FreshMartSecurity.sendChangeEmailOTP()" class="primary-btn">
+              <i data-lucide="mail"></i>
+              <span>Send Verification OTP</span>
+            </button>
+          </div>
+
+          <!-- SECTION 2: ENTER & VERIFY OTP (Visible Together!) -->
+          <div id="ce-step-otp">
+            <div class="section-label">
+              <span class="section-number">2</span>
+              <span>ENTER &amp; VERIFY OTP</span>
+            </div>
+
+            <div class="field">
+              <label for="ce-otp">VERIFICATION OTP CODE</label>
+              <input
+                type="text"
+                id="ce-otp"
+                class="input otp-input"
+                placeholder="0000"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                maxlength="6"
+                required
+              >
+              <div class="otp-row">
+                <span class="otp-timer">
+                  <i data-lucide="clock"></i>
+                  OTP Status: <strong id="ce-otp-timer">Ready</strong>
+                </span>
+              </div>
+            </div>
+
+            <button type="button" id="ce-verify-otp-btn" onclick="window.FreshMartSecurity.verifyChangeEmailOTP()" class="secondary-btn">
+              <i data-lucide="shield-check"></i>
+              <span>Verify OTP Code</span>
+            </button>
+            <p class="field-help" id="ce-verified-note">Verify the OTP sent to your email before saving your new email address.</p>
+          </div>
+
+          <!-- SECTION 3: NEW EMAIL & CONFIRMATION (Visible Together!) -->
+          <div id="ce-step-new">
+            <div class="section-label">
+              <span class="section-number">3</span>
+              <span>NEW EMAIL ADDRESS</span>
+            </div>
+
+            <div class="field">
+              <label for="ce-new-email">NEW EMAIL ADDRESS</label>
+              <input
+                type="email"
+                id="ce-new-email"
+                class="input"
+                autocomplete="email"
+                placeholder="Enter your new email address"
+                required
+              >
+            </div>
+
+            <div class="field">
+              <label for="ce-confirm-email">CONFIRM NEW EMAIL ADDRESS</label>
+              <input
+                type="email"
+                id="ce-confirm-email"
+                class="input"
+                autocomplete="email"
+                placeholder="Re-enter your new email address"
+                required
+              >
+            </div>
+
+            <button type="button" id="ce-save-btn" onclick="window.FreshMartSecurity.saveNewEmail()" class="primary-btn">
+              <i data-lucide="check-circle-2"></i>
+              <span>Verify &amp; Save New Email</span>
+            </button>
+          </div>
+
+          <div class="limit-note">
+            <i data-lucide="calendar-clock"></i>
+            <span>
+              <strong>Monthly change limit:</strong>
+              Your registered email address can be changed once every 30 days. All details must be accurate before saving.
+            </span>
+          </div>
+
+          <div class="login-link">
+            Need another security option?
+            <a href="account-security.html">Back to Account Security</a>
+          </div>
+
+        </section>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Bar & Gesture Support (No Top Back/Home Buttons on Mobile) -->
+  <nav class="mob-sec-bottom-bar" aria-label="Mobile Bottom Navigation">
+    <a href="index.html">
+      <i data-lucide="home" style="width:18px;height:18px;"></i>
+      <span>Home</span>
+    </a>
+    <a href="index.html#categories">
+      <i data-lucide="grid" style="width:18px;height:18px;"></i>
+      <span>Categories</span>
+    </a>
+    <a href="account-security.html" class="active">
+      <i data-lucide="shield-check" style="width:18px;height:18px;"></i>
+      <span>Security</span>
+    </a>
+    <button type="button" onclick="goBackSecurityPage('account-security.html')">
+      <i data-lucide="corner-up-left" style="width:18px;height:18px;"></i>
+      <span>Step Back</span>
+    </button>
+  </nav>
+
+  <script src="script.js"></script>
+  <script>
+    function goBackSecurityPage(fallbackUrl) {
+      if (window.history.length > 1 && document.referrer) {
+        window.history.back();
+      } else {
+        window.location.href = fallbackUrl || 'account-security.html';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const curr = JSON.parse(localStorage.getItem('freshmart_user') || localStorage.getItem('freshmart_profile') || 'null');
+      const oldEmailEl = document.getElementById('ce-old-email');
+      if (oldEmailEl && !oldEmailEl.value && curr && curr.email) {
+        oldEmailEl.value = curr.email;
+      }
+      if (window.lucide) window.lucide.createIcons();
+    });
+
+    // Mobile Right-Swipe Gesture Support (Swipe from left edge to go back)
+    (() => {
+      let sx = 0, sy = 0;
+      document.addEventListener('touchstart', e => {
+        sx = e.changedTouches[0].screenX;
+        sy = e.changedTouches[0].screenY;
+      }, { passive: true });
+      document.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].screenX - sx;
+        const dy = Math.abs(e.changedTouches[0].screenY - sy);
+        if (dx > 75 && dx > dy * 1.4) {
+          goBackSecurityPage('account-security.html');
+        }
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>

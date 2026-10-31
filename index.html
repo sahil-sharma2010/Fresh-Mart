@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FreshMart - Premium Daily Needs</title>
+    <!-- CSS & ICONS LOADED -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <script>
+        if (typeof tailwind !== 'undefined') {
+            if (window.tailwind) tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: {
+                                50: '#ecfdf5',
+                                100: '#d1fae5',
+                                500: '#10b981',
+                                600: '#059669',
+                                700: '#047857'
+                            }
+                        }
+                    }
+                }
+            };
+        }
+    </script>
+</head>
+<body id="app-body" class="bg-slate-50 text-gray-900 pb-safe relative overflow-x-hidden transition-colors duration-300">
+
+    <div id="toast-container" class="fixed top-5 left-1/2 -translate-x-1/2 z-[10200] flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- HEADER: Clean Mobile Header (No User/Cart Icons & No Express Delivery Badge on Mobile; Full Search + User + Cart on Laptop/PC) -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm transition-colors duration-300 header-dark">
+        <div class="max-w-[1400px] mx-auto px-4 h-15 py-2.5 md:py-0 md:h-[4.5rem] flex items-center justify-between gap-3">
+            <a href="#app-body" onclick="event.preventDefault(); closeAllFullPages(); window.scrollTo({top:0, behavior:'smooth'});" class="flex items-center gap-2.5 flex-shrink-0 btn-3d">
+                <img src="images/logo.png" alt="FreshMart Logo" class="h-9 md:h-10 w-9 md:w-10 object-contain rounded-full shadow-sm border border-gray-100" onerror="this.onerror=null; this.style.display='none'">
+                <div>
+                    <span class="text-xl md:text-2xl font-extrabold text-primary-600 tracking-tight block leading-none">Fresh<span class="text-gray-900 title-dark">Mart</span></span>
+                    <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block mt-0.5 subtitle-dark">Daily Needs Store</span>
+                </div>
+            </a>
+            
+            <!-- DESKTOP SEARCH WITH LIVE RESULTS DROPDOWN -->
+            <div class="hidden md:flex flex-1 max-w-2xl mx-8 relative">
+                <div class="w-full relative flex items-center">
+                    <div class="search-icon-badge absolute left-1.5 top-1/2 -translate-y-1/2 z-10">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                    </div>
+                    <input type="text" id="desktop-search" oninput="handleSearch(this.value)" onkeyup="handleSearch(this.value)" placeholder="Search groceries, snacks, beverages..." autocomplete="off" class="w-full bg-gray-50 rounded-full py-2.5 pl-11 pr-10 text-sm font-bold outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition border border-gray-200 shadow-inner input-dark">
+                    <button type="button" onclick="clearSearchInput()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden btn-3d bg-gray-200/70 rounded-full p-1.5" id="clear-search-btn" aria-label="Clear search">
+                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+                <!-- Live Search Dropdown Container -->
+                <div id="search-results-container" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden z-50 max-h-96 overflow-y-auto card-dark border-dark"></div>
+            </div>
+
+            <!-- DESKTOP / LAPTOP ONLY USER & CART BUTTONS (Hidden on Mobile per Point 9) -->
+            <div class="hidden md:flex items-center gap-3.5 flex-shrink-0">
+                <!-- User / Settings Button (Shows Unread Notification Count + Red Dot per Screenshot 5) -->
+                <button type="button" id="header-user-btn" onclick="openModal('settings-modal')" title="Account & Settings" class="btn-3d h-11 min-w-[2.75rem] px-3 rounded-full bg-gray-50 border border-gray-200 hover:bg-primary-50 hover:text-primary-600 flex items-center justify-center gap-1.5 text-gray-700 transition shadow-sm relative input-dark">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                    <span id="notif-count-badge-main" class="text-xs font-extrabold text-gray-800 title-dark hidden">3</span>
+                    <span id="settings-dot" class="absolute -top-0.5 -right-0.5 bg-red-500 h-3 w-3 rounded-full border-2 border-white shadow-sm hidden"></span>
+                </button>
+                
+                <!-- Cart Button (Opens Full Cart Page) -->
+                <button type="button" id="header-cart-btn" onclick="openModal('cart-drawer')" title="Open Cart" class="btn-3d relative h-11 px-5 rounded-full bg-primary-600 hover:bg-primary-700 text-white flex items-center gap-2 transition shadow-lg shadow-primary-500/30">
+                    <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                    <span id="header-cart-total" class="text-sm font-extrabold tracking-wide">₹0</span>
+                    <span id="header-cart-count" class="bg-white text-primary-700 text-[10px] font-black px-1.5 py-0.5 rounded-full hidden">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE SEARCH (Fitted Search Icon Badge in Light & Dark Mode) -->
+    <div class="md:hidden px-4 py-2.5 bg-white border-b border-gray-100 relative z-30 header-dark">
+        <div class="relative flex items-center w-full">
+            <div class="search-icon-badge absolute left-1.5 top-1/2 -translate-y-1/2 z-10">
+                <i data-lucide="search" class="w-3.5 h-3.5"></i>
+            </div>
+            <input type="text" id="mobile-search" oninput="handleSearch(this.value)" onkeyup="handleSearch(this.value)" placeholder="Search groceries, atta, snacks, drinks..." autocomplete="off" class="w-full bg-gray-50 border border-gray-200 rounded-full py-2.5 pl-10 pr-9 text-xs font-bold outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition shadow-inner input-dark">
+            <button type="button" onclick="clearSearchInput()" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden btn-3d bg-gray-200/70 rounded-full p-1" id="mobile-clear-search-btn" aria-label="Clear mobile search">
+                <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+        </div>
+        <div id="mobile-search-results-container" class="hidden absolute left-4 right-4 top-full mt-1.5 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden z-50 max-h-80 overflow-y-auto card-dark border-dark"></div>
+    </div>
+
+    <!-- HERO SECTION: Clean Left-Aligned Layout on Both Mobile & Laptop (No Categories Button Beside Shop Now & No 4 Cards Below) -->
+    <section class="max-w-[1400px] mx-auto px-4 pt-4 md:pt-6">
+        <div class="bg-gradient-to-br from-primary-50 via-emerald-50/60 to-white border border-primary-100/80 rounded-[1.75rem] md:rounded-[2.25rem] p-6 sm:p-8 md:p-11 shadow-sm hero-dark">
+            <div class="max-w-xl space-y-3 md:space-y-4 text-left flex flex-col items-start">
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-white text-primary-700 rounded-full text-[10px] md:text-xs font-extrabold border border-primary-200/70 shadow-sm uppercase tracking-wider card-dark">
+                    🛒 Your Everyday Premium Store
+                </span>
+                <h1 class="text-2xl sm:text-3xl md:text-5xl font-black text-gray-900 leading-[1.15] tracking-tight title-dark">
+                    Daily Needs.<br><span class="text-primary-600">Delivered to Your Door.</span>
+                </h1>
+                <p class="text-gray-600 text-xs sm:text-sm md:text-base max-w-lg font-medium leading-relaxed subtitle-dark">
+                    From fresh kitchen staples to snacks and daily essentials — everything your home needs is just a tap away with superfast doorstep delivery.
+                </p>
+                <div class="pt-1.5 flex justify-start">
+                    <button type="button" onclick="scrollToProducts()" class="btn-3d bg-primary-600 text-white px-7 md:px-8 py-3 md:py-3.5 rounded-full text-xs md:text-sm font-extrabold shadow-lg shadow-primary-500/35 hover:bg-primary-700 transition inline-flex items-center gap-2 tracking-wide">
+                        Shop Now <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN PRODUCT SECTION -->
+    <main id="products-section" class="max-w-[1400px] mx-auto px-4 py-6 md:py-8 flex flex-col gap-5">
+
+        <!-- FILTER & SORT HEADER BAR
+             - Laptop/PC: Shows 3D "All Products ▾" Dropdown on Left + Sort on Right
+             - Mobile: Sleek Single-Line Horizontal Bar with "Fresh Picks for You" on Left + Sort Pill on Right -->
+        <div class="flex items-center justify-between gap-2 bg-white py-2.5 px-3.5 md:p-3 md:px-4 rounded-2xl md:rounded-full border border-gray-200/80 shadow-sm relative z-30 card-dark border-dark">
+            
+            <!-- Mobile Section Heading (Sleek Single-Line on Mobile Only) -->
+            <div class="flex md:hidden items-center gap-2 min-w-0 flex-1">
+                <span class="w-7 h-7 rounded-xl bg-primary-50 text-primary-600 flex items-center justify-center text-xs flex-shrink-0 shadow-inner input-dark" id="mobile-grid-icon">✨</span>
+                <h2 class="text-[13px] sm:text-sm font-extrabold text-gray-900 truncate title-dark" id="mobile-grid-title">Fresh Picks for You</h2>
+                <button type="button" id="mobile-reset-filter-btn" onclick="filterByCategory('all')" class="hidden flex-shrink-0 text-[10px] font-extrabold bg-primary-50 text-primary-700 border border-primary-200 px-2 py-0.5 rounded-full">
+                    All ✕
+                </button>
+            </div>
+
+            <!-- Laptop / PC 3D "All Products ▾" Dropdown (Hidden on Mobile per Point 9) -->
+            <div id="categories" class="hidden"></div><div id="categories-section" class="hidden"></div><div id="deals" class="hidden"></div>
+            <div id="categories" class="hidden"></div><div id="categories-section" class="hidden"></div><div id="deals" class="hidden"></div>
+            <div id="categories" class="hidden"></div><div id="categories-section" class="hidden"></div><div id="deals" class="hidden"></div>
+            <div class="hidden md:block relative" id="all-products-dropdown-wrapper">
+                <button type="button" onclick="toggleCategoryDropdown(event)" class="btn-3d flex items-center gap-2.5 bg-primary-50/80 hover:bg-primary-100/80 border border-primary-200/80 px-4 py-2 rounded-full transition cursor-pointer card-dark border-dark">
+                    <span class="text-base" id="grid-title-icon">🛍️</span>
+                    <h2 class="text-sm md:text-base font-extrabold text-gray-900 title-dark" id="grid-title">All Products</h2>
+                    <span id="product-count-badge" class="text-[11px] font-extrabold bg-primary-600 text-white px-2.5 py-0.5 rounded-full shadow-sm">20 Items</span>
+                    <i data-lucide="chevron-down" id="category-dropdown-arrow" class="w-4 h-4 text-primary-700 transition-transform duration-300"></i>
+                </button>
+
+                <!-- 3D Animated Category Dropdown List (Laptop/PC) -->
+                <div id="desktop-category-dropdown" class="category-dropdown-menu absolute left-0 top-full mt-3 w-72 bg-white rounded-3xl shadow-2xl border border-gray-100 p-2.5 z-50 card-dark border-dark">
+                    <div class="px-3 py-2 text-[10px] font-extrabold text-gray-400 uppercase tracking-widest border-b border-gray-50 mb-1 border-dark">Browse Categories</div>
+                    <div id="dropdown-categories-list" class="space-y-1"></div>
+                </div>
+            </div>
+
+            <!-- Sort Dropdown (Compact & Crisp on Mobile & Desktop) -->
+            <div class="flex items-center flex-shrink-0">
+                <select id="sort-select" onchange="sortProducts(this.value)" class="premium-select bg-gray-50 border border-gray-200 rounded-xl md:rounded-full pl-3 pr-7 py-1.5 md:py-2 text-[11px] sm:text-xs md:text-sm font-extrabold text-gray-700 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition cursor-pointer shadow-inner input-dark">
+                    <option value="recommended">Recommended</option>
+                    <option value="priceLow">Price: Low to High</option>
+                    <option value="priceHigh">Price: High to Low</option>
+                    <option value="rating">Top Rated</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- PRODUCTS GRID -->
+        <div id="products-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3.5 md:gap-5"></div>
+    </main>
+
+    <!-- FOOTER (Redesigned Matching Photo 5: Brand Header + 2x2 Mobile / 4-Col Desktop Grid + Need Help Block, Without Social Icons or Payment Logos) -->
+    <!-- UPDATED FOOTER (EXACT 3 LINK SECTIONS WITH 4 LINKS EACH + SEPARATE NEED HELP SECTION WITH 4 CONTACT DETAILS) -->
+<footer class="bg-gradient-to-b from-white to-emerald-50/30 border-t border-gray-200/90 mt-8 pt-7 pb-5 px-4 overflow-x-hidden card-dark border-dark">
+    <div class="max-w-[1400px] mx-auto">
+        <!-- Top Brand Info -->
+        <div class="pb-6 mb-6 border-b border-gray-100 border-dark">
+            <div class="flex items-center gap-3 mb-2.5">
+                <img src="images/logo.png" alt="FreshMart" class="w-11 h-11 rounded-full object-contain border border-emerald-200 shadow-sm bg-white p-0.5" onerror="this.style.display='none'">
+                <div>
+                    <span class="text-xl md:text-2xl font-black text-primary-600 tracking-tight block leading-none">Fresh<span class="text-gray-900 title-dark">Mart</span></span>
+                    <span class="text-[9px] font-extrabold text-gray-400 uppercase tracking-[0.18em] block mt-1 subtitle-dark">Your Everyday Store</span>
+                </div>
+            </div>
+            <p class="text-xs sm:text-sm text-gray-500 font-medium leading-relaxed max-w-xl subtitle-dark">
+                Your trusted everyday store for fresh groceries, snacks, beverages, personal care, and household essentials.
+            </p>
+        </div>
+
+        <!-- Responsive Grid: Stacked neatly on Mobile (grid-cols-1), 2-col on Tablet (sm:grid-cols-2), 4-col on Desktop (lg:grid-cols-4) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+            
+            <!-- 1. QUICK LINKS — Exactly 4 Links -->
+            <div class="bg-white/90 rounded-2xl border border-gray-100 p-4 shadow-xs card-dark border-dark">
+                <div class="footer-section-badge">
+                    <i data-lucide="layout-grid" class="w-4 h-4 text-primary-600 flex-shrink-0"></i>
+                    <span>QUICK LINKS</span>
+                </div>
+                <ul class="space-y-1.5">
+                    <li>
+                        <a href="index.html" class="footer-nav-link">
+                            <span class="flex items-center gap-2.5"><i data-lucide="home" class="w-4 h-4 text-primary-600 flex-shrink-0"></i> <span>Home</span></span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#categories-section" onclick="openModal('category-full-modal'); return false;" class="footer-nav-link">
+                            <span class="flex items-center gap-2.5"><i data-lucide="grid" class="w-4 h-4 text-primary-600 flex-shrink-0"></i> <span>Categories</span></span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#products-section" onclick="scrollToProducts(); return false;" class="footer-nav-link">
+                            <span class="flex items-center gap-2.5"><i data-lucide="flame" class="w-4 h-4 text-primary-600 flex-shrink-0"></i> <span>Best Deals</span></span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="help-support.html" class="footer-nav-link">
+                            <span class="flex items-center gap-2.5"><i data-lucide="headphones" class="w-4 h-4 text-primary-600 flex-shrink-0"></i> <span>Help &amp; Support</span></span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 2. STORE POLICIES — Exactly 4 Links -->
+            <div class="bg-white/90 rounded-2xl border border-gray-100 p-4 shadow-xs card-dark border-dark">
+                <div class="footer-section-badge">
+                    <i data-lucide="file-text" class="w-4 h-4 text-primary-600 flex-shrink-0"></i>
+                    <span>STORE POLICIES</span>
+                </div>
+                <ul class="space-y-1.5">
+                    <li>
+                        <a href="delivery.html" class="footer-nav-link">
+                            <span class="flex items-center gap-2.5"><i data-lucide="truck" class="w-4 h-4 text-primary-600 flex-shrink-0"></i> <span>Delivery Policy</span></span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="refund.html" class="footer-nav-link">
+                            <span class="flex items-center gap-2.5"><i data-lucide="package-check" class="w-4 h-4 text-primary-600 flex-shrink-0"></i> <span>Return &amp; Refund Policy</span></span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="cancellation.html" class="footer-nav-link">
+                            <span class="flex items-center gap-2.5"><i data-lucide="rotate-ccw" class="w-4 h-4 text-primary-600 flex-shrink-0"></i> <span>Cancellation Policy</span></span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="privacy.html" class="footer-nav-link">
+                            <span class="flex items-center gap-2.5"><i data-lucide="shield-alert" class="w-4 h-4 text-primary-600 flex-shrink-0"></i> <span>Privacy Policy</span></span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 3. LEGAL & SECURITY — Exactly 4 Links -->
+            <div class="bg-white/90 rounded-2xl border border-gray-100 p-4 shadow-xs card-dark border-dark">
+                <div class="footer-section-badge">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-primary-600 flex-shrink-0"></i>
+                    <span>LEGAL &amp; SECURITY</span>
+                </div>
+                <ul class="space-y-1.5">
+                    <li>
+                        <a href="terms.html" class="footer-nav-link">
+                            <span class="flex items-center gap-2.5"><i data-lucide="file-check" class="w-4 h-4 text-primary-600 flex-shrink-0"></i> <span>Terms &amp; Conditions</span></span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="security-policy.html" class="footer-nav-link">
+                            <span class="flex items-center gap-2.5"><i data-lucide="lock" class="w-4 h-4 text-primary-600 flex-shrink-0"></i> <span>Security Policy</span></span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="legal.html" class="footer-nav-link">
+                            <span class="flex items-center gap-2.5"><i data-lucide="scale" class="w-4 h-4 text-primary-600 flex-shrink-0"></i> <span>Legal Notice</span></span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="cookie-policy.html" class="footer-nav-link">
+                            <span class="flex items-center gap-2.5"><i data-lucide="cookie" class="w-4 h-4 text-primary-600 flex-shrink-0"></i> <span>Cookie Policy</span></span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 4. NEED HELP? — Separate Contact Section (4 Contact Details) -->
+            <div class="bg-emerald-50/50 rounded-2xl border border-emerald-200/70 p-4 shadow-xs card-dark border-dark">
+                <div class="footer-section-badge !bg-white">
+                    <i data-lucide="headphones" class="w-4 h-4 text-primary-600 flex-shrink-0"></i>
+                    <span>NEED HELP?</span>
+                </div>
+                <div class="space-y-3 pt-0.5 text-xs">
+                    <a href="tel:+917988300872" class="flex items-start gap-2.5 font-extrabold text-gray-800 hover:text-primary-600 transition title-dark">
+                        <div class="w-7 h-7 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center flex-shrink-0 input-dark">
+                            <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Mobile</div>
+                            <div class="text-xs font-extrabold text-primary-600">+91 79883 00872</div>
+                        </div>
+                    </a>
+                    <a href="mailto:support@freshmart.com" class="flex items-start gap-2.5 font-bold text-gray-700 hover:text-primary-600 transition title-dark">
+                        <div class="w-7 h-7 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center flex-shrink-0 input-dark">
+                            <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Email</div>
+                            <div class="text-xs font-bold break-all">support@freshmart.com</div>
+                        </div>
+                    </a>
+                    <div class="flex items-start gap-2.5 text-gray-600 subtitle-dark">
+                        <div class="w-7 h-7 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center flex-shrink-0 input-dark">
+                            <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Working Hours</div>
+                            <div class="text-xs font-bold text-gray-700 title-dark">Mon–Sat, 9:00 AM–8:00 PM</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-2.5 text-gray-600 subtitle-dark">
+                        <div class="w-7 h-7 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center flex-shrink-0 input-dark">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Address</div>
+                            <div class="text-xs font-bold text-gray-700 title-dark">Hisar, Haryana, India</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Copyright Line -->
+        <div class="mt-5 pt-4 border-t border-gray-200/70 text-center text-[11px] font-bold text-gray-400 border-dark">
+            © 2026 FreshMart. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+
+    <!-- MOBILE FLOATING CART BAR (Shows Above Bottom Nav When Items Are in Cart) -->
+    <div id="mobile-floating-cart" onclick="openModal('cart-drawer')" class="md:hidden fixed bottom-[4.75rem] left-3 right-3 z-40 bg-primary-600 text-white p-3 px-4 rounded-2xl shadow-2xl shadow-primary-600/40 flex items-center justify-between cursor-pointer transition-all duration-300 hidden">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center font-black text-xs" id="mobile-float-qty">0</div>
+            <div>
+                <div class="text-[10px] font-extrabold uppercase tracking-wider opacity-90">Cart Total</div>
+                <div class="text-sm font-black leading-tight" id="mobile-float-total">₹0</div>
+            </div>
+        </div>
+        <div class="flex items-center gap-1.5 font-extrabold text-xs bg-white text-primary-700 px-3.5 py-2 rounded-xl shadow-sm">
+            View Cart <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </div>
+    </div>
+
+    <!-- MOBILE BOTTOM NAVIGATION (App-Style Bar) -->
+    <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200 z-[10050] flex justify-around items-center h-[4.25rem] shadow-[0_-10px_30px_rgba(0,0,0,0.06)] px-2 header-dark">
+        <button type="button" id="mob-nav-home" onclick="closeAllFullPages(); window.scrollTo({top:0, behavior:'smooth'});" class="flex flex-col items-center text-primary-600 pt-1">
+            <div id="mob-nav-home-circle" class="nav-circle-btn bg-primary-50 text-primary-600 shadow-inner w-9 h-9"><i data-lucide="home" class="w-4 h-4"></i></div>
+            <span class="text-[9px] font-extrabold mt-0.5 tracking-wider uppercase">Home</span>
+        </button>
+        <button type="button" id="mob-nav-category" onclick="openModal('category-full-modal')" class="flex flex-col items-center text-gray-500 hover:text-primary-600 transition pt-1">
+            <div id="mob-nav-category-circle" class="nav-circle-btn w-9 h-9"><i data-lucide="grid" class="w-4 h-4"></i></div>
+            <span class="text-[9px] font-extrabold mt-0.5 tracking-wider uppercase">Category</span>
+        </button>
+        <button type="button" id="mob-nav-cart" onclick="openModal('cart-drawer')" class="flex flex-col items-center text-gray-500 hover:text-primary-600 transition relative pt-1">
+            <div id="mob-nav-cart-circle" class="nav-circle-btn w-9 h-9"><i data-lucide="shopping-bag" class="w-4 h-4"></i></div>
+            <span id="nav-cart-badge" class="absolute top-1 right-1 bg-red-500 text-white text-[9px] font-bold h-4 min-w-[1rem] px-1 rounded-full hidden items-center justify-center border-2 border-white shadow-sm"></span>
+            <span class="text-[9px] font-extrabold mt-0.5 tracking-wider uppercase">Cart</span>
+        </button>
+        <button type="button" id="mob-nav-settings" onclick="openModal('settings-modal')" class="flex flex-col items-center text-gray-500 hover:text-primary-600 transition relative pt-1">
+            <div id="mob-nav-settings-circle" class="nav-circle-btn w-9 h-9"><i data-lucide="user" class="w-4 h-4"></i></div>
+            <span id="nav-settings-dot" class="absolute top-1.5 right-2 bg-red-500 h-2.5 w-2.5 rounded-full hidden border-2 border-white shadow-sm"></span>
+            <span class="text-[9px] font-extrabold mt-0.5 tracking-wider uppercase">Settings</span>
+        </button>
+    </nav>
+
+    <!-- PREMIUM GENERAL POPUP MODAL (OK Alerts) -->
+    <div id="premium-alert-popup" class="premium-popup-overlay fixed inset-0 bg-black/70 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="premium-popup-box bg-white rounded-[2rem] w-full max-w-sm p-6 shadow-2xl flex flex-col items-center text-center relative border border-gray-100 card-dark border-dark">
+            <div id="alert-icon-container" class="w-14 h-14 bg-green-50 text-green-500 rounded-full flex items-center justify-center mb-3.5 mt-1 shadow-inner">
+                <i data-lucide="check-circle" id="alert-icon" class="w-7 h-7"></i>
+            </div>
+            <h3 id="alert-title" class="text-lg font-extrabold text-gray-900 mb-1.5 tracking-tight title-dark">Success</h3>
+            <p id="alert-message" class="text-xs sm:text-sm text-gray-500 mb-5 font-bold px-2 subtitle-dark">Operation completed successfully.</p>
+            <div class="w-full">
+                <button type="button" onclick="closePremiumAlert()" class="btn-3d w-full bg-gray-900 text-white font-extrabold py-3 rounded-full hover:bg-black transition shadow-xl text-xs uppercase tracking-widest">OK</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ======================================================================
+         ALL FUNCTIONS OPEN AS FULL-SCREEN 3D ANIMATED PAGES (WITH 1-STEP BACK)
+         ====================================================================== -->
+
+    <!-- 1. PRODUCT DETAILS FULL SEPARATE PAGE VIEW (Compact & Fresh on Mobile per Point 11) -->
+    <div id="product-modal" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <!-- Dedicated Product Page Header -->
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[1200px] mx-auto px-4 h-14 md:h-16 flex items-center justify-between gap-3">
+                    <button type="button" onclick="goBackOneStep()" class="hidden md:inline-flex btn-3d items-center gap-1.5 px-3.5 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-extrabold transition input-dark title-dark">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <img src="images/logo.png" alt="FreshMart" class="w-6 h-6 md:w-7 md:h-7 rounded-full object-contain" onerror="this.style.display='none'">
+                        <span class="text-sm md:text-lg font-extrabold text-primary-600">Fresh<span class="text-gray-900 title-dark">Mart</span></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="openModal('cart-drawer')" class="btn-3d h-9 md:h-10 px-3.5 md:px-4 rounded-full bg-primary-600 hover:bg-primary-700 text-white flex items-center gap-1.5 text-xs font-extrabold shadow-md">
+                            <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+                            <span id="product-page-cart-total">₹0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Product Page Body -->
+            <div id="product-modal-content" class="flex-1 max-w-[1200px] w-full mx-auto px-3.5 sm:px-4 py-4 md:py-8 pb-28 md:pb-12">
+                <!-- Injected dynamically from JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. CART FULL SEPARATE PAGE VIEW -->
+    <div id="cart-drawer" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <!-- Dedicated Cart Page Header -->
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-200 shadow-sm header-dark">
+                <div class="max-w-[1200px] mx-auto px-4 h-14 md:h-[4.25rem] flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="goBackOneStep()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 items-center justify-center text-gray-700 transition input-dark" aria-label="Go back">
+                            <i data-lucide="arrow-left" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-base md:text-xl font-extrabold text-gray-900 flex items-center gap-2 title-dark">
+                                Your Shopping Cart
+                            </h2>
+                            <p class="text-[10px] md:text-[11px] font-bold text-gray-400 subtitle-dark">Fast doorstep delivery in minutes</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="clear-cart-btn" onclick="clearEntireCart()" class="btn-3d px-3.5 py-1.5 rounded-full bg-red-50 hover:bg-red-100 text-[11px] font-extrabold text-red-600 transition hidden">
+                            Clear Cart
+                        </button>
+                        <button type="button" onclick="closeAllFullPages()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 items-center justify-center text-gray-700 transition input-dark" title="Home">
+                            <i data-lucide="home" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cart Page Content -->
+            <div class="flex-1 max-w-[1200px] w-full mx-auto px-4 py-5 md:py-8 pb-28 md:pb-12 grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+                <div id="cart-items" class="lg:col-span-7 space-y-3.5"></div>
+
+                <div id="cart-footer" class="lg:col-span-5 bg-white p-5 md:p-7 rounded-[1.75rem] border border-gray-100 shadow-lg sticky top-20 card-dark border-dark">
+                    <h3 class="text-sm md:text-base font-extrabold text-gray-900 mb-3.5 pb-2.5 border-b border-gray-100 title-dark border-dark">Order Summary</h3>
+                    <div class="space-y-2.5 mb-5 text-xs md:text-sm text-gray-600 font-bold subtitle-dark">
+                        <div class="flex justify-between"><span>Items Subtotal</span><span id="cart-subtotal" class="font-extrabold text-gray-900 title-dark">₹0</span></div>
+                        <div class="flex justify-between"><span>Delivery Partner Fee</span><span class="font-extrabold text-gray-900 title-dark">₹20</span></div>
+                        <div class="flex justify-between"><span>Payment Mode</span><span id="cart-payment-mode" class="font-extrabold text-primary-600">Cash on Delivery</span></div>
+                        <div class="flex justify-between font-black text-lg md:text-2xl text-gray-900 pt-2.5 border-t border-gray-100 title-dark border-dark">
+                            <span>Total Payable</span>
+                            <span id="cart-total" class="tracking-tight text-primary-600">₹0</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 bg-slate-50 p-3.5 rounded-2xl border border-gray-200/80 text-xs shadow-sm hover:border-primary-300 transition input-dark">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="font-black text-gray-500 text-[10px] uppercase tracking-widest flex items-center gap-1.5 subtitle-dark">
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-primary-600"></i> Delivery Address
+                            </span>
+                            <button type="button" onclick="openModal('address-modal')" class="btn-3d text-primary-700 font-extrabold text-[10px] uppercase tracking-wider bg-primary-50 border border-primary-100 px-3 py-1 rounded-full hover:bg-primary-100 transition">Change</button>
+                        </div>
+                        <div id="selected-address-text" class="text-gray-900 text-xs font-bold leading-snug title-dark">No address selected</div>
+                    </div>
+
+                    <button type="button" onclick="checkoutWhatsApp()" class="btn-3d w-full bg-[#25D366] text-white py-3.5 rounded-2xl font-extrabold shadow-xl shadow-green-500/25 hover:bg-[#20bd5a] transition flex justify-center items-center gap-2 text-sm md:text-base tracking-wide">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i> Place Order on WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. SETTINGS FULL SEPARATE PAGE VIEW (Updated per Point 10:
+            - "Back to Store" removed; Mobile uses swipe gesture / bottom bar, Laptop has Home Icon button
+            - "Sahil Sharma" profile card made sleek, compact & well-proportioned
+            - "Switch Account" placed inside ACCOUNT SETTINGS section) -->
+    <div id="settings-modal" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <!-- Dedicated Settings Page Sticky Header -->
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[760px] mx-auto px-4 h-14 md:h-16 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-xl bg-primary-50 text-primary-600 flex items-center justify-center shadow-inner">
+                            <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+                        </div>
+                        <h2 class="text-base md:text-lg font-extrabold text-gray-900 title-dark">Account & Settings</h2>
+                    </div>
+                    <!-- Laptop/PC Home Icon Button (Replaces "Back to Store" per Point 10) -->
+                    <button type="button" onclick="closeAllFullPages()" title="Go to Home Page" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 items-center justify-center text-gray-700 transition shadow-sm input-dark">
+                        <i data-lucide="home" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Settings Page Container -->
+            <div class="flex-1 w-full max-w-[760px] mx-auto px-4 py-4 md:py-6 pb-28">
+                
+                <!-- COMPACT & REFINED PROFILE BANNER CARD (Point 10: Balanced Size for Sahil Sharma) -->
+                <div class="bg-gradient-to-r from-[#e6fcf5] via-[#ecfdf5] to-[#f0fdf4] border border-emerald-200/70 rounded-2xl p-3.5 md:p-4 flex items-center justify-between gap-3 shadow-sm card-dark border-dark">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div id="profile-initials" class="w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-[#c3fae8] text-[#087f5b] font-black text-sm md:text-base flex items-center justify-center shadow-sm flex-shrink-0 border border-white">
+                            SM
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h3 id="profile-name-display" class="text-sm md:text-base font-extrabold text-gray-900 truncate title-dark">Sahil Sharma</h3>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#d3f9d8]/90 border border-emerald-300/60 text-[#0ca678] text-[9px] font-extrabold">
+                                    <i data-lucide="shield-check" class="w-3 h-3"></i>
+                                    <span id="profile-verified-badge">Verified</span>
+                                </span>
+                            </div>
+                            <p id="profile-phone-display" class="text-[11px] md:text-xs font-bold text-gray-500 truncate mt-0.5 subtitle-dark">+91 79883 00872</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="openModal('edit-profile-modal')" class="btn-3d bg-white hover:bg-emerald-50 text-[#0ca678] border border-emerald-200 font-extrabold text-xs px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 flex-shrink-0 input-dark">
+                        <i data-lucide="pencil" class="w-3 h-3"></i> Edit
+                    </button>
+                </div>
+
+                <!-- 1. MY ORDERS & SHOPPING -->
+                <div class="settings-group-title">MY ORDERS & SHOPPING</div>
+                <div class="settings-card-group card-dark border-dark">
+                    <div class="settings-item card-dark border-dark" onclick="openModal('orders-modal')">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-blue-50 text-blue-500"><i data-lucide="package" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">My Orders</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">View, track and reorder past purchases</div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                    </div>
+
+                                        <a href="return-order.html" onclick="saveModalStackBeforeLeave()" class="settings-item card-dark border-dark !bg-emerald-50/70 !border-emerald-200/80">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-amber-100/80 text-amber-600"><i data-lucide="package-check" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">Return Order</div>
+                                <div class="text-[11px] font-medium text-gray-500 subtitle-dark">Report issue &amp; return order</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span id="return-order-status-pill" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 whitespace-nowrap">Report Issue</span>
+                            <i data-lucide="chevron-right" class="text-emerald-600 w-4 h-4"></i>
+                        </div>
+                    </a>
+
+                    <a href="return-order.html#my-complaints" onclick="saveModalStackBeforeLeave()" class="settings-item card-dark border-dark">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-sky-50 text-sky-600"><i data-lucide="clipboard-list" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">My Complaints Status</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">Track Received, Processing, Approved &amp; Rejected complaints</div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                    </a>
+
+                    <div class="settings-item card-dark border-dark" onclick="openModal('cart-drawer')">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-emerald-50 text-emerald-600"><i data-lucide="shopping-bag" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">My Cart</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">Items added to your shopping basket</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="settings-cart-count" class="bg-red-500 text-white text-[11px] font-extrabold min-w-[1.5rem] h-5 px-1.5 rounded-full flex items-center justify-center shadow-sm">0</span>
+                            <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                        </div>
+                    </div>
+
+                    <div class="settings-item card-dark border-dark" onclick="openModal('wishlist-modal')">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-red-50 text-red-500"><i data-lucide="heart" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">Wishlist</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">Your saved favorite products</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="settings-wishlist-count" class="bg-red-50 text-red-600 text-[11px] font-extrabold px-2 py-0.5 rounded-full hidden">0</span>
+                            <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. ACCOUNT SETTINGS (Includes Switch Account in its natural place per Point 10) -->
+                <div class="settings-group-title">ACCOUNT SETTINGS</div>
+                <div class="settings-card-group card-dark border-dark">
+                    <div class="settings-item card-dark border-dark" onclick="openModal('edit-profile-modal')">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-purple-50 text-purple-600"><i data-lucide="user" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">Edit Profile</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">Update your name, phone number and email</div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                    </div>
+
+                    <div class="settings-item card-dark border-dark" onclick="openModal('address-modal')">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-orange-50 text-orange-500"><i data-lucide="map-pin" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">My Addresses</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">Manage your doorstep delivery addresses</div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                    </div>
+
+                    <a href="return-order.html" onclick="saveModalStackBeforeLeave()" class="settings-item card-dark border-dark !bg-emerald-50/70 !border-emerald-200/80">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-amber-100/80 text-amber-600"><i data-lucide="rotate-ccw" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">Return Order &amp; Complaint</div>
+                                <div class="text-[11px] font-medium text-gray-500 subtitle-dark">Report issue &amp; return order (Track status in My Complaints)</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 whitespace-nowrap">Return</span>
+                            <i data-lucide="chevron-right" class="text-emerald-600 w-4 h-4"></i>
+                        </div>
+                    </a>
+
+                    <div class="settings-item card-dark border-dark" onclick="openModal('payment-methods-modal')">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-slate-100 text-slate-600"><i data-lucide="credit-card" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">Payment Methods</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">Manage your default payment option</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="settings-payment-badge" class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">COD</span>
+                            <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                        </div>
+                    </div>
+
+                    <!-- Switch Account Placed Here Inside Account Settings per Point 10 -->
+                    <div class="settings-item card-dark border-dark" onclick="openSwitchAccount(event)">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-teal-50 text-teal-600"><i data-lucide="repeat" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark" id="settings-auth-link">Switch Account</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">Sign in with another account or register new</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-extrabold text-teal-700 bg-teal-50 border border-teal-200/60 px-2.5 py-0.5 rounded-full">Switch</span>
+                            <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. PREFERENCES -->
+                <div class="settings-group-title">PREFERENCES</div>
+                <div class="settings-card-group card-dark border-dark">
+                    <div class="settings-item card-dark border-dark" onclick="openModal('language-modal')">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-blue-50 text-blue-600"><i data-lucide="languages" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">Language / भाषा</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">Choose your preferred store language</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-emerald-50 text-emerald-700 border border-emerald-200/60 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                                <span id="lang-status">English</span>
+                            </span>
+                            <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                        </div>
+                    </div>
+
+                    <div class="settings-item card-dark border-dark" onclick="openModal('notification-modal')">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-blue-50 text-blue-500"><i data-lucide="bell" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">Notifications</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">Order updates, offers and alerts</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="notif-count-badge" class="bg-emerald-50 text-emerald-700 border border-emerald-200/60 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full">3 New</span>
+                            <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                        </div>
+                    </div>
+
+                    <div class="settings-item card-dark border-dark" onclick="openModal('appearance-modal')">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-slate-100 text-slate-600"><i data-lucide="moon" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">Appearance</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">Choose theme (Light / Dark / System)</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-slate-100 text-slate-700 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full flex items-center gap-1 input-dark">
+                                <span id="theme-status">Light</span>
+                            </span>
+                            <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. SUPPORT & LEGAL -->
+                <div class="settings-group-title">SUPPORT &amp; LEGAL</div>
+                <div class="settings-card-group card-dark border-dark">
+                    <a href="help-support.html" onclick="saveModalStackBeforeLeave()" class="settings-item card-dark border-dark">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-emerald-50 text-emerald-600"><i data-lucide="headphones" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">Help &amp; Support</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">Get assistance with orders, delivery and refunds</div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                    </a>
+                    <a href="cookie-settings.html" onclick="saveModalStackBeforeLeave()" class="settings-item card-dark border-dark">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-amber-50 text-amber-600"><i data-lucide="sliders-horizontal" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">Cookie Settings</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">Manage essential, preference, analytics &amp; marketing cookies</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="cookie-status-pill" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 whitespace-nowrap inline-flex items-center justify-center leading-none">All Allowed</span>
+                            <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                        </div>
+                    </a>
+
+                    <div class="settings-item card-dark border-dark" onclick="openModal('security-settings-modal')">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-rose-50 text-rose-500"><i data-lucide="shield" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">Account Security</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">Password, login activity and security guidelines</div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                    </div>
+
+                    <div class="settings-item card-dark border-dark" onclick="openModal('legal-links-modal')">
+                        <div class="settings-icon-wrapper title-dark">
+                            <div class="settings-icon-circle bg-slate-100 text-slate-600"><i data-lucide="file-text" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-gray-900 title-dark">Legal & Terms</div>
+                                <div class="text-[11px] font-medium text-gray-400 subtitle-dark">Terms, Privacy, Refund, Delivery & Cancellation</div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-gray-300 w-4 h-4"></i>
+                    </div>
+                </div>
+
+                <!-- 5. DANGER ZONE -->
+                <div class="settings-group-title !text-red-500">DANGER ZONE</div>
+                <div class="rounded-2xl border border-red-100 bg-red-50/60 overflow-hidden shadow-sm card-dark border-dark">
+                    <div class="settings-item !bg-transparent hover:!bg-red-100/50" onclick="logoutUser()">
+                        <div class="settings-icon-wrapper">
+                            <div class="settings-icon-circle bg-red-100 text-red-500"><i data-lucide="log-out" class="w-4 h-4"></i></div>
+                            <div>
+                                <div class="text-xs md:text-sm font-extrabold text-red-600">Logout</div>
+                                <div class="text-[11px] font-medium text-red-400">Sign out from your current session</div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-red-400 w-4 h-4"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. CATEGORIES FULL SEPARATE PAGE VIEW (Clean & Premium on Mobile & Laptop) -->
+    <div id="category-full-modal" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[900px] mx-auto px-4 h-14 md:h-16 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="goBackOneStep()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 items-center justify-center text-gray-700 input-dark">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-base md:text-lg font-extrabold text-gray-900 title-dark">Shop by Category</h2>
+                            <p class="text-[10px] font-bold text-gray-400 subtitle-dark">Select any category to filter products</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeAllFullPages()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 items-center justify-center text-gray-700 input-dark" title="Home">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="desktop-sidebar-categories" class="hidden"></div>
+            <div class="flex-1 w-full max-w-[900px] mx-auto px-4 py-5 pb-28">
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 md:gap-5" id="fs-categories-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. EDIT PROFILE FULL SEPARATE PAGE VIEW -->
+    <div id="edit-profile-modal" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[640px] mx-auto px-4 h-14 md:h-16 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="goBackOneStep()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 items-center justify-center text-gray-700 input-dark">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        </button>
+                        <h2 class="text-base md:text-lg font-extrabold text-gray-900 title-dark">Edit Profile</h2>
+                    </div>
+                    <button type="button" onclick="closeAllFullPages()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 items-center justify-center text-gray-700 input-dark" title="Home">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 w-full max-w-[640px] mx-auto px-4 py-6 pb-28">
+                <div class="bg-white rounded-[1.75rem] border border-gray-100 shadow-sm p-5 md:p-7 space-y-4 card-dark border-dark">
+                    <div class="flex flex-col items-center mb-2">
+                        <div id="edit-initials" class="w-16 h-16 rounded-2xl bg-[#c3fae8] text-[#087f5b] font-black text-xl flex items-center justify-center shadow-sm mb-2">SM</div>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Personal Details</span>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-2">Full Name</label>
+                        <input type="text" id="prof-name" placeholder="e.g. Sahil Sharma" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none text-sm font-bold focus:border-primary-500 transition input-dark">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-2">10-Digit Mobile Number</label>
+                        <input type="tel" id="prof-phone" maxlength="10" placeholder="e.g. 7988300872" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none text-sm font-bold focus:border-primary-500 transition input-dark">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-2">Email Address</label>
+                        <input type="email" id="prof-email" placeholder="e.g. sahil@freshmart.com" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none text-sm font-bold focus:border-primary-500 transition input-dark">
+                    </div>
+                    <button type="button" onclick="saveProfile()" class="btn-3d w-full bg-primary-600 hover:bg-primary-700 text-white font-extrabold py-3.5 rounded-full shadow-lg mt-2 transition text-sm">
+                        Save Profile Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. PAYMENT METHODS FULL SEPARATE PAGE VIEW -->
+    <div id="payment-methods-modal" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[640px] mx-auto px-4 h-14 md:h-16 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="goBackOneStep()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 items-center justify-center text-gray-700 input-dark">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        </button>
+                        <h2 class="text-base md:text-lg font-extrabold text-gray-900 title-dark">Payment Methods</h2>
+                    </div>
+                    <button type="button" onclick="closeAllFullPages()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 items-center justify-center text-gray-700 input-dark" title="Home">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 w-full max-w-[640px] mx-auto px-4 py-6 pb-28 space-y-3">
+                <p class="text-[11px] font-extrabold text-gray-400 uppercase tracking-wider px-1">Select Default Checkout Method</p>
+                <label class="card-3d flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-200 cursor-pointer hover:border-primary-500 transition card-dark border-dark">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center"><i data-lucide="banknote" class="w-5 h-5"></i></div>
+                        <div>
+                            <div class="text-sm font-extrabold text-gray-900 title-dark">Cash on Delivery (COD)</div>
+                            <div class="text-xs text-gray-400 font-medium">Pay cash at your doorstep</div>
+                        </div>
+                    </div>
+                    <input type="radio" name="payment_method" value="Cash on Delivery" onchange="savePaymentMethod(this.value)" class="w-5 h-5 text-primary-600" checked>
+                </label>
+                <label class="card-3d flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-200 cursor-pointer hover:border-primary-500 transition card-dark border-dark">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center"><i data-lucide="smartphone" class="w-5 h-5"></i></div>
+                        <div>
+                            <div class="text-sm font-extrabold text-gray-900 title-dark">UPI / QR on Delivery</div>
+                            <div class="text-xs text-gray-400 font-medium">GPay, PhonePe, Paytm at doorstep</div>
+                        </div>
+                    </div>
+                    <input type="radio" name="payment_method" value="UPI on Delivery" onchange="savePaymentMethod(this.value)" class="w-5 h-5 text-primary-600">
+                </label>
+                <label class="card-3d flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-200 cursor-pointer hover:border-primary-500 transition card-dark border-dark">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center"><i data-lucide="credit-card" class="w-5 h-5"></i></div>
+                        <div>
+                            <div class="text-sm font-extrabold text-gray-900 title-dark">Card on Delivery</div>
+                            <div class="text-xs text-gray-400 font-medium">Swipe/Tap Debit or Credit Card</div>
+                        </div>
+                    </div>
+                    <input type="radio" name="payment_method" value="Card on Delivery" onchange="savePaymentMethod(this.value)" class="w-5 h-5 text-primary-600">
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. LANGUAGE / भाषा FULL SEPARATE PAGE VIEW -->
+    <div id="language-modal" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[640px] mx-auto px-4 h-14 md:h-16 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="goBackOneStep()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 items-center justify-center text-gray-700 input-dark">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        </button>
+                        <h2 class="text-base md:text-lg font-extrabold text-gray-900 title-dark">Language / भाषा</h2>
+                    </div>
+                    <button type="button" onclick="closeAllFullPages()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 items-center justify-center text-gray-700 input-dark" title="Home">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 w-full max-w-[640px] mx-auto px-4 py-6 pb-28 space-y-3">
+                <label class="card-3d flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-200 cursor-pointer hover:border-primary-500 transition card-dark border-dark">
+                    <div>
+                        <div class="text-sm font-extrabold text-gray-900 title-dark">English</div>
+                        <div class="text-xs text-gray-400 font-medium">Default store language</div>
+                    </div>
+                    <input type="radio" name="app_lang" value="English" onchange="updateLanguage(this.value)" class="w-5 h-5 text-primary-600" checked>
+                </label>
+                <label class="card-3d flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-200 cursor-pointer hover:border-primary-500 transition card-dark border-dark">
+                    <div>
+                        <div class="text-sm font-extrabold text-gray-900 title-dark">हिन्दी (Hindi)</div>
+                        <div class="text-xs text-gray-400 font-medium">दैनिक ज़रूरत का सामान</div>
+                    </div>
+                    <input type="radio" name="app_lang" value="हिन्दी" onchange="updateLanguage(this.value)" class="w-5 h-5 text-primary-600">
+                </label>
+                <label class="card-3d flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-200 cursor-pointer hover:border-primary-500 transition card-dark border-dark">
+                    <div>
+                        <div class="text-sm font-extrabold text-gray-900 title-dark">Hinglish</div>
+                        <div class="text-xs text-gray-400 font-medium">Daily shopping in Hinglish</div>
+                    </div>
+                    <input type="radio" name="app_lang" value="Hinglish" onchange="updateLanguage(this.value)" class="w-5 h-5 text-primary-600">
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. ACCOUNT SECURITY FULL SEPARATE PAGE VIEW (5 DEDICATED CARDS + MINIMAL FOOTER) -->
+    <div id="security-settings-modal" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[680px] mx-auto px-4 h-15 md:h-16 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5">
+                        <img src="images/logo.png" alt="FreshMart Logo" class="h-8 w-8 object-contain rounded-full shadow-sm border border-gray-100" onerror="this.onerror=null; this.style.display='none'">
+                        <div>
+                            <h2 class="text-sm md:text-base font-extrabold text-gray-900 leading-tight title-dark">Account Security</h2>
+                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block subtitle-dark">FreshMart Protection</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="goBackOneStep()" class="hidden md:inline-flex btn-3d px-3.5 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 items-center gap-1.5 text-xs font-extrabold text-gray-700 input-dark">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                            <span>Back</span>
+                        </button>
+                        <button type="button" onclick="closeAllFullPages()" class="hidden md:inline-flex btn-3d px-3.5 py-2 rounded-xl bg-gray-100 hover:bg-primary-50 hover:text-primary-600 items-center gap-1.5 text-xs font-extrabold text-gray-700 input-dark" title="Home">
+                            <i data-lucide="home" class="w-4 h-4"></i>
+                            <span>Home</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 w-full max-w-[680px] mx-auto px-4 py-6 space-y-4">
+                <!-- Header Summary Card -->
+                <div class="p-4 md:p-5 rounded-2xl bg-white border border-gray-200 shadow-sm flex items-start gap-3.5 card-dark border-dark">
+                    <div class="w-11 h-11 rounded-2xl bg-primary-50 border border-primary-100 text-primary-600 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm md:text-base font-extrabold text-gray-900 title-dark">Manage Your Account Security</div>
+                        <div class="text-xs font-medium text-gray-500 mt-0.5 leading-relaxed subtitle-dark">Select an option below to update your password, recover access, or change your registered email and mobile number.</div>
+                    </div>
+                </div>
+
+                <!-- 5 Dedicated Clickable Security Cards -->
+                <div class="space-y-3">
+                    <!-- 1. Change Password -->
+                    <a href="change-password.html" onclick="saveModalStackBeforeLeave()" class="security-option-card card-dark border-dark">
+                        <div class="flex items-center gap-3.5 text-left min-w-0">
+                            <div class="w-11 h-11 rounded-2xl bg-slate-100 text-primary-600 flex items-center justify-center flex-shrink-0 input-dark">
+                                <i data-lucide="key-round" class="w-5 h-5"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-sm md:text-[15px] font-extrabold text-gray-900 title-dark">Change Password</div>
+                                <div class="text-xs text-gray-500 font-medium truncate subtitle-dark">Verify old password and set a new password</div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                    </a>
+
+                    <!-- 2. Forgot Password -->
+                    <a href="forgot-password.html" onclick="saveModalStackBeforeLeave()" class="security-option-card card-dark border-dark">
+                        <div class="flex items-center gap-3.5 text-left min-w-0">
+                            <div class="w-11 h-11 rounded-2xl bg-slate-100 text-primary-600 flex items-center justify-center flex-shrink-0 input-dark">
+                                <i data-lucide="lock-keyhole" class="w-5 h-5"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-sm md:text-[15px] font-extrabold text-gray-900 title-dark">Forgot Password</div>
+                                <div class="text-xs text-gray-500 font-medium truncate subtitle-dark">Reset password via registered email OTP verification</div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                    </a>
+
+                    <!-- 3. Change Email Address -->
+                    <a href="change-email.html" onclick="saveModalStackBeforeLeave()" class="security-option-card card-dark border-dark">
+                        <div class="flex items-center gap-3.5 text-left min-w-0">
+                            <div class="w-11 h-11 rounded-2xl bg-slate-100 text-primary-600 flex items-center justify-center flex-shrink-0 input-dark">
+                                <i data-lucide="mail-check" class="w-5 h-5"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-sm md:text-[15px] font-extrabold text-gray-900 title-dark">Change Email Address</div>
+                                <div class="text-xs text-gray-500 font-medium truncate subtitle-dark">Verify registered email with OTP and save new email</div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                    </a>
+
+                    <!-- 4. Change Mobile Number -->
+                    <a href="change-mobile.html" onclick="saveModalStackBeforeLeave()" class="security-option-card card-dark border-dark">
+                        <div class="flex items-center gap-3.5 text-left min-w-0">
+                            <div class="w-11 h-11 rounded-2xl bg-slate-100 text-primary-600 flex items-center justify-center flex-shrink-0 input-dark">
+                                <i data-lucide="smartphone" class="w-5 h-5"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-sm md:text-[15px] font-extrabold text-gray-900 title-dark">Change Mobile Number</div>
+                                <div class="text-xs text-gray-500 font-medium truncate subtitle-dark">Verify via registered email OTP and update mobile number</div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                    </a>
+
+                    <!-- 5. Security Policy & Guidelines -->
+                    <a href="security-policy.html" onclick="saveModalStackBeforeLeave()" class="security-option-card card-dark border-dark">
+                        <div class="flex items-center gap-3.5 text-left min-w-0">
+                            <div class="w-11 h-11 rounded-2xl bg-slate-100 text-primary-600 flex items-center justify-center flex-shrink-0 input-dark">
+                                <i data-lucide="shield" class="w-5 h-5"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-sm md:text-[15px] font-extrabold text-gray-900 title-dark">Security Policy &amp; Guidelines</div>
+                                <div class="text-xs text-gray-500 font-medium truncate subtitle-dark">Password safety, OTP protection and account safety rules</div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Minimal Security Footer -->
+            <footer class="security-minimal-footer border-dark">
+                <div class="footer-brand title-dark">FreshMart Security</div>
+                <div class="footer-sub subtitle-dark">Your trust, privacy and account safety matter to us.</div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- 9. LEGAL & TERMS HUB FULL SEPARATE PAGE VIEW -->
+    <div id="legal-links-modal" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[640px] mx-auto px-4 h-14 md:h-16 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="goBackOneStep()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 items-center justify-center text-gray-700 input-dark">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        </button>
+                        <h2 class="text-base md:text-lg font-extrabold text-gray-900 title-dark">Legal & Store Policies</h2>
+                    </div>
+                    <button type="button" onclick="closeAllFullPages()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 items-center justify-center text-gray-700 input-dark" title="Home">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 w-full max-w-[700px] mx-auto px-4 py-6 pb-28 space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <a href="terms.html" onclick="saveModalStackBeforeLeave()" class="legal-card-3d card-dark border-dark">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="legal-icon-3d bg-emerald-50 text-emerald-600 input-dark"><i data-lucide="file-check" class="w-5 h-5"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-sm font-extrabold text-gray-900 truncate title-dark">Terms &amp; Conditions</div>
+                                <div class="text-[11px] font-semibold text-gray-400 truncate subtitle-dark">Store usage &amp; order agreement</div>
+                            </div>
+                        </div>
+                        <div class="legal-arrow-3d input-dark"><i data-lucide="chevron-right" class="w-4 h-4"></i></div>
+                    </a>
+
+                    <a href="privacy.html" onclick="saveModalStackBeforeLeave()" class="legal-card-3d card-dark border-dark">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="legal-icon-3d bg-teal-50 text-teal-600 input-dark"><i data-lucide="shield-alert" class="w-5 h-5"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-sm font-extrabold text-gray-900 truncate title-dark">Privacy Policy</div>
+                                <div class="text-[11px] font-semibold text-gray-400 truncate subtitle-dark">Data &amp; personal info safety</div>
+                            </div>
+                        </div>
+                        <div class="legal-arrow-3d input-dark"><i data-lucide="chevron-right" class="w-4 h-4"></i></div>
+                    </a>
+
+                    <a href="refund.html" onclick="saveModalStackBeforeLeave()" class="legal-card-3d card-dark border-dark">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="legal-icon-3d bg-blue-50 text-blue-600 input-dark"><i data-lucide="package-check" class="w-5 h-5"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-sm font-extrabold text-gray-900 truncate title-dark">Return &amp; Refund Policy</div>
+                                <div class="text-[11px] font-semibold text-gray-400 truncate subtitle-dark">Easy replacements &amp; refunds</div>
+                            </div>
+                        </div>
+                        <div class="legal-arrow-3d input-dark"><i data-lucide="chevron-right" class="w-4 h-4"></i></div>
+                    </a>
+
+                    <a href="delivery.html" onclick="saveModalStackBeforeLeave()" class="legal-card-3d card-dark border-dark">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="legal-icon-3d bg-amber-50 text-amber-600 input-dark"><i data-lucide="truck" class="w-5 h-5"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-sm font-extrabold text-gray-900 truncate title-dark">Delivery Policy</div>
+                                <div class="text-[11px] font-semibold text-gray-400 truncate subtitle-dark">Express doorstep shipping rules</div>
+                            </div>
+                        </div>
+                        <div class="legal-arrow-3d input-dark"><i data-lucide="chevron-right" class="w-4 h-4"></i></div>
+                    </a>
+
+                    <a href="cancellation.html" onclick="saveModalStackBeforeLeave()" class="legal-card-3d card-dark border-dark">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="legal-icon-3d bg-rose-50 text-rose-600 input-dark"><i data-lucide="rotate-ccw" class="w-5 h-5"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-sm font-extrabold text-gray-900 truncate title-dark">Cancellation Policy</div>
+                                <div class="text-[11px] font-semibold text-gray-400 truncate subtitle-dark">Order modification &amp; cancellation</div>
+                            </div>
+                        </div>
+                        <div class="legal-arrow-3d input-dark"><i data-lucide="chevron-right" class="w-4 h-4"></i></div>
+                    </a>
+
+                    <a href="security-policy.html" onclick="saveModalStackBeforeLeave()" class="legal-card-3d card-dark border-dark">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="legal-icon-3d bg-purple-50 text-purple-600 input-dark"><i data-lucide="lock" class="w-5 h-5"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-sm font-extrabold text-gray-900 truncate title-dark">Security Policy</div>
+                                <div class="text-[11px] font-semibold text-gray-400 truncate subtitle-dark">OTP, password &amp; payment protection</div>
+                            </div>
+                        </div>
+                        <div class="legal-arrow-3d input-dark"><i data-lucide="chevron-right" class="w-4 h-4"></i></div>
+                    </a>
+
+                    <a href="cookie-policy.html" onclick="saveModalStackBeforeLeave()" class="legal-card-3d card-dark border-dark">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="legal-icon-3d bg-orange-50 text-orange-600 input-dark"><i data-lucide="cookie" class="w-5 h-5"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-sm font-extrabold text-gray-900 truncate title-dark">Cookie Policy</div>
+                                <div class="text-[11px] font-semibold text-gray-400 truncate subtitle-dark">Consent &amp; preference information</div>
+                            </div>
+                        </div>
+                        <div class="legal-arrow-3d input-dark"><i data-lucide="chevron-right" class="w-4 h-4"></i></div>
+                    </a>
+
+                    <a href="about.html" onclick="saveModalStackBeforeLeave()" class="legal-card-3d card-dark border-dark">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="legal-icon-3d bg-emerald-50 text-emerald-600 input-dark"><i data-lucide="store" class="w-5 h-5"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-sm font-extrabold text-gray-900 truncate title-dark">About FreshMart</div>
+                                <div class="text-[11px] font-semibold text-gray-400 truncate subtitle-dark">Our story, mission &amp; values</div>
+                            </div>
+                        </div>
+                        <div class="legal-arrow-3d input-dark"><i data-lucide="chevron-right" class="w-4 h-4"></i></div>
+                    </a>
+
+                    <a href="help-support.html" onclick="saveModalStackBeforeLeave()" class="legal-card-3d card-dark border-dark">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="legal-icon-3d bg-cyan-50 text-cyan-600 input-dark"><i data-lucide="headphones" class="w-5 h-5"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-sm font-extrabold text-gray-900 truncate title-dark">Help &amp; Support</div>
+                                <div class="text-[11px] font-semibold text-gray-400 truncate subtitle-dark">Customer care &amp; FAQs</div>
+                            </div>
+                        </div>
+                        <div class="legal-arrow-3d input-dark"><i data-lucide="chevron-right" class="w-4 h-4"></i></div>
+                    </a>
+
+                    <a href="legal.html" onclick="saveModalStackBeforeLeave()" class="legal-card-3d card-dark border-dark">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="legal-icon-3d bg-indigo-50 text-indigo-600 input-dark"><i data-lucide="scale" class="w-5 h-5"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-sm font-extrabold text-gray-900 truncate title-dark">Legal Notice</div>
+                                <div class="text-[11px] font-semibold text-gray-400 truncate subtitle-dark">Compliance &amp; consumer rights</div>
+                            </div>
+                        </div>
+                        <div class="legal-arrow-3d input-dark"><i data-lucide="chevron-right" class="w-4 h-4"></i></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10. WISHLIST FULL SEPARATE PAGE VIEW -->
+    <div id="wishlist-modal" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[680px] mx-auto px-4 h-14 md:h-16 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="goBackOneStep()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 items-center justify-center text-gray-700 input-dark">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        </button>
+                        <h2 class="text-base md:text-lg font-extrabold text-gray-900 title-dark">My Wishlist</h2>
+                    </div>
+                    <button type="button" onclick="closeAllFullPages()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 items-center justify-center text-gray-700 input-dark" title="Home">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="wishlist-container" class="flex-1 w-full max-w-[680px] mx-auto px-4 py-6 pb-28 space-y-3.5"></div>
+        </div>
+    </div>
+
+    <!-- 11. ADDRESS FULL SEPARATE PAGE VIEW -->
+    <div id="address-modal" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[640px] mx-auto px-4 h-14 md:h-16 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="goBackOneStep()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 items-center justify-center text-gray-700 input-dark">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        </button>
+                        <h2 class="text-base md:text-lg font-extrabold text-gray-900 title-dark">Delivery Address</h2>
+                    </div>
+                    <button type="button" onclick="closeAllFullPages()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 items-center justify-center text-gray-700 input-dark" title="Home">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 w-full max-w-[640px] mx-auto px-4 py-6 pb-28">
+                <div class="bg-white p-5 md:p-7 rounded-[1.75rem] border border-gray-100 shadow-sm space-y-4 card-dark border-dark">
+                    <button type="button" onclick="autoFillLocation()" class="btn-3d w-full bg-blue-50 border border-blue-100 text-blue-600 font-extrabold py-3 rounded-full text-xs md:text-sm flex items-center justify-center gap-2">
+                        <i data-lucide="locate-fixed" class="w-4 h-4"></i> Use Current Location
+                    </button>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Save Address As</label>
+                        <div class="grid grid-cols-3 gap-2.5">
+                            <div>
+                                <input type="radio" name="addr_type" id="addr-type-home" value="Home" class="sr-only address-type-radio" checked>
+                                <label for="addr-type-home" class="block text-center py-2.5 px-3 rounded-full border border-gray-200 bg-white text-xs font-extrabold text-gray-600 cursor-pointer transition">🏠 Home</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="addr_type" id="addr-type-work" value="Work" class="sr-only address-type-radio">
+                                <label for="addr-type-work" class="block text-center py-2.5 px-3 rounded-full border border-gray-200 bg-white text-xs font-extrabold text-gray-600 cursor-pointer transition">🏢 Work</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="addr_type" id="addr-type-other" value="Other" class="sr-only address-type-radio">
+                                <label for="addr-type-other" class="block text-center py-2.5 px-3 rounded-full border border-gray-200 bg-white text-xs font-extrabold text-gray-600 cursor-pointer transition">📍 Other</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Full Name</label><input type="text" id="addr-name" placeholder="Receiver's Name" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none text-sm font-bold input-dark"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Phone (10 Digits)</label><input type="tel" id="addr-phone" maxlength="10" placeholder="10-digit mobile number" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none text-sm font-bold input-dark"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">House / Flat / Landmark</label><input type="text" id="addr-house" placeholder="House No, Street, Area" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none text-sm font-bold input-dark"></div>
+                    <div class="grid grid-cols-2 gap-3.5">
+                        <div><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">City</label><input type="text" id="addr-city" placeholder="City" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-bold input-dark"></div>
+                        <div><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Pincode</label><input type="number" id="addr-pin" placeholder="6-digit Pin" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-bold input-dark"></div>
+                    </div>
+                    <button type="button" onclick="saveAddress()" class="btn-3d w-full bg-primary-600 hover:bg-primary-700 text-white font-extrabold py-3.5 rounded-full shadow-lg mt-2 transition text-sm">Save Address</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 12. ORDERS FULL SEPARATE PAGE VIEW -->
+    <div id="orders-modal" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[680px] mx-auto px-4 h-14 md:h-16 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="goBackOneStep()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 items-center justify-center text-gray-700 input-dark">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        </button>
+                        <h2 class="text-base md:text-lg font-extrabold text-gray-900 title-dark">My Orders</h2>
+                    </div>
+                    <button type="button" onclick="closeAllFullPages()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 items-center justify-center text-gray-700 input-dark" title="Home">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 w-full max-w-[680px] mx-auto px-4 py-6 pb-28 space-y-4" id="orders-container"></div>
+        </div>
+    </div>
+
+    <!-- 13. NOTIFICATIONS FULL SEPARATE PAGE VIEW -->
+    <div id="notification-modal" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[680px] mx-auto px-4 h-14 md:h-16 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="goBackOneStep()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 items-center justify-center text-gray-700 input-dark">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        </button>
+                        <h2 class="text-base md:text-lg font-extrabold text-gray-900 title-dark">Notifications</h2>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="mark-all-notifs-read-btn" onclick="markAllNotificationsRead()" class="btn-3d px-3 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 text-[11px] font-extrabold transition">
+                            Mark all as read
+                        </button>
+                        <button type="button" onclick="closeAllFullPages()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 items-center justify-center text-gray-700 input-dark" title="Home">
+                            <i data-lucide="home" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-1 w-full max-w-[680px] mx-auto px-4 py-6 pb-28 space-y-3" id="notification-container"></div>
+        </div>
+    </div>
+
+    <!-- 14. APPEARANCE FULL SEPARATE PAGE VIEW -->
+    <div id="appearance-modal" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[640px] mx-auto px-4 h-14 md:h-16 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="goBackOneStep()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 items-center justify-center text-gray-700 input-dark">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        </button>
+                        <h2 class="text-base md:text-lg font-extrabold text-gray-900 title-dark">Appearance</h2>
+                    </div>
+                    <button type="button" onclick="closeAllFullPages()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 items-center justify-center text-gray-700 input-dark" title="Home">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 w-full max-w-[640px] mx-auto px-4 py-6 pb-28 space-y-3">
+                <div class="bg-white rounded-[1.5rem] border border-gray-100 p-2 shadow-sm card-dark border-dark space-y-1">
+                    <label class="flex items-center justify-between p-3.5 cursor-pointer hover:bg-gray-50 rounded-2xl transition">
+                        <div class="flex items-center gap-3 font-extrabold text-sm text-gray-900 title-dark"><div class="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center text-orange-500"><i data-lucide="sun" class="w-4 h-4"></i></div> Light Mode</div>
+                        <input type="radio" name="theme" id="theme-radio-light" value="Light" onchange="updateThemeText(this)" class="w-5 h-5 text-primary-600" checked>
+                    </label>
+                    <label class="flex items-center justify-between p-3.5 cursor-pointer hover:bg-gray-50 rounded-2xl transition">
+                        <div class="flex items-center gap-3 font-extrabold text-sm text-gray-900 title-dark"><div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600"><i data-lucide="moon" class="w-4 h-4"></i></div> Dark Mode</div>
+                        <input type="radio" name="theme" id="theme-radio-dark" value="Dark" onchange="updateThemeText(this)" class="w-5 h-5 text-primary-600">
+                    </label>
+                    <label class="flex items-center justify-between p-3.5 cursor-pointer hover:bg-gray-50 rounded-2xl transition">
+                        <div class="flex items-center gap-3 font-extrabold text-sm text-gray-900 title-dark"><div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600"><i data-lucide="monitor" class="w-4 h-4"></i></div> System Default</div>
+                        <input type="radio" name="theme" id="theme-radio-system" value="System" onchange="updateThemeText(this)" class="w-5 h-5 text-primary-600">
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 15. AUTH / SWITCH ACCOUNT FULL SEPARATE PAGE VIEW (Locked Until Login or 1-Tap Saved Account Selection — No Back Button) -->
+    <div id="auth-modal" class="full-screen-modal full-page-view bg-slate-50 overflow-y-auto">
+        <div class="flex flex-col min-h-screen w-full bg-slate-50 card-dark">
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[640px] mx-auto px-4 h-14 md:h-16 flex items-center justify-center">
+                    <div class="flex items-center gap-2.5">
+                        <img src="images/logo.png" alt="FreshMart" class="w-7 h-7 rounded-full object-contain" onerror="this.style.display='none'">
+                        <h2 class="text-base md:text-lg font-extrabold text-gray-900 title-dark">FreshMart Account Access</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-1 w-full max-w-[460px] mx-auto px-4 py-6 pb-16 flex flex-col justify-center">
+                <div class="bg-white p-5 sm:p-6 md:p-8 rounded-[2rem] shadow-lg border border-gray-100 relative card-dark border-dark">
+                    <div class="text-center mb-4">
+                        <h3 class="text-xl font-black text-gray-900 tracking-tight title-dark">Switch or Sign In</h3>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5 subtitle-dark">Select a saved account or sign in below to continue</p>
+                    </div>
+
+                    <!-- SAVED ACCOUNTS SECTION (1-Tap Instant Login for Existing Accounts) -->
+                    <div id="saved-accounts-section" class="mb-5">
+                        <div class="flex items-center justify-between mb-2 px-1">
+                            <span class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">Saved Accounts (Tap to Login)</span>
+                            <span class="text-[10px] font-bold text-primary-600">1-Tap Access</span>
+                        </div>
+                        <div id="saved-accounts-list" class="space-y-2"></div>
+                        <div class="relative flex py-3 items-center">
+                            <div class="flex-grow border-t border-gray-100 border-dark"></div>
+                            <span class="flex-shrink mx-3 text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">Or Use Another Account</span>
+                            <div class="flex-grow border-t border-gray-100 border-dark"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex p-1 bg-gray-100 rounded-full mb-5 relative shadow-inner input-dark">
+                        <div id="tab-indicator" class="absolute top-1 left-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-full shadow-sm transition-transform duration-300 card-dark"></div>
+                        <button type="button" onclick="switchAuthTab('login')" id="tab-login" class="flex-1 py-2 text-xs md:text-sm font-extrabold z-10 text-primary-600 transition-colors">Secure Login</button>
+                        <button type="button" onclick="switchAuthTab('signup')" id="tab-signup" class="flex-1 py-2 text-xs md:text-sm font-extrabold z-10 text-gray-500 transition-colors">Create Account</button>
+                    </div>
+
+                    <form id="form-login" class="space-y-4 transition-opacity duration-300 block" onsubmit="event.preventDefault(); handleLogin();">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-2">Email or Mobile</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i data-lucide="user" class="w-4 h-4 text-gray-400"></i></div>
+                                <input type="text" id="login-id" required class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-2xl py-3 pl-11 pr-4 text-sm font-bold outline-none focus:border-primary-500 focus:bg-white transition shadow-inner input-dark" placeholder="Email or 10-digit Mobile">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-2">Password</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i data-lucide="lock" class="w-4 h-4 text-gray-400"></i></div>
+                                <input type="password" id="login-pass" required class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-2xl py-3 pl-11 pr-11 text-sm font-bold outline-none focus:border-primary-500 focus:bg-white transition shadow-inner input-dark" placeholder="Enter Password">
+                                <button type="button" onclick="togglePassword('login-pass')" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-primary-600 focus:outline-none"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between px-1 pt-1">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="login-remember" class="w-3.5 h-3.5 text-primary-600 rounded focus:ring-primary-500 border-gray-300">
+                                <span class="text-xs font-bold text-gray-600 subtitle-dark">Remember Me</span>
+                            </label>
+                            <button type="button" onclick="handleForgotPassword()" class="text-xs font-extrabold text-primary-600 hover:underline">Forgot Password?</button>
+                        </div>
+                        <button type="submit" id="btn-login" class="btn-3d w-full bg-primary-600 text-white font-extrabold py-3.5 rounded-2xl shadow-lg shadow-primary-500/30 hover:bg-primary-700 transition tracking-wide text-sm mt-2 flex justify-center items-center gap-2">Login Now</button>
+                    </form>
+
+                    <form id="form-signup" class="space-y-3.5 transition-opacity duration-300 hidden" onsubmit="event.preventDefault();">
+                        <div id="signup-step-1">
+                            <div>
+                                <label class="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-2">Full Name</label>
+                                <input type="text" id="reg-name" required class="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 text-sm font-bold outline-none focus:border-primary-500 focus:bg-white transition shadow-inner input-dark" placeholder="e.g. Sahil Sharma">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 mt-3">
+                                <div>
+                                    <label class="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-2">Mobile</label>
+                                    <input type="tel" id="reg-mobile" required maxlength="10" pattern="[0-9]{10}" class="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 text-sm font-bold outline-none focus:border-primary-500 focus:bg-white transition shadow-inner input-dark" placeholder="10 Digits">
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-2">Email</label>
+                                    <input type="email" id="reg-email" oninput="checkEmailFormat()" required class="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 text-sm font-bold outline-none focus:border-primary-500 focus:bg-white transition shadow-inner input-dark" placeholder="mail@example.com">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="signup-action-section" class="mt-3 hidden transition-all">
+                            <button type="button" id="btn-init-register" onclick="initiateRegistration()" class="btn-3d w-full bg-gray-900 text-white font-extrabold py-3.5 rounded-2xl shadow-lg hover:bg-black transition tracking-wide text-sm flex justify-center items-center gap-2">Send OTP</button>
+                        </div>
+
+                        <div id="signup-otp-section" class="hidden mt-3 bg-gray-50 p-4 rounded-2xl border border-gray-100 shadow-inner input-dark">
+                            <div class="text-center mb-3">
+                                <p class="text-xs font-bold text-gray-600 subtitle-dark">Enter 6-digit verification OTP sent to your email</p>
+                            </div>
+                            <div>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" id="reg-otp" maxlength="6" oninput="autoVerifyOTP(this.value)" class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-lg font-black text-center tracking-[0.6em] outline-none focus:border-primary-500 transition shadow-sm input-dark" placeholder="------">
+                            </div>
+                            <div class="text-center mt-3">
+                                <button type="button" onclick="cancelRegistration()" class="text-[10px] font-extrabold text-red-500 hover:underline uppercase tracking-widest">Cancel / Edit Email</button>
+                            </div>
+                        </div>
+
+                        <div id="signup-final-section" class="hidden mt-3 space-y-3">
+                            <div class="bg-green-50 text-green-700 text-xs font-bold p-3 rounded-xl mb-2 text-center border border-green-200 flex items-center justify-center gap-2">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> OTP Verified
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="relative">
+                                    <label class="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-2">Password</label>
+                                    <input type="password" id="reg-pass" required minlength="8" class="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 pr-9 text-sm font-bold outline-none focus:border-primary-500 focus:bg-white transition shadow-inner input-dark" placeholder="Min 8 chars">
+                                    <button type="button" onclick="togglePassword('reg-pass')" class="absolute bottom-2.5 right-3 text-gray-400 hover:text-primary-600"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                </div>
+                                <div class="relative">
+                                    <label class="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-2">Confirm</label>
+                                    <input type="password" id="reg-pass-confirm" required minlength="8" class="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 pr-9 text-sm font-bold outline-none focus:border-primary-500 focus:bg-white transition shadow-inner input-dark" placeholder="Confirm">
+                                </div>
+                            </div>
+                            <label class="flex items-start gap-2 p-1.5 mt-2">
+                                <input type="checkbox" id="reg-terms" required class="w-3.5 h-3.5 text-primary-600 rounded focus:ring-primary-500 mt-0.5 border-gray-300">
+                                <span class="text-[10px] font-bold text-gray-500 leading-tight subtitle-dark">I agree to the <a href="terms.html" class="text-primary-600 underline">Terms &amp; Conditions</a> and <a href="privacy.html" class="text-primary-600 underline">Privacy Policy</a>.</span>
+                            </label>
+                            <button type="button" id="btn-final-register" onclick="handleRegisterFinal()" class="btn-3d w-full bg-primary-600 text-white font-extrabold py-3.5 rounded-2xl shadow-lg shadow-primary-500/30 hover:bg-primary-700 transition tracking-wide text-sm flex justify-center items-center gap-2">Create Account</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 16. IN-APP TERMS & POLICY PAGES VIEWER (ONLY Page with Watermark Background `policy-watermark-page` & NO "Official Watermark Active" line!) -->
+    <div id="policy-viewer-modal" class="full-screen-modal full-page-view policy-watermark-page overflow-y-auto swipeable">
+        <div class="flex flex-col min-h-screen w-full">
+            <!-- Clean Header (Fix 4: "Official FreshMart Documentation • Watermark Active (6.5%)" Completely Deleted) -->
+            <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm header-dark">
+                <div class="max-w-[820px] mx-auto px-4 h-14 md:h-16 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="goBackOneStep()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 items-center justify-center text-gray-700 input-dark" aria-label="Go back">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        </button>
+                        <h2 id="policy-viewer-header-title" class="text-base md:text-lg font-extrabold text-gray-900 title-dark">Delivery Policy</h2>
+                    </div>
+                    <button type="button" onclick="closeAllFullPages()" class="hidden md:flex btn-3d w-10 h-10 rounded-full bg-gray-100 hover:bg-primary-50 hover:text-primary-600 items-center justify-center text-gray-700 input-dark" title="Home">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Policy Viewer Body -->
+            <div id="policy-viewer-body" class="flex-1 w-full max-w-[820px] mx-auto px-4 py-6 pb-28"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

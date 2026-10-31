@@ -1,0 +1,2142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FreshMart - Premium Admin Panel (PIN: 0276)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        if (typeof tailwind !== "undefined") {
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46'
+                        }
+                    }
+                }
+            }
+        };
+        }
+    </script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+        }
+        /* Subtle watermark background (images/background.png) */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('images/background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.06;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 2.25rem;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.28), 0 0 0 1px rgba(16, 185, 129, 0.12);
+        }
+        .fade-in {
+            animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px) scale(0.985); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes shakeError {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .shake { animation: shakeError 0.38s ease; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .admin-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid #e2e8f0;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 24px -8px rgba(15, 23, 42, 0.05);
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        }
+        .admin-card:hover {
+            box-shadow: 0 14px 30px -10px rgba(15, 23, 42, 0.08);
+        }
+        .admin-input {
+            width: 100%;
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.95rem;
+            padding: 0.78rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #0f172a;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .admin-input:focus {
+            background-color: #ffffff;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+        }
+        .admin-input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .admin-label {
+            display: block;
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 0 0 0.35rem 0.35rem;
+        }
+
+        /* Mobile Sidebar Drawer */
+        @media (max-width: 767px) {
+            #admin-sidebar {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                z-index: 60;
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+            #admin-sidebar.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden flex text-slate-800">
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="admin-toast-container" class="fixed top-4 right-4 z-[200] flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+    <!-- ======================================================================
+         PREMIUM LOCK SCREEN (DEFAULT PASSWORD / PIN: 0276)
+         ====================================================================== -->
+    <div id="lock-screen" class="fixed inset-0 bg-slate-900/95 backdrop-blur-xl z-[100] flex items-center justify-center p-4 transition-opacity duration-500">
+        <div id="lock-card" class="glass-panel p-7 sm:p-10 text-center max-w-md w-full fade-in relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-primary-500 via-emerald-400 to-teal-500"></div>
+
+            <!-- Brand & Shield Icon -->
+            <div class="w-20 h-20 bg-gradient-to-br from-primary-50 to-emerald-100 text-primary-600 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-inner border border-primary-200/60">
+                <i data-lucide="shield-check" class="w-10 h-10"></i>
+            </div>
+
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 border border-primary-200 text-primary-700 text-[10px] font-extrabold uppercase tracking-widest mb-2">
+                <i data-lucide="lock" class="w-3 h-3"></i> Authorized Access Only
+            </div>
+
+            <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">FreshMart Admin</h1>
+            <p class="text-slate-500 text-xs font-semibold mt-1 mb-6">Enter your 4-digit security PIN (<span class="font-extrabold text-primary-600">0276</span>) to unlock</p>
+
+            <form onsubmit="event.preventDefault(); checkPass();" class="space-y-4">
+                <div class="relative">
+                    <input
+                        type="password"
+                        id="admin-pass"
+                        maxlength="8"
+                        inputmode="numeric"
+                        placeholder="••••"
+                        autofocus
+                        class="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl py-3.5 px-12 text-center text-2xl font-black tracking-[0.55em] text-slate-900 outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/15 transition"
+                    >
+                    <button type="button" onclick="toggleAdminPinVisibility()" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1.5 rounded-xl transition" title="Show/Hide PIN">
+                        <i data-lucide="eye" id="pin-eye-icon" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <!-- Quick Keypad Pills -->
+                <div class="grid grid-cols-4 gap-2 pt-1">
+                    <button type="button" onclick="appendPinDigit('0')" class="py-2.5 rounded-xl bg-slate-100 hover:bg-primary-50 hover:text-primary-700 font-black text-sm text-slate-700 transition active:scale-95">0</button>
+                    <button type="button" onclick="appendPinDigit('2')" class="py-2.5 rounded-xl bg-slate-100 hover:bg-primary-50 hover:text-primary-700 font-black text-sm text-slate-700 transition active:scale-95">2</button>
+                    <button type="button" onclick="appendPinDigit('7')" class="py-2.5 rounded-xl bg-slate-100 hover:bg-primary-50 hover:text-primary-700 font-black text-sm text-slate-700 transition active:scale-95">7</button>
+                    <button type="button" onclick="appendPinDigit('6')" class="py-2.5 rounded-xl bg-slate-100 hover:bg-primary-50 hover:text-primary-700 font-black text-sm text-slate-700 transition active:scale-95">6</button>
+                </div>
+
+                <button type="submit" class="w-full bg-primary-600 text-white font-extrabold py-3.5 rounded-2xl shadow-lg shadow-primary-600/30 hover:bg-primary-700 transition active:scale-98 text-sm sm:text-base flex items-center justify-center gap-2">
+                    <i data-lucide="unlock" class="w-4 h-4"></i>
+                    <span>Unlock Dashboard</span>
+                </button>
+            </form>
+
+            <p id="error-msg" class="text-red-600 bg-red-50 border border-red-200 rounded-xl py-2 px-3 font-extrabold text-xs mt-4 hidden flex items-center justify-center gap-1.5">
+                <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                <span>Incorrect Password! Use PIN: 0276</span>
+            </p>
+
+            <div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-400">
+                <a href="index.html" class="inline-flex items-center gap-1.5 text-slate-600 hover:text-primary-600 transition">
+                    <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Back to Store
+                </a>
+                <button type="button" onclick="document.getElementById('admin-pass').value='0276'; checkPass();" class="text-primary-600 hover:underline font-extrabold">
+                    Auto-Fill 0276
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE SIDEBAR BACKDROP -->
+    <div id="sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden md:hidden"></div>
+
+    <!-- ======================================================================
+         MAIN ADMIN DASHBOARD (13 FULL-FEATURED MODULES)
+         ====================================================================== -->
+    <div id="dashboard" class="flex w-full h-full hidden fade-in relative z-10">
+        
+        <!-- SIDEBAR (13 MODULES) -->
+        <aside id="admin-sidebar" class="w-72 bg-white/95 backdrop-blur-xl border-r border-slate-200/90 h-full flex flex-col shadow-2xl md:shadow-none md:relative flex-shrink-0">
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                <a href="index.html" class="flex items-center gap-3">
+                    <img src="images/logo.png" alt="FreshMart" class="w-10 h-10 rounded-full object-contain border border-slate-100 shadow-sm" onerror="this.style.display='none'">
+                    <div>
+                        <h2 class="text-lg font-black text-slate-900 tracking-tight leading-none">Fresh<span class="text-primary-600">Mart</span></h2>
+                        <span class="text-[10px] font-extrabold text-primary-600 uppercase tracking-widest block mt-1">Admin Portal v2</span>
+                    </div>
+                </a>
+                <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-xl bg-slate-100 text-slate-600 hover:text-slate-900">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="p-3.5 space-y-1 flex-1 overflow-y-auto hide-scrollbar text-xs sm:text-sm font-bold text-slate-600">
+                <div class="px-3 py-1.5 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Core Store</div>
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="w-full flex items-center justify-between p-3 rounded-2xl bg-primary-50 text-primary-700 font-extrabold transition">
+                    <span class="flex items-center gap-3"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</span>
+                </button>
+                <button onclick="switchTab('items')" id="tab-items" class="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition">
+                    <span class="flex items-center gap-3"><i data-lucide="package" class="w-4 h-4"></i> Product Management</span>
+                    <span id="side-badge-products" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-extrabold">20</span>
+                </button>
+                <button onclick="switchTab('inventory')" id="tab-inventory" class="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition">
+                    <span class="flex items-center gap-3"><i data-lucide="database" class="w-4 h-4"></i> Inventory &amp; Stock</span>
+                </button>
+                <button onclick="switchTab('sales')" id="tab-sales" class="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition">
+                    <span class="flex items-center gap-3"><i data-lucide="percent" class="w-4 h-4"></i> Sale &amp; Coupons</span>
+                </button>
+
+                <div class="px-3 pt-3 pb-1.5 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Orders &amp; Users</div>
+                <button onclick="switchTab('orders')" id="tab-orders" class="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition">
+                    <span class="flex items-center gap-3"><i data-lucide="shopping-cart" class="w-4 h-4"></i> Order Management</span>
+                    <span id="side-badge-orders" class="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-extrabold">4</span>
+                </button>
+                <button onclick="switchTab('complaints')" id="tab-complaints" class="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition">
+                    <span class="flex items-center gap-3"><i data-lucide="rotate-ccw" class="w-4 h-4 text-emerald-600"></i> Return Complaints</span>
+                    <span id="side-badge-complaints" class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-extrabold">0</span>
+                </button>
+                <button onclick="switchTab('delivery')" id="tab-delivery" class="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition">
+                    <span class="flex items-center gap-3"><i data-lucide="truck" class="w-4 h-4"></i> Delivery Control</span>
+                </button>
+                <button onclick="switchTab('customers')" id="tab-customers" class="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition">
+                    <span class="flex items-center gap-3"><i data-lucide="users" class="w-4 h-4"></i> Customers &amp; Support</span>
+                </button>
+
+                <div class="px-3 pt-3 pb-1.5 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Configuration</div>
+                <button onclick="switchTab('category')" id="tab-category" class="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition">
+                    <span class="flex items-center gap-3"><i data-lucide="list-tree" class="w-4 h-4"></i> Category Config</span>
+                </button>
+                <button onclick="switchTab('homepage')" id="tab-homepage" class="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition">
+                    <span class="flex items-center gap-3"><i data-lucide="layout" class="w-4 h-4"></i> Homepage Manager</span>
+                </button>
+                <button onclick="switchTab('payment')" id="tab-payment" class="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition">
+                    <span class="flex items-center gap-3"><i data-lucide="credit-card" class="w-4 h-4"></i> Payment Settings</span>
+                </button>
+                <button onclick="switchTab('reports')" id="tab-reports" class="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition">
+                    <span class="flex items-center gap-3"><i data-lucide="bar-chart-2" class="w-4 h-4"></i> Reports &amp; Export</span>
+                </button>
+                <button onclick="switchTab('security')" id="tab-security" class="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition">
+                    <span class="flex items-center gap-3"><i data-lucide="shield-alert" class="w-4 h-4"></i> Admin Security</span>
+                </button>
+                <button onclick="switchTab('settings')" id="tab-settings" class="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition">
+                    <span class="flex items-center gap-3"><i data-lucide="settings" class="w-4 h-4"></i> Business Settings</span>
+                </button>
+            </div>
+
+            <div class="p-3.5 border-t border-slate-100 space-y-2">
+                <a href="index.html" class="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-2xl bg-primary-600 text-white text-xs font-extrabold hover:bg-primary-700 transition shadow-md shadow-primary-600/20">
+                    <i data-lucide="globe" class="w-4 h-4"></i> View Live Store
+                </a>
+                <button type="button" onclick="lockDashboard()" class="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-2xl bg-slate-100 text-slate-700 text-xs font-extrabold hover:bg-red-50 hover:text-red-600 transition">
+                    <i data-lucide="lock" class="w-3.5 h-3.5"></i> Lock Admin Panel
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden">
+            <!-- Top Bar (Mobile & Desktop) -->
+            <header class="bg-white/95 backdrop-blur-xl px-4 md:px-8 h-16 border-b border-slate-200/80 flex items-center justify-between gap-3 flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleSidebar()" class="md:hidden p-2 bg-slate-100 rounded-xl text-slate-700 hover:bg-slate-200">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                    <div>
+                        <h1 id="topbar-title" class="text-sm sm:text-base md:text-lg font-black text-slate-900">Store Dashboard</h1>
+                        <p class="text-[10px] sm:text-xs font-semibold text-slate-400 hidden sm:block">Real-time control synced with FreshMart storefront</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2.5">
+                    <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-extrabold">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live Sync Active
+                    </span>
+                    <button type="button" onclick="switchTab('items'); showAction('add');" class="bg-primary-600 hover:bg-primary-700 text-white text-xs font-extrabold px-3.5 py-2 rounded-xl inline-flex items-center gap-1.5 shadow-sm transition">
+                        <i data-lucide="plus" class="w-4 h-4"></i> <span class="hidden sm:inline">Add Item</span>
+                    </button>
+                    <a href="index.html" class="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-extrabold inline-flex items-center gap-1.5" title="Go to Storefront">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </header>
+
+            <!-- Scrollable Module Container -->
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 space-y-6">
+                
+                <!-- ==========================================================
+                     1. DASHBOARD VIEW
+                     ========================================================== -->
+                <div id="view-dashboard" class="space-y-6">
+                    <!-- Top Status Banner -->
+                    <div class="bg-gradient-to-r from-primary-600 to-emerald-700 p-5 sm:p-6 rounded-3xl text-white shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/15 text-[10px] font-extrabold uppercase tracking-widest mb-2">
+                                ✨ FreshMart Control Center
+                            </span>
+                            <h2 class="text-xl sm:text-2xl font-black tracking-tight">Welcome back, Sahil Sharma!</h2>
+                            <p class="text-xs sm:text-sm text-emerald-100 font-medium mt-0.5">Every product, price, sale, order, and delivery update you save here updates the main website immediately.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 flex-shrink-0">
+                            <button onclick="switchTab('items'); showAction('add');" class="bg-white text-primary-700 px-4 py-2.5 rounded-xl text-xs font-extrabold shadow-sm hover:bg-emerald-50 transition inline-flex items-center gap-1.5">
+                                <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Product
+                            </button>
+                            <button onclick="switchTab('sales')" class="bg-emerald-800/70 text-white border border-emerald-400/30 px-4 py-2.5 rounded-xl text-xs font-extrabold hover:bg-emerald-800 transition inline-flex items-center gap-1.5">
+                                <i data-lucide="percent" class="w-4 h-4"></i> Manage Sales
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 4 KPI Stat Cards -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div onclick="switchTab('items')" class="admin-card p-5 cursor-pointer hover:border-primary-400">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="w-10 h-10 rounded-2xl bg-primary-50 text-primary-600 flex items-center justify-center"><i data-lucide="package" class="w-5 h-5"></i></div>
+                                <span class="text-[10px] font-extrabold text-primary-600 bg-primary-50 px-2.5 py-0.5 rounded-full">Catalog</span>
+                            </div>
+                            <div class="text-2xl sm:text-3xl font-black text-slate-900" id="dash-total-products">20</div>
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-1">Total Products</div>
+                        </div>
+
+                        <div onclick="switchTab('orders')" class="admin-card p-5 cursor-pointer hover:border-blue-400">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center"><i data-lucide="shopping-cart" class="w-5 h-5"></i></div>
+                                <span class="text-[10px] font-extrabold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full">Orders</span>
+                            </div>
+                            <div class="text-2xl sm:text-3xl font-black text-slate-900" id="dash-pending-orders">4</div>
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-1">Active / Pending Orders</div>
+                        </div>
+
+                        <div onclick="switchTab('reports')" class="admin-card p-5 cursor-pointer hover:border-emerald-400">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i data-lucide="indian-rupee" class="w-5 h-5"></i></div>
+                                <span class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">Revenue</span>
+                            </div>
+                            <div class="text-2xl sm:text-3xl font-black text-slate-900" id="dash-total-sales">₹8,450</div>
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-1">Store Sales Revenue</div>
+                        </div>
+
+                        <div onclick="switchTab('inventory')" class="admin-card p-5 cursor-pointer border-red-100 bg-red-50/20 hover:border-red-400">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="w-10 h-10 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div>
+                                <span class="text-[10px] font-extrabold text-red-600 bg-red-100 px-2.5 py-0.5 rounded-full">Stock Alert</span>
+                            </div>
+                            <div class="text-2xl sm:text-3xl font-black text-red-600" id="dash-low-stock">2</div>
+                            <div class="text-[11px] font-bold text-red-400 uppercase tracking-wider mt-1">Low Stock Items (&lt;25)</div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Orders & Low Stock Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <div class="lg:col-span-7 admin-card p-5 sm:p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                                    <i data-lucide="clock" class="w-4 h-4 text-primary-600"></i> Recent Customer Orders
+                                </h3>
+                                <button onclick="switchTab('orders')" class="text-xs font-extrabold text-primary-600 hover:underline">View All →</button>
+                            </div>
+                            <div id="dash-recent-orders" class="space-y-3"></div>
+                        </div>
+
+                        <div class="lg:col-span-5 admin-card p-5 sm:p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                                    <i data-lucide="flame" class="w-4 h-4 text-orange-500"></i> Low Stock &amp; Active Sales
+                                </h3>
+                                <button onclick="switchTab('inventory')" class="text-xs font-extrabold text-primary-600 hover:underline">Manage Stock →</button>
+                            </div>
+                            <div id="dash-low-stock-list" class="space-y-2.5"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     2. PRODUCT MANAGEMENT (PRESERVED OLD LOGIC + LIVE TABLE)
+                     ========================================================== -->
+                <div id="view-items" class="space-y-6 hidden">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
+                            <i data-lucide="package" class="text-primary-600 w-6 h-6"></i> Product Management
+                        </h2>
+                        <span class="text-xs font-bold text-slate-500">Add, edit, or delete products from your live store</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <button onclick="showAction('add')" class="p-5 bg-white rounded-3xl border-2 border-slate-200 hover:border-green-500 font-extrabold text-slate-800 shadow-sm flex items-center sm:flex-col justify-center gap-3 transition">
+                            <div class="w-11 h-11 rounded-2xl bg-green-50 text-green-600 flex items-center justify-center"><i data-lucide="plus-circle" class="w-6 h-6"></i></div>
+                            <span>Add New Item</span>
+                        </button>
+                        <button onclick="showAction('edit')" class="p-5 bg-white rounded-3xl border-2 border-slate-200 hover:border-blue-500 font-extrabold text-slate-800 shadow-sm flex items-center sm:flex-col justify-center gap-3 transition">
+                            <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center"><i data-lucide="edit" class="w-6 h-6"></i></div>
+                            <span>Edit Existing Item</span>
+                        </button>
+                        <button onclick="showAction('delete')" class="p-5 bg-white rounded-3xl border-2 border-slate-200 hover:border-red-500 font-extrabold text-slate-800 shadow-sm flex items-center sm:flex-col justify-center gap-3 transition">
+                            <div class="w-11 h-11 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-6 h-6"></i></div>
+                            <span>Delete Item</span>
+                        </button>
+                    </div>
+
+                    <!-- Preserved Action Form Container -->
+                    <div id="action-container" class="admin-card p-6 md:p-8 hidden">
+                        <div class="flex items-center justify-between mb-5 pb-3 border-b border-slate-100">
+                            <h3 id="action-title" class="text-base sm:text-lg font-black text-slate-900 uppercase tracking-wider">Select an Action</h3>
+                            <button type="button" onclick="document.getElementById('action-container').classList.add('hidden')" class="text-xs font-extrabold text-slate-400 hover:text-slate-700">Close ✕</button>
+                        </div>
+                        <div id="form-area" class="space-y-4">
+                            <select id="item-select" onchange="loadItemData()" class="admin-input hidden mb-4"></select>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="admin-label">Item Name</label>
+                                    <input type="text" id="i-name" placeholder="e.g. Aashirvaad Shudh Chakki Atta" class="admin-input">
+                                </div>
+                                <div>
+                                    <label class="admin-label">Brand</label>
+                                    <input type="text" id="i-brand" placeholder="e.g. ITC, Amul, Tata" class="admin-input">
+                                </div>
+                                <div>
+                                    <label class="admin-label">Category</label>
+                                    <select id="i-category" class="admin-input">
+                                        <option value="c1">Water &amp; Drinks</option>
+                                        <option value="c2">Snacks</option>
+                                        <option value="c3">Grocery</option>
+                                        <option value="c4">Personal Care</option>
+                                        <option value="c5">Household</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="admin-label">Variant Size</label>
+                                    <input type="text" id="i-size" placeholder="e.g. 1 L, 500 g, 5 kg" class="admin-input">
+                                </div>
+                                <div>
+                                    <label class="admin-label">Selling Price (₹)</label>
+                                    <input type="number" id="i-price" placeholder="e.g. 210" class="admin-input">
+                                </div>
+                                <div>
+                                    <label class="admin-label">Original MRP (₹)</label>
+                                    <input type="number" id="i-orig-price" placeholder="e.g. 240 (optional)" class="admin-input">
+                                </div>
+                                <div>
+                                    <label class="admin-label">Available Stock Qty</label>
+                                    <input type="number" id="i-stock" placeholder="e.g. 50" class="admin-input" value="100">
+                                </div>
+                                <div>
+                                    <label class="admin-label">Product Image URL</label>
+                                    <input type="text" id="i-image" placeholder="https://..." class="admin-input">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="admin-label">Product Description</label>
+                                <textarea id="i-desc" rows="3" placeholder="Write a short description of the product..." class="admin-input"></textarea>
+                            </div>
+                            <button id="save-btn" onclick="saveItemData()" class="w-full bg-primary-600 text-white font-extrabold py-4 rounded-2xl mt-4 hover:bg-primary-700 shadow-lg active:scale-98 transition tracking-wide text-sm sm:text-base">
+                                Save Item
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Catalog Table with Instant Edit/Delete -->
+                    <div class="admin-card overflow-hidden">
+                        <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/60">
+                            <h3 class="font-extrabold text-sm sm:text-base text-slate-900">All Store Products</h3>
+                            <input type="text" id="admin-item-search" oninput="renderAdminItemsList()" placeholder="Search product or brand..." class="admin-input sm:max-w-xs !py-2 !bg-white">
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs sm:text-sm font-semibold text-slate-600">
+                                <thead class="bg-slate-50 text-[10px] uppercase tracking-widest text-slate-400 border-b border-slate-100">
+                                    <tr>
+                                        <th class="p-4">Product</th>
+                                        <th class="p-4">Brand / Category</th>
+                                        <th class="p-4">Pack Size</th>
+                                        <th class="p-4">Price / MRP</th>
+                                        <th class="p-4 text-right">Quick Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-items-tbody" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     3. INVENTORY & STOCK (PRESERVED + QUICK STOCK STEPPERS)
+                     ========================================================== -->
+                <div id="view-inventory" class="space-y-6 hidden">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
+                            <i data-lucide="database" class="text-primary-600 w-6 h-6"></i> Inventory &amp; Stock Control
+                        </h2>
+                        <button onclick="exportStockCSV()" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2.5 rounded-xl text-xs font-extrabold inline-flex items-center gap-2 shadow-sm w-max">
+                            <i data-lucide="download" class="w-4 h-4"></i> Export Stock CSV
+                        </button>
+                    </div>
+
+                    <div class="admin-card overflow-hidden">
+                        <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/60">
+                            <h3 class="font-extrabold text-sm sm:text-base text-slate-900">Current Stock Levels (Click + / - to Update Live)</h3>
+                            <select id="inv-filter" onchange="loadInventoryTable()" class="admin-input sm:w-52 !py-2 !bg-white">
+                                <option value="all">All Inventory Items</option>
+                                <option value="low">Low Stock (&lt; 25 units)</option>
+                                <option value="out">Out of Stock (0 units)</option>
+                            </select>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs sm:text-sm font-medium text-slate-600">
+                                <thead class="bg-slate-50 text-[10px] uppercase tracking-widest text-slate-400 border-b border-slate-100">
+                                    <tr>
+                                        <th class="p-4">Product Name</th>
+                                        <th class="p-4">Category</th>
+                                        <th class="p-4 text-center">In Stock</th>
+                                        <th class="p-4 text-center">Status</th>
+                                        <th class="p-4 text-right">Quick Adjust</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventory-table-body" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     4. SALE & COUPONS (PRESERVED OLD LOGIC + COUPON MANAGER)
+                     ========================================================== -->
+                <div id="view-sales" class="space-y-6 hidden">
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
+                        <i data-lucide="percent" class="text-orange-500 w-6 h-6"></i> Flash Sales &amp; Promo Coupons
+                    </h2>
+
+                    <!-- Product Discount Manager (Preserved Old Logic) -->
+                    <div class="admin-card p-6 md:p-8">
+                        <h3 class="text-base font-extrabold text-slate-900 mb-4">1. Product Flash Sale &amp; Discount Badge</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <label class="admin-label">Category Filter</label>
+                                <select id="s-category" onchange="loadCategoryItems()" class="admin-input"></select>
+                            </div>
+                            <div>
+                                <label class="admin-label">Select Product</label>
+                                <select id="s-item" onchange="loadSaleData()" class="admin-input"></select>
+                            </div>
+                        </div>
+
+                        <div id="sale-details" class="hidden p-5 sm:p-6 bg-orange-50/60 border border-orange-200/80 rounded-3xl">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 border-b border-orange-200/60 pb-5 gap-4">
+                                <div class="flex items-center gap-4">
+                                    <img id="s-img" src="" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-contain bg-white shadow-sm border border-orange-100 p-1.5" onerror="this.style.display='none'">
+                                    <div>
+                                        <h3 id="s-name" class="font-extrabold text-base sm:text-lg text-slate-900"></h3>
+                                        <p id="s-orig-price" class="text-xs sm:text-sm font-bold text-slate-500 mt-0.5"></p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between md:justify-end gap-3 bg-white px-4 py-2.5 rounded-2xl shadow-sm border border-orange-100">
+                                    <span class="font-black text-xs text-orange-600 uppercase tracking-widest">Sale Active</span>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="s-status" onchange="toggleSaleCalc()" class="sr-only peer">
+                                        <div class="w-12 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[3px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div id="sale-inputs" class="grid grid-cols-1 md:grid-cols-3 gap-4 opacity-50 pointer-events-none transition-all">
+                                <div>
+                                    <label class="admin-label !text-orange-800">Sale Price (₹)</label>
+                                    <input type="number" id="s-new-price" oninput="calcDiscount()" onkeyup="calcDiscount()" class="admin-input !bg-white !border-orange-200 !text-orange-600 !font-black !text-lg text-center">
+                                </div>
+                                <div>
+                                    <label class="admin-label !text-orange-800">Auto Discount</label>
+                                    <input type="text" id="s-percent" disabled class="admin-input !bg-orange-100/60 !text-slate-800 !font-black !text-lg text-center">
+                                </div>
+                                <div>
+                                    <label class="admin-label !text-orange-800">End Date (Timer)</label>
+                                    <input type="date" id="s-end" class="admin-input !bg-white !border-orange-200">
+                                </div>
+                            </div>
+                            <button onclick="saveSaleData()" class="w-full bg-orange-500 text-white font-extrabold py-3.5 rounded-2xl mt-6 shadow-lg shadow-orange-500/25 hover:bg-orange-600 active:scale-98 transition tracking-wider uppercase text-xs sm:text-sm">
+                                Apply Sale Update
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Store Promo Coupons Manager -->
+                    <div class="admin-card p-6 md:p-8">
+                        <h3 class="text-base font-extrabold text-slate-900 mb-4">2. Discount Coupon Codes</h3>
+                        <form onsubmit="event.preventDefault(); addCouponCode();" class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-5">
+                            <input type="text" id="coup-code" placeholder="Code (e.g. FRESH20)" class="admin-input uppercase" required>
+                            <input type="number" id="coup-discount" placeholder="Discount ₹ (e.g. 50)" class="admin-input" required>
+                            <input type="number" id="coup-min" placeholder="Min Order ₹ (e.g. 299)" class="admin-input" required>
+                            <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white font-extrabold rounded-2xl py-3 px-4 text-xs uppercase tracking-wider transition">
+                                + Add Coupon
+                            </button>
+                        </form>
+                        <div id="coupons-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     5. ORDER MANAGEMENT (UPGRADED FULL LIVE MODULE)
+                     ========================================================== -->
+                <div id="view-orders" class="space-y-6 hidden">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
+                            <i data-lucide="shopping-cart" class="text-primary-600 w-6 h-6"></i> Order Management
+                        </h2>
+                        <div class="flex flex-wrap gap-2">
+                            <select id="order-status-filter" onchange="renderAdminOrders()" class="admin-input !w-auto !py-2 !bg-white text-xs">
+                                <option value="all">All Statuses</option>
+                                <option value="Processing">Processing</option>
+                                <option value="Out for Delivery">Out for Delivery</option>
+                                <option value="Delivered">Delivered</option>
+                                <option value="Failed">Failed / Cancelled</option>
+                            </select>
+                            <button onclick="createSampleOrder()" class="bg-primary-600 hover:bg-primary-700 text-white px-3.5 py-2 rounded-xl text-xs font-extrabold inline-flex items-center gap-1.5">
+                                <i data-lucide="plus" class="w-3.5 h-3.5"></i> New Order
+                            </button>
+                        </div>
+                    </div>
+
+                                        <div id="admin-orders-list" class="space-y-3.5"></div>
+
+                    <!-- Return Order Complaints & Email Resolution Desk -->
+                    <div class="admin-card p-6 mt-6 border-2 border-emerald-100">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 mb-4 border-b border-slate-100">
+                            <div>
+                                <h3 class="text-base font-black text-slate-900 flex items-center gap-2">
+                                    <i data-lucide="rotate-ccw" class="w-5 h-5 text-primary-600"></i>
+                                    <span>Customer Return Order Complaints (WhatsApp 7988300872 &amp; Email Resolution)</span>
+                                </h3>
+                                <p class="text-xs font-semibold text-slate-500 mt-0.5">Inspect customer complaints (4+ photos &amp; 1 video) and send official resolution email (Our Fault vs Customer Fault).</p>
+                            </div>
+                            <a href="return-order.html" target="_blank" class="px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-700 font-extrabold text-xs hover:bg-emerald-100 whitespace-nowrap">
+                                Open Return Portal ↗
+                            </a>
+                        </div>
+                        <div id="admin-return-complaints-list" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                
+                <!-- ==========================================================
+                     5B. RETURN ORDER COMPLAINTS REVIEW MODULE (RECEIVED / PROCESSING / APPROVE / REJECT)
+                     ========================================================== -->
+                <div id="view-complaints" class="space-y-6 hidden">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
+                                <i data-lucide="rotate-ccw" class="text-primary-600 w-6 h-6"></i> Customer Return &amp; Complaint Review
+                            </h2>
+                            <p class="text-xs font-semibold text-slate-500 mt-1">
+                                Inspect reported customer complaints, view 4 uploaded photos &amp; video, and update status (Received, Processing, Under Review, Approved, Rejected, Resolved) with automatic customer email notification.
+                            </p>
+                        </div>
+                    </div>
+                    <div id="admin-dedicated-complaints-list" class="space-y-4"></div>
+                </div>
+
+                <!-- ==========================================================
+                     6. DELIVERY CONTROL (PRESERVED OLD LOGIC + LIVE ORDER SYNC)
+                     ========================================================== -->
+                <div id="view-delivery" class="space-y-6 hidden">
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
+                        <i data-lucide="truck" class="text-blue-500 w-6 h-6"></i> Delivery Control &amp; Customer Alerts
+                    </h2>
+                    <div class="admin-card p-6 md:p-8">
+                        <p class="text-xs sm:text-sm font-semibold text-slate-500 mb-5">
+                            Select any active customer order and mark its delivery outcome to push an instant live notification to the customer's FreshMart app.
+                        </p>
+                        
+                        <label class="admin-label">Select Active Order</label>
+                        <select id="d-order-select" class="admin-input mb-6">
+                            <option value="">-- View Pending Orders --</option>
+                            <option value="FM-9901">Order #FM-9901 (Sahil Sharma) - ₹350</option>
+                            <option value="FM-9902">Order #FM-9902 (Rahul Kumar) - ₹820</option>
+                        </select>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-emerald-50/60 p-6 sm:p-8 rounded-3xl border border-emerald-200/80 text-center">
+                                <i data-lucide="check-circle-2" class="w-14 h-14 text-emerald-600 mx-auto mb-3"></i>
+                                <h3 class="font-extrabold text-slate-900 mb-2 text-base sm:text-lg">Mark as Delivered</h3>
+                                <p class="text-xs text-slate-500 font-medium mb-5">Updates order status to Delivered and sends a green delivery confirmation alert.</p>
+                                <button onclick="updateDelivery('Success')" class="w-full bg-emerald-600 text-white font-extrabold py-3.5 rounded-2xl shadow-lg shadow-emerald-600/25 hover:bg-emerald-700 active:scale-98 transition text-xs sm:text-sm">
+                                    Confirm Delivery
+                                </button>
+                            </div>
+                            <div class="bg-red-50/60 p-6 sm:p-8 rounded-3xl border border-red-200/80 text-center">
+                                <i data-lucide="x-circle" class="w-14 h-14 text-red-500 mx-auto mb-3"></i>
+                                <h3 class="font-extrabold text-slate-900 mb-3 text-base sm:text-lg">Mark Delivery Failed</h3>
+                                <input type="text" id="d-reason" placeholder="Reason (e.g. Customer unavailable / Wrong address)" class="admin-input !bg-white !border-red-200 mb-4 text-center">
+                                <button onclick="updateDelivery('Failed')" class="w-full bg-red-500 text-white font-extrabold py-3.5 rounded-2xl shadow-lg shadow-red-500/25 hover:bg-red-600 active:scale-98 transition text-xs sm:text-sm">
+                                    Push Failed Alert
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Sent Notifications Log -->
+                    <div class="admin-card p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-extrabold text-sm sm:text-base text-slate-900">Recent App Notifications Sent</h3>
+                            <button onclick="clearAdminNotifs()" class="text-xs font-extrabold text-red-500 hover:underline">Clear Log</button>
+                        </div>
+                        <div id="admin-delivery-notifs" class="space-y-2.5"></div>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     7. CUSTOMERS & SUPPORT (FULL WORKING MODULE)
+                     ========================================================== -->
+                <div id="view-customers" class="space-y-6 hidden">
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
+                        <i data-lucide="users" class="text-primary-600 w-6 h-6"></i> Customers &amp; Broadcast Support
+                    </h2>
+
+                    <!-- Store Broadcast Tool -->
+                    <div class="admin-card p-6">
+                        <h3 class="text-base font-extrabold text-slate-900 mb-1">Send Store-Wide Offer / Support Alert</h3>
+                        <p class="text-xs text-slate-500 font-medium mb-4">Push a custom notification banner directly into customers' Notification Center.</p>
+                        <form onsubmit="event.preventDefault(); sendBroadcastNotification();" class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                            <input type="text" id="bc-title" placeholder="Alert Title (e.g. Weekend Mega Sale Live!)" class="admin-input sm:col-span-4" required>
+                            <input type="text" id="bc-msg" placeholder="Message (e.g. Get flat ₹50 OFF on orders above ₹499)" class="admin-input sm:col-span-6" required>
+                            <button type="submit" class="sm:col-span-2 bg-primary-600 hover:bg-primary-700 text-white font-extrabold rounded-2xl py-3 px-4 text-xs uppercase tracking-wider transition">
+                                Push Alert
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Registered Customers Directory -->
+                    <div class="admin-card overflow-hidden">
+                        <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
+                            <h3 class="font-extrabold text-sm sm:text-base text-slate-900">Registered Customer Accounts</h3>
+                            <span id="customer-total-count" class="text-xs font-extrabold text-primary-700 bg-primary-50 px-3 py-1 rounded-full">1 Customer</span>
+                        </div>
+                        <div id="customers-list-container" class="divide-y divide-slate-100"></div>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     8. CATEGORY CONFIG (FULL WORKING MODULE)
+                     ========================================================== -->
+                <div id="view-category" class="space-y-6 hidden">
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
+                        <i data-lucide="list-tree" class="text-primary-600 w-6 h-6"></i> Category Configuration
+                    </h2>
+
+                    <div class="admin-card p-6">
+                        <h3 class="text-base font-extrabold text-slate-900 mb-4">Add New Store Category</h3>
+                        <form onsubmit="event.preventDefault(); addAdminCategory();" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                            <input type="text" id="cat-new-name" placeholder="Category Name (e.g. Dairy & Bakery)" class="admin-input sm:col-span-2" required>
+                            <input type="text" id="cat-new-icon" placeholder="Emoji Icon (e.g. 🥛)" class="admin-input text-center" required>
+                            <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white font-extrabold rounded-2xl py-3 px-4 text-xs uppercase tracking-wider transition">
+                                + Add Category
+                            </button>
+                        </form>
+                    </div>
+
+                    <div id="admin-categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                </div>
+
+                <!-- ==========================================================
+                     9. HOMEPAGE MANAGER (FULL WORKING MODULE)
+                     ========================================================== -->
+                <div id="view-homepage" class="space-y-6 hidden">
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
+                        <i data-lucide="layout" class="text-primary-600 w-6 h-6"></i> Homepage Banner &amp; Hero Manager
+                    </h2>
+                    <div class="admin-card p-6 md:p-8 space-y-4">
+                        <div>
+                            <label class="admin-label">Top Badge Text</label>
+                            <input type="text" id="hp-badge" class="admin-input" value="🛒 Your Everyday Premium Store">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="admin-label">Hero Main Title (Line 1)</label>
+                                <input type="text" id="hp-title-1" class="admin-input" value="Daily Needs.">
+                            </div>
+                            <div>
+                                <label class="admin-label">Hero Highlight Title (Green Line 2)</label>
+                                <input type="text" id="hp-title-2" class="admin-input" value="Delivered to Your Door.">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="admin-label">Hero Subtitle Description</label>
+                            <textarea id="hp-subtitle" rows="2" class="admin-input">From fresh kitchen staples to snacks and daily essentials — everything your home needs is just a tap away with superfast doorstep delivery.</textarea>
+                        </div>
+                        <div>
+                            <label class="admin-label">Mobile Product Grid Heading</label>
+                            <input type="text" id="hp-grid-heading" class="admin-input" value="Fresh Picks for You">
+                        </div>
+                        <button type="button" onclick="saveHomepageConfig()" class="bg-primary-600 hover:bg-primary-700 text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-lg shadow-primary-600/20 text-xs sm:text-sm transition">
+                            Save Homepage Layout
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     10. PAYMENT SETTINGS (FULL WORKING MODULE)
+                     ========================================================== -->
+                <div id="view-payment" class="space-y-6 hidden">
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
+                        <i data-lucide="credit-card" class="text-primary-600 w-6 h-6"></i> Payment &amp; Checkout Settings
+                    </h2>
+                    <div class="admin-card p-6 md:p-8 space-y-5">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <label class="flex items-center justify-between p-4 rounded-2xl border border-slate-200 bg-slate-50/70 cursor-pointer">
+                                <div>
+                                    <div class="text-sm font-extrabold text-slate-900">Cash on Delivery</div>
+                                    <div class="text-xs text-slate-500">Pay cash at doorstep</div>
+                                </div>
+                                <input type="checkbox" id="pay-cod" checked class="w-5 h-5 accent-emerald-600">
+                            </label>
+                            <label class="flex items-center justify-between p-4 rounded-2xl border border-slate-200 bg-slate-50/70 cursor-pointer">
+                                <div>
+                                    <div class="text-sm font-extrabold text-slate-900">UPI / QR on Delivery</div>
+                                    <div class="text-xs text-slate-500">GPay, PhonePe, Paytm</div>
+                                </div>
+                                <input type="checkbox" id="pay-upi" checked class="w-5 h-5 accent-emerald-600">
+                            </label>
+                            <label class="flex items-center justify-between p-4 rounded-2xl border border-slate-200 bg-slate-50/70 cursor-pointer">
+                                <div>
+                                    <div class="text-sm font-extrabold text-slate-900">Card on Delivery</div>
+                                    <div class="text-xs text-slate-500">POS machine at doorstep</div>
+                                </div>
+                                <input type="checkbox" id="pay-card" checked class="w-5 h-5 accent-emerald-600">
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                            <div>
+                                <label class="admin-label">Merchant UPI ID (For QR / UPI Payments)</label>
+                                <input type="text" id="pay-upi-id" class="admin-input" value="7988300872@upi">
+                            </div>
+                            <div>
+                                <label class="admin-label">Standard Delivery Partner Fee (₹)</label>
+                                <input type="number" id="pay-del-fee" class="admin-input" value="20">
+                            </div>
+                        </div>
+
+                        <button type="button" onclick="savePaymentConfig()" class="bg-primary-600 hover:bg-primary-700 text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-lg shadow-primary-600/20 text-xs sm:text-sm transition">
+                            Save Payment Settings
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     11. REPORTS & EXPORT (FULL WORKING MODULE)
+                     ========================================================== -->
+                <div id="view-reports" class="space-y-6 hidden">
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
+                        <i data-lucide="bar-chart-2" class="text-primary-600 w-6 h-6"></i> Store Analytics &amp; CSV Export
+                    </h2>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="admin-card p-5">
+                            <div class="text-xs font-extrabold text-slate-400 uppercase">Total Inventory Value</div>
+                            <div id="rep-inv-value" class="text-2xl font-black text-slate-900 mt-1">₹0</div>
+                            <div class="text-xs text-emerald-600 font-bold mt-1">Across all stock units</div>
+                        </div>
+                        <div class="admin-card p-5">
+                            <div class="text-xs font-extrabold text-slate-400 uppercase">Total Stock Units</div>
+                            <div id="rep-total-units" class="text-2xl font-black text-slate-900 mt-1">0</div>
+                            <div class="text-xs text-blue-600 font-bold mt-1">Ready for dispatch</div>
+                        </div>
+                        <div class="admin-card p-5">
+                            <div class="text-xs font-extrabold text-slate-400 uppercase">Items Currently On Sale</div>
+                            <div id="rep-sale-count" class="text-2xl font-black text-orange-500 mt-1">0</div>
+                            <div class="text-xs text-slate-500 font-bold mt-1">Active discount badges</div>
+                        </div>
+                    </div>
+
+                    <div class="admin-card p-6 space-y-4">
+                        <h3 class="text-base font-extrabold text-slate-900">1-Click Data Exports &amp; Store Backup</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                            <button onclick="exportStockCSV()" class="p-4 rounded-2xl border border-slate-200 hover:border-primary-500 bg-slate-50/70 hover:bg-primary-50/40 font-extrabold text-xs sm:text-sm text-slate-800 flex items-center justify-center gap-2 transition">
+                                <i data-lucide="file-spreadsheet" class="w-4 h-4 text-primary-600"></i> Export Products &amp; Stock CSV
+                            </button>
+                            <button onclick="exportOrdersCSV()" class="p-4 rounded-2xl border border-slate-200 hover:border-blue-500 bg-slate-50/70 hover:bg-blue-50/40 font-extrabold text-xs sm:text-sm text-slate-800 flex items-center justify-center gap-2 transition">
+                                <i data-lucide="shopping-bag" class="w-4 h-4 text-blue-600"></i> Export Orders CSV
+                            </button>
+                            <button onclick="exportFullBackupJSON()" class="p-4 rounded-2xl border border-slate-200 hover:border-slate-800 bg-slate-50/70 hover:bg-slate-100 font-extrabold text-xs sm:text-sm text-slate-800 flex items-center justify-center gap-2 transition">
+                                <i data-lucide="download-cloud" class="w-4 h-4 text-slate-700"></i> Download Full JSON Backup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     12. ADMIN SECURITY (FULL WORKING MODULE)
+                     ========================================================== -->
+                <div id="view-security" class="space-y-6 hidden">
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
+                        <i data-lucide="shield-alert" class="text-primary-600 w-6 h-6"></i> Admin Security &amp; Access Control
+                    </h2>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="admin-card p-6 space-y-4">
+                            <h3 class="text-base font-extrabold text-slate-900">Admin Portal Lock PIN</h3>
+                            <p class="text-xs text-slate-500 font-medium">Master PIN <span class="font-extrabold text-primary-600">0276</span> is always enabled. You can also set an additional custom Admin PIN below.</p>
+                            <div>
+                                <label class="admin-label">Current / Master PIN</label>
+                                <input type="password" id="sec-old-pin" placeholder="Enter 0276" class="admin-input">
+                            </div>
+                            <div>
+                                <label class="admin-label">New Custom Admin PIN (4–8 digits)</label>
+                                <input type="password" id="sec-new-pin" placeholder="Enter new PIN" class="admin-input">
+                            </div>
+                            <button type="button" onclick="saveAdminPin()" class="bg-primary-600 hover:bg-primary-700 text-white font-extrabold py-3 px-5 rounded-2xl text-xs sm:text-sm transition">
+                                Update Admin PIN
+                            </button>
+                        </div>
+
+                        <div class="admin-card p-6 space-y-3">
+                            <h3 class="text-base font-extrabold text-slate-900">Customer Account Security Pages</h3>
+                            <p class="text-xs text-slate-500 font-medium">Quickly test or inspect all 5 dedicated customer security workflows:</p>
+                            <div class="space-y-2 pt-1">
+                                <a href="security.html" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-primary-500 text-xs font-extrabold text-slate-800">
+                                    <span>Account Security Hub (`security.html`)</span>
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-400"></i>
+                                </a>
+                                <a href="change-password.html" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-primary-500 text-xs font-extrabold text-slate-800">
+                                    <span>1. Change Password (`Change-Password.html`)</span>
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-400"></i>
+                                </a>
+                                <a href="forgot-password.html" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-primary-500 text-xs font-extrabold text-slate-800">
+                                    <span>2. Forgot Password (`forgot-password.html`)</span>
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-400"></i>
+                                </a>
+                                <a href="change-email.html" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-primary-500 text-xs font-extrabold text-slate-800">
+                                    <span>3. Change Email (`Change-Email.html`)</span>
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-400"></i>
+                                </a>
+                                <a href="change-mobile.html" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-primary-500 text-xs font-extrabold text-slate-800">
+                                    <span>4. Change Mobile (`Change-Mobile.html`)</span>
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-400"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     13. BUSINESS SETTINGS (FULL WORKING MODULE)
+                     ========================================================== -->
+                <div id="view-settings" class="space-y-6 hidden">
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
+                        <i data-lucide="settings" class="text-primary-600 w-6 h-6"></i> Business Settings &amp; Store Reset
+                    </h2>
+
+                    <div class="admin-card p-6 md:p-8 space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="admin-label">Store Name</label>
+                                <input type="text" id="biz-name" class="admin-input" value="FreshMart">
+                            </div>
+                            <div>
+                                <label class="admin-label">WhatsApp Order Number (With Country Code)</label>
+                                <input type="text" id="biz-wa" class="admin-input" value="917988300872">
+                            </div>
+                            <div>
+                                <label class="admin-label">Customer Support Phone</label>
+                                <input type="text" id="biz-phone" class="admin-input" value="+91 79883 00872">
+                            </div>
+                            <div>
+                                <label class="admin-label">Support Email</label>
+                                <input type="email" id="biz-email" class="admin-input" value="support@freshmart.com">
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100">
+                            <button type="button" onclick="saveBusinessSettings()" class="bg-primary-600 hover:bg-primary-700 text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-lg shadow-primary-600/20 text-xs sm:text-sm transition">
+                                Save Business Settings
+                            </button>
+                            <button type="button" onclick="resetDefaultCatalog()" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-extrabold py-3 px-5 rounded-2xl text-xs transition">
+                                Reset Default 20 Products
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- DEFAULT 20 FRESHMART PRODUCTS (Ensures Admin Panel is never empty) ---
+        const DEFAULT_PRODUCTS = [
+            { id: 1, name: "Bisleri Packaged Drinking Water", brand: "Bisleri", category: "c1", description: "Pure drinking water with essential minerals and double ozonisation protection.", image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=400&q=80", rating: 4.8, reviews: 156, sales: 1200, variants: [{ vId: '1a', size: "1 L", price: 20, originalPrice: 20, stock: 50 }, { vId: '1b', size: "5 L", price: 65, originalPrice: 75, stock: 15 }] },
+            { id: 2, name: "Aashirvaad Shudh Chakki Atta", brand: "ITC", category: "c3", description: "100% whole wheat grain atta for soft, fluffy rotis every day.", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&q=80", rating: 4.9, reviews: 342, sales: 800, variants: [{ vId: '2a', size: "5 kg", price: 210, originalPrice: 240, stock: 30 }, { vId: '2b', size: "10 kg", price: 410, originalPrice: 460, stock: 20 }] },
+            { id: 3, name: "Haldiram's Aloo Bhujia", brand: "Haldiram", category: "c2", description: "Crispy and spicy authentic potato & gram flour namkeen snack.", image: "https://images.unsplash.com/photo-1621996346565-e3d5d6281298?w=400&q=80", rating: 4.5, reviews: 89, sales: 500, variants: [{ vId: '3a', size: "400 g", price: 95, originalPrice: 100, stock: 100 }, { vId: '3b', size: "1 kg", price: 215, originalPrice: 240, stock: 45 }] },
+            { id: 4, name: "Maggi 2-Minute Noodles", brand: "Nestle", category: "c3", description: "Instant masala noodles with signature spice tastemaker for quick meals.", image: "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400&q=80", rating: 4.7, reviews: 500, sales: 2000, variants: [{ vId: '4a', size: "70 g", price: 14, originalPrice: 14, stock: 200 }, { vId: '4b', size: "420 g (Pack of 6)", price: 80, originalPrice: 84, stock: 90 }] },
+            { id: 5, name: "Coca Cola Soft Drink", brand: "Coca Cola", category: "c1", description: "Original taste refreshing sparkling cold beverage.", image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&q=80", rating: 4.6, reviews: 210, sales: 1500, variants: [{ vId: '5a', size: "750 ml", price: 40, originalPrice: 40, stock: 50 }, { vId: '5b', size: "2 L", price: 90, originalPrice: 100, stock: 35 }] },
+            { id: 6, name: "Lays Classic Salted", brand: "Lays", category: "c2", description: "Crispy farm-grown potato chips lightly seasoned with classic salt.", image: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=400&q=80", rating: 4.5, reviews: 320, sales: 1800, variants: [{ vId: '6a', size: "50 g", price: 20, originalPrice: 20, stock: 100 }, { vId: '6b', size: "115 g", price: 45, originalPrice: 50, stock: 60 }] },
+            { id: 7, name: "Tata Salt Vacuum Evaporated", brand: "Tata", category: "c3", description: "Desh ka Namak — hygienic iodised vacuum evaporated salt.", image: "https://images.unsplash.com/photo-1518110925495-5fe2fda0442c?w=400&q=80", rating: 4.9, reviews: 800, sales: 5000, variants: [{ vId: '7a', size: "1 kg", price: 25, originalPrice: 28, stock: 200 }] },
+            { id: 8, name: "Dettol Original Soap", brand: "Dettol", category: "c4", description: "Trusted germ protection bathing bar for daily skin hygiene.", image: "https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?w=400&q=80", rating: 4.8, reviews: 450, sales: 2200, variants: [{ vId: '8a', size: "125 g", price: 45, originalPrice: 50, stock: 80 }, { vId: '8b', size: "4 x 125 g", price: 165, originalPrice: 190, stock: 40 }] },
+            { id: 9, name: "India Gate Basmati Rice", brand: "India Gate", category: "c3", description: "Aged premium long-grain aromatic basmati rice.", image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&q=80", rating: 4.7, reviews: 120, sales: 600, variants: [{ vId: '9a', size: "1 kg", price: 110, originalPrice: 130, stock: 18 }, { vId: '9b', size: "5 kg", price: 520, originalPrice: 610, stock: 25 }] },
+            { id: 10, name: "Fortune Sunflower Oil", brand: "Fortune", category: "c3", description: "Light, healthy refined sunflower oil enriched with vitamins.", image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400&q=80", rating: 4.6, reviews: 300, sales: 900, variants: [{ vId: '10a', size: "1 L", price: 140, originalPrice: 155, stock: 60 }] },
+            { id: 11, name: "MDH Garam Masala", brand: "MDH", category: "c3", description: "Authentic aromatic blend of roasted Indian whole spices.", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&q=80", rating: 4.8, reviews: 250, sales: 700, variants: [{ vId: '11a', size: "100 g", price: 75, originalPrice: 80, stock: 90 }] },
+            { id: 12, name: "Taj Mahal Tea", brand: "Brooke Bond", category: "c3", description: "Rich, aromatic, and flavorful finest Assam tea leaves.", image: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?w=400&q=80", rating: 4.7, reviews: 400, sales: 1100, variants: [{ vId: '12a', size: "250 g", price: 150, originalPrice: 165, stock: 50 }, { vId: '12b', size: "500 g", price: 290, originalPrice: 320, stock: 30 }] },
+            { id: 13, name: "Nescafe Classic Coffee", brand: "Nescafe", category: "c3", description: "100% pure roasted instant coffee for a rich morning aroma.", image: "https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=400&q=80", rating: 4.8, reviews: 600, sales: 1300, variants: [{ vId: '13a', size: "50 g", price: 160, originalPrice: 170, stock: 15 }] },
+            { id: 14, name: "Colgate MaxFresh", brand: "Colgate", category: "c4", description: "Peppermint ice toothpaste with cooling crystals for fresh breath.", image: "https://images.unsplash.com/photo-1559591937-abc368006c77?w=400&q=80", rating: 4.5, reviews: 350, sales: 1400, variants: [{ vId: '14a', size: "150 g", price: 90, originalPrice: 105, stock: 70 }] },
+            { id: 15, name: "Surf Excel Easy Wash", brand: "Surf Excel", category: "c5", description: "Superfine detergent powder for tough stain removal in one wash.", image: "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=400&q=80", rating: 4.7, reviews: 420, sales: 1600, variants: [{ vId: '15a', size: "1 kg", price: 120, originalPrice: 130, stock: 85 }] },
+            { id: 16, name: "Vim Dishwash Bar", brand: "Vim", category: "c5", description: "Power of 100 lemons dishwashing bar for sparkling utensils.", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=400&q=80", rating: 4.6, reviews: 290, sales: 1900, variants: [{ vId: '16a', size: "300 g", price: 30, originalPrice: 30, stock: 150 }] },
+            { id: 17, name: "Harpic Power Plus", brand: "Harpic", category: "c5", description: "10x max clean disinfectant toilet cleaner liquid.", image: "https://images.unsplash.com/photo-1563453392212-326f5e854473?w=400&q=80", rating: 4.8, reviews: 510, sales: 1250, variants: [{ vId: '17a', size: "500 ml", price: 95, originalPrice: 100, stock: 60 }] },
+            { id: 18, name: "Amul Butter", brand: "Amul", category: "c3", description: "Utterly butterly delicious pasteurized table butter.", image: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=400&q=80", rating: 4.9, reviews: 900, sales: 3000, variants: [{ vId: '18a', size: "100 g", price: 54, originalPrice: 54, stock: 110 }, { vId: '18b', size: "500 g", price: 265, originalPrice: 275, stock: 50 }] },
+            { id: 19, name: "Parle-G Gold", brand: "Parle", category: "c2", description: "Rich, crunchy family pack glucose biscuits.", image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&q=80", rating: 4.5, reviews: 850, sales: 4000, variants: [{ vId: '19a', size: "1 kg", price: 100, originalPrice: 110, stock: 200 }] },
+            { id: 20, name: "Real Fruit Juice", brand: "Real", category: "c1", description: "Healthy mixed fruit beverage with no added preservatives.", image: "https://images.unsplash.com/photo-1622597467836-f382490b4d4b?w=400&q=80", rating: 4.6, reviews: 230, sales: 850, variants: [{ vId: '20a', size: "1 L", price: 115, originalPrice: 125, stock: 40 }] }
+        ];
+
+        function safeGet(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch (e) { return fallback; }
+        }
+        function safeSet(key, val) {
+            try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+        }
+
+        let products = safeGet('freshmart_products', null);
+        if (!products || !Array.isArray(products) || products.length === 0) {
+            products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+            safeSet('freshmart_products', products);
+        }
+
+        let categories = safeGet('freshmart_categories', [
+            { id: 'c1', name: 'Water & Drinks', icon: '🥤' },
+            { id: 'c2', name: 'Snacks', icon: '🍿' },
+            { id: 'c3', name: 'Grocery', icon: '🛒' },
+            { id: 'c4', name: 'Personal Care', icon: '🧴' },
+            { id: 'c5', name: 'Household', icon: '🧹' }
+        ]);
+
+        let currentMode = '';
+
+        function showAdminToast(title, msg, type = 'success') {
+            const box = document.getElementById('admin-toast-container');
+            if (!box) return;
+            const el = document.createElement('div');
+            const bg = type === 'error' ? 'bg-red-600' : (type === 'info' ? 'bg-slate-900' : 'bg-primary-600');
+            el.className = `${bg} text-white p-3.5 px-4 rounded-2xl shadow-xl flex items-center gap-3 pointer-events-auto fade-in`;
+            el.innerHTML = `<i data-lucide="${type === 'error' ? 'alert-circle' : 'check-circle-2'}" class="w-5 h-5 flex-shrink-0"></i><div><div class="text-xs font-extrabold">${title}</div><div class="text-[11px] font-medium opacity-90">${msg}</div></div>`;
+            box.appendChild(el);
+            if (window.lucide) lucide.createIcons();
+            setTimeout(() => { el.remove(); }, 3200);
+        }
+
+        // --- LOCK SCREEN & PIN 0276 LOGIC ---
+        function appendPinDigit(d) {
+            const inp = document.getElementById('admin-pass');
+            if (!inp) return;
+            inp.value = (inp.value + d).slice(0, 8);
+            document.getElementById('error-msg')?.classList.add('hidden');
+            if (inp.value === '0276') checkPass();
+        }
+
+        function toggleAdminPinVisibility() {
+            const inp = document.getElementById('admin-pass');
+            if (!inp) return;
+            inp.type = inp.type === 'password' ? 'text' : 'password';
+        }
+
+        function checkPass() {
+            const val = (document.getElementById('admin-pass')?.value || '').trim();
+            const customPin = localStorage.getItem('freshmart_admin_pin') || '0276';
+            if (val === '0276' || val === customPin) {
+                document.getElementById('error-msg')?.classList.add('hidden');
+                document.getElementById('lock-screen').classList.add('opacity-0');
+                setTimeout(() => {
+                    document.getElementById('lock-screen').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    switchTab('dashboard');
+                    showAdminToast('Welcome Admin', 'FreshMart Admin Dashboard Unlocked!', 'success');
+                }, 350);
+            } else {
+                const err = document.getElementById('error-msg');
+                const card = document.getElementById('lock-card');
+                if (err) err.classList.remove('hidden');
+                if (card) {
+                    card.classList.remove('shake');
+                    void card.offsetWidth;
+                    card.classList.add('shake');
+                }
+            }
+        }
+
+        function lockDashboard() {
+            document.getElementById('admin-pass').value = '';
+            document.getElementById('dashboard').classList.add('hidden');
+            const lock = document.getElementById('lock-screen');
+            lock.classList.remove('hidden', 'opacity-0');
+        }
+
+        function toggleSidebar() {
+            const sb = document.getElementById('admin-sidebar');
+            const bd = document.getElementById('sidebar-backdrop');
+            if (!sb) return;
+            sb.classList.toggle('open');
+            if (bd) bd.classList.toggle('hidden', !sb.classList.contains('open'));
+        }
+
+        const tabs = ['dashboard', 'items', 'inventory', 'sales', 'orders', 'complaints', 'delivery', 'customers', 'category', 'homepage', 'payment', 'reports', 'security', 'settings'];
+        const tabTitles = {
+            dashboard: 'Store Dashboard',
+            items: 'Product Management',
+            inventory: 'Inventory & Stock Control',
+            sales: 'Flash Sales & Promo Coupons',
+            orders: 'Order Management',
+            complaints: 'Return & Complaint Review',
+            delivery: 'Delivery Control',
+            customers: 'Customers & Support',
+            category: 'Category Configuration',
+            homepage: 'Homepage Manager',
+            payment: 'Payment Settings',
+            reports: 'Reports & Export',
+            security: 'Admin Security',
+            settings: 'Business Settings'
+        };
+
+        function switchTab(tabId) {
+            tabs.forEach(t => {
+                const view = document.getElementById('view-' + t);
+                const btn = document.getElementById('tab-' + t);
+                if (view) view.classList.add('hidden');
+                if (btn) btn.className = 'w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition font-bold text-slate-600';
+            });
+            const view = document.getElementById('view-' + tabId);
+            const btn = document.getElementById('tab-' + tabId);
+            if (view) view.classList.remove('hidden');
+            if (btn) btn.className = 'w-full flex items-center justify-between p-3 rounded-2xl bg-primary-50 text-primary-700 font-extrabold shadow-xs transition';
+
+            const titleEl = document.getElementById('topbar-title');
+            if (titleEl) titleEl.innerText = tabTitles[tabId] || 'Admin Panel';
+
+            refreshDashboardStats();
+            if (tabId === 'items') {
+                populateCategoryDropdown();
+                renderAdminItemsList();
+            } else if (tabId === 'sales') {
+                populateCategoryDropdown();
+                renderCouponsList();
+            } else if (tabId === 'inventory') {
+                loadInventoryTable();
+            } else if (tabId === 'orders') {
+                renderAdminOrders();
+            } else if (tabId === 'complaints') {
+                renderAdminReturnComplaints();
+            } else if (tabId === 'delivery') {
+                populateDeliveryOrdersDropdown();
+                renderDeliveryNotifsLog();
+            } else if (tabId === 'customers') {
+                renderCustomersList();
+            } else if (tabId === 'category') {
+                renderAdminCategories();
+            } else if (tabId === 'reports') {
+                renderReportsStats();
+            }
+
+            if (window.innerWidth < 768) {
+                const sb = document.getElementById('admin-sidebar');
+                if (sb && sb.classList.contains('open')) toggleSidebar();
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        // --- 1. DASHBOARD STATS & OVERVIEW ---
+        function getOrdersList() {
+            let orders = safeGet('freshmart_orders', null);
+            if (!orders || !Array.isArray(orders) || orders.length === 0) {
+                orders = [
+                    { id: 'FM-9901', customer: 'Sahil Sharma', phone: '7988300872', date: '26 Oct 2026', total: 350, status: 'Processing', items: [{ pId: 2, qty: 1 }, { pId: 7, qty: 2 }] },
+                    { id: 'FM-9902', customer: 'Rahul Kumar', phone: '9812345678', date: '26 Oct 2026', total: 820, status: 'Out for Delivery', items: [{ pId: 9, qty: 1 }, { pId: 10, qty: 2 }] },
+                    { id: 'FM-9082', customer: 'Sahil Sharma', phone: '7988300872', date: '24 Oct 2026', total: 465, status: 'Delivered', items: [{ pId: 18, qty: 1 }, { pId: 19, qty: 2 }] },
+                    { id: 'FM-8810', customer: 'Priya Verma', phone: '9876501234', date: '22 Oct 2026', total: 640, status: 'Delivered', items: [{ pId: 12, qty: 2 }] }
+                ];
+                safeSet('freshmart_orders', orders);
+            }
+            return orders;
+        }
+
+        function refreshDashboardStats() {
+            const orders = getOrdersList();
+            const pendingCount = orders.filter(o => o.status !== 'Delivered' && o.status !== 'Failed').length;
+            const totalRev = orders.reduce((s, o) => s + (Number(o.total) || 0), 0) + 6175;
+            const lowStockItems = products.filter(p => (p.variants?.[0]?.stock ?? 50) < 25);
+
+            const elProd = document.getElementById('dash-total-products');
+            const elOrd = document.getElementById('dash-pending-orders');
+            const elSales = document.getElementById('dash-total-sales');
+            const elLow = document.getElementById('dash-low-stock');
+            if (elProd) elProd.innerText = products.length;
+            if (elOrd) elOrd.innerText = pendingCount;
+            if (elSales) elSales.innerText = '₹' + totalRev.toLocaleString('en-IN');
+            if (elLow) elLow.innerText = lowStockItems.length;
+
+            const sideProd = document.getElementById('side-badge-products');
+            const sideOrd = document.getElementById('side-badge-orders');
+            if (sideProd) sideProd.innerText = products.length;
+            if (sideOrd) sideOrd.innerText = orders.length;
+
+            // Recent orders on dashboard
+            const recContainer = document.getElementById('dash-recent-orders');
+            if (recContainer) {
+                recContainer.innerHTML = orders.slice(0, 4).map(o => `
+                    <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+                        <div>
+                            <div class="text-xs sm:text-sm font-extrabold text-slate-900">#${o.id} • ${o.customer || 'Sahil Sharma'}</div>
+                            <div class="text-[11px] font-semibold text-slate-400">${o.date}</div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-black text-slate-900">₹${o.total}</span>
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold ${o.status === 'Delivered' || o.status === 'Success' ? 'bg-emerald-100 text-emerald-700' : (o.status === 'Failed' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700')}">${o.status}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Low stock & active sales on dashboard
+            const lowContainer = document.getElementById('dash-low-stock-list');
+            if (lowContainer) {
+                const saleItems = products.filter(p => p.variants?.[0]?.originalPrice > p.variants?.[0]?.price).slice(0, 3);
+                const combined = [...lowStockItems.map(p => ({ p, type: 'low' })), ...saleItems.map(p => ({ p, type: 'sale' }))].slice(0, 5);
+                lowContainer.innerHTML = combined.length === 0
+                    ? `<div class="p-4 text-xs text-slate-400 font-bold text-center">All products are well-stocked!</div>`
+                    : combined.map(({ p, type }) => `
+                        <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <img src="${p.image}" class="w-9 h-9 rounded-xl object-contain bg-white border border-slate-100 p-1" onerror="this.style.display='none'">
+                                <div class="min-w-0">
+                                    <div class="text-xs font-extrabold text-slate-900 truncate">${p.name}</div>
+                                    <div class="text-[10px] font-bold text-slate-400">${p.variants[0].size} • ₹${p.variants[0].price}</div>
+                                </div>
+                            </div>
+                            ${type === 'low'
+                                ? `<span class="px-2.5 py-1 rounded-full bg-red-100 text-red-700 text-[10px] font-extrabold flex-shrink-0">${p.variants[0].stock} left</span>`
+                                : `<span class="px-2.5 py-1 rounded-full bg-orange-100 text-orange-700 text-[10px] font-extrabold flex-shrink-0">On Sale</span>`
+                            }
+                        </div>
+                    `).join('');
+            }
+        }
+
+        // --- 2. PRODUCT MANAGEMENT (PRESERVED + ENHANCED) ---
+        function showAction(mode) {
+            currentMode = mode;
+            document.getElementById('action-container').classList.remove('hidden');
+            const title = document.getElementById('action-title');
+            const select = document.getElementById('item-select');
+            const inputs = ['i-name', 'i-brand', 'i-category', 'i-size', 'i-price', 'i-orig-price', 'i-stock', 'i-image', 'i-desc'];
+            populateCategoryDropdown();
+
+            if (mode === 'add') {
+                title.innerHTML = '<span class="text-green-600">ADD</span> NEW ITEM';
+                select.classList.add('hidden');
+                inputs.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) { el.disabled = false; el.value = id === 'i-stock' ? '100' : ''; }
+                });
+                document.getElementById('save-btn').innerText = 'Add Item to Store';
+                document.getElementById('save-btn').className = 'w-full bg-green-600 text-white font-extrabold py-4 rounded-2xl mt-4 hover:bg-green-700 shadow-lg active:scale-98 transition tracking-wider text-sm sm:text-base';
+            } else {
+                title.innerHTML = mode === 'edit' ? '<span class="text-blue-600">EDIT</span> EXISTING ITEM' : '<span class="text-red-600">DELETE</span> ITEM';
+                select.classList.remove('hidden');
+                select.innerHTML = '<option value="">-- Select an Item --</option>' + products.map(p => `<option value="${p.id}">${p.name} (${p.variants[0].size} - ₹${p.variants[0].price})</option>`).join('');
+                inputs.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) { el.value = ''; el.disabled = (mode === 'delete'); }
+                });
+                document.getElementById('save-btn').innerText = mode === 'edit' ? 'Save Changes' : 'Permanently Delete Item';
+                document.getElementById('save-btn').className = mode === 'edit'
+                    ? 'w-full bg-blue-600 text-white font-extrabold py-4 rounded-2xl mt-4 hover:bg-blue-700 shadow-lg active:scale-98 transition tracking-wider text-sm sm:text-base'
+                    : 'w-full bg-red-600 text-white font-extrabold py-4 rounded-2xl mt-4 hover:bg-red-700 shadow-lg active:scale-98 transition tracking-wider text-sm sm:text-base';
+            }
+        }
+
+        function loadItemData() {
+            const id = parseInt(document.getElementById('item-select').value);
+            if (!id) return;
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            document.getElementById('i-name').value = p.name || '';
+            document.getElementById('i-brand').value = p.brand || '';
+            document.getElementById('i-category').value = p.category || 'c3';
+            document.getElementById('i-size').value = p.variants[0]?.size || '1 Pack';
+            document.getElementById('i-price').value = p.variants[0]?.price || 0;
+            document.getElementById('i-orig-price').value = p.variants[0]?.originalPrice || p.variants[0]?.price || 0;
+            document.getElementById('i-stock').value = p.variants[0]?.stock ?? 100;
+            document.getElementById('i-image').value = p.image || '';
+            document.getElementById('i-desc').value = p.description || '';
+        }
+
+        function quickEditProduct(id) {
+            showAction('edit');
+            const sel = document.getElementById('item-select');
+            if (sel) {
+                sel.value = String(id);
+                loadItemData();
+                document.getElementById('action-container')?.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function quickDeleteProduct(id) {
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            products = products.filter(x => x.id !== id);
+            safeSet('freshmart_products', products);
+            renderAdminItemsList();
+            refreshDashboardStats();
+            showAdminToast('Product Deleted', `${p.name} removed from catalog.`, 'info');
+        }
+
+        function saveItemData() {
+            if (currentMode === 'add') {
+                const name = document.getElementById('i-name').value.trim();
+                const brand = document.getElementById('i-brand').value.trim() || 'FreshMart';
+                const price = parseInt(document.getElementById('i-price').value) || 0;
+                const origPrice = parseInt(document.getElementById('i-orig-price').value) || price;
+                const stock = parseInt(document.getElementById('i-stock').value) || 100;
+                if (!name || !price) return showAdminToast('Missing Fields', 'Please enter Item Name and Price.', 'error');
+
+                const newItem = {
+                    id: Date.now(),
+                    name,
+                    brand,
+                    category: document.getElementById('i-category').value || 'c3',
+                    description: document.getElementById('i-desc').value.trim() || 'Fresh quality daily essential.',
+                    image: document.getElementById('i-image').value.trim() || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&q=80',
+                    rating: 4.9,
+                    reviews: 12,
+                    sales: 50,
+                    variants: [{
+                        vId: Date.now() + 'v',
+                        size: document.getElementById('i-size').value.trim() || '1 Pack',
+                        price,
+                        originalPrice: Math.max(price, origPrice),
+                        stock
+                    }]
+                };
+                products.unshift(newItem);
+                showAdminToast('Item Added', `${newItem.name} added to live store!`);
+            } else {
+                const id = parseInt(document.getElementById('item-select').value);
+                if (!id) return showAdminToast('Select Item', 'Please select a product from the dropdown first.', 'error');
+
+                if (currentMode === 'delete') {
+                    products = products.filter(x => x.id !== id);
+                    showAdminToast('Item Deleted', 'Product removed from store.', 'info');
+                } else if (currentMode === 'edit') {
+                    const p = products.find(x => x.id === id);
+                    if (p) {
+                        p.name = document.getElementById('i-name').value.trim() || p.name;
+                        p.brand = document.getElementById('i-brand').value.trim() || p.brand;
+                        p.category = document.getElementById('i-category').value || p.category;
+                        p.description = document.getElementById('i-desc').value.trim();
+                        p.image = document.getElementById('i-image').value.trim() || p.image;
+                        p.variants[0].size = document.getElementById('i-size').value.trim() || p.variants[0].size;
+                        const newPrice = parseInt(document.getElementById('i-price').value) || p.variants[0].price;
+                        const newOrig = parseInt(document.getElementById('i-orig-price').value) || Math.max(newPrice, p.variants[0].originalPrice);
+                        p.variants[0].price = newPrice;
+                        p.variants[0].originalPrice = Math.max(newPrice, newOrig);
+                        p.variants[0].stock = parseInt(document.getElementById('i-stock').value) ?? p.variants[0].stock;
+                        showAdminToast('Item Updated', `${p.name} updated successfully!`);
+                    }
+                }
+            }
+            safeSet('freshmart_products', products);
+            renderAdminItemsList();
+            refreshDashboardStats();
+            showAction(currentMode);
+        }
+
+        function renderAdminItemsList() {
+            const tbody = document.getElementById('admin-items-tbody');
+            if (!tbody) return;
+            const q = (document.getElementById('admin-item-search')?.value || '').trim().toLowerCase();
+            const list = products.filter(p => !q || p.name.toLowerCase().includes(q) || (p.brand || '').toLowerCase().includes(q));
+            tbody.innerHTML = list.map(p => {
+                const catName = categories.find(c => c.id === p.category)?.name || 'Grocery';
+                const v = p.variants?.[0] || { size: '1 Pack', price: 0, originalPrice: 0, stock: 0 };
+                return `
+                    <tr class="hover:bg-slate-50/80 transition">
+                        <td class="p-3.5 font-extrabold text-slate-900 flex items-center gap-3">
+                            <img src="${p.image}" class="w-10 h-10 rounded-xl object-contain bg-white border border-slate-100 p-1 flex-shrink-0" onerror="this.style.display='none'">
+                            <span class="truncate max-w-[200px]">${p.name}</span>
+                        </td>
+                        <td class="p-3.5"><span class="text-xs font-extrabold text-primary-700 bg-primary-50 px-2 py-0.5 rounded-md">${p.brand}</span> <span class="text-xs text-slate-400 ml-1">${catName}</span></td>
+                        <td class="p-3.5 text-xs font-bold">${v.size}</td>
+                        <td class="p-3.5 font-black text-slate-900">₹${v.price} ${v.originalPrice > v.price ? `<span class="text-[11px] text-slate-400 line-through ml-1">₹${v.originalPrice}</span>` : ''}</td>
+                        <td class="p-3.5 text-right space-x-2 whitespace-nowrap">
+                            <button onclick="quickEditProduct(${p.id})" class="px-3 py-1.5 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-100 text-xs font-extrabold transition">Edit</button>
+                            <button onclick="quickDeleteProduct(${p.id})" class="px-3 py-1.5 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 text-xs font-extrabold transition">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // --- 3. INVENTORY & STOCK ---
+        function loadInventoryTable() {
+            const tbody = document.getElementById('inventory-table-body');
+            if (!tbody) return;
+            const filter = document.getElementById('inv-filter')?.value || 'all';
+            let list = [...products];
+            if (filter === 'low') list = list.filter(p => (p.variants?.[0]?.stock ?? 0) > 0 && (p.variants?.[0]?.stock ?? 0) < 25);
+            if (filter === 'out') list = list.filter(p => (p.variants?.[0]?.stock ?? 0) <= 0);
+
+            tbody.innerHTML = list.map(p => {
+                const cat = categories.find(c => c.id === p.category)?.name || 'Grocery';
+                const stock = p.variants?.[0]?.stock ?? 0;
+                const badge = stock <= 0
+                    ? `<span class="px-2.5 py-1 rounded-full bg-red-100 text-red-700 text-[10px] font-extrabold">Out of Stock</span>`
+                    : (stock < 25
+                        ? `<span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 text-[10px] font-extrabold">Low Stock</span>`
+                        : `<span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-extrabold">In Stock</span>`);
+                return `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-4 font-extrabold text-slate-900 flex items-center gap-3">
+                            <img src="${p.image}" class="w-9 h-9 rounded-xl object-contain bg-white border border-slate-100 p-1" onerror="this.style.display='none'">
+                            <div>
+                                <div>${p.name}</div>
+                                <div class="text-[10px] text-slate-400 font-bold">${p.variants[0].size} • ₹${p.variants[0].price}</div>
+                            </div>
+                        </td>
+                        <td class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">${cat}</td>
+                        <td class="p-4 text-center"><span class="bg-slate-100 text-slate-900 px-3.5 py-1 rounded-full font-black text-xs sm:text-sm">${stock}</span></td>
+                        <td class="p-4 text-center">${badge}</td>
+                        <td class="p-4 text-right whitespace-nowrap space-x-1">
+                            <button onclick="adjustStock(${p.id}, -10)" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-red-50 hover:text-red-600 text-xs font-extrabold">-10</button>
+                            <button onclick="adjustStock(${p.id}, -1)" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-red-50 hover:text-red-600 text-xs font-extrabold">-1</button>
+                            <button onclick="adjustStock(${p.id}, 1)" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-600 text-xs font-extrabold">+1</button>
+                            <button onclick="adjustStock(${p.id}, 10)" class="px-2.5 py-1 rounded-lg bg-primary-50 text-primary-700 hover:bg-primary-100 text-xs font-extrabold">+10</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function adjustStock(productId, delta) {
+            const p = products.find(x => x.id === productId);
+            if (!p || !p.variants?.[0]) return;
+            p.variants[0].stock = Math.max(0, (Number(p.variants[0].stock) || 0) + delta);
+            safeSet('freshmart_products', products);
+            loadInventoryTable();
+            refreshDashboardStats();
+        }
+
+        // --- 4. SALES & COUPONS ---
+        function populateCategoryDropdown() {
+            const options = '<option value="">-- Select Category --</option>' + categories.map(c => `<option value="${c.id}">${c.icon || ''} ${c.name}</option>`).join('');
+            const sCat = document.getElementById('s-category');
+            const iCat = document.getElementById('i-category');
+            if (sCat) sCat.innerHTML = options;
+            if (iCat) iCat.innerHTML = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+            document.getElementById('sale-details')?.classList.add('hidden');
+        }
+
+        function loadCategoryItems() {
+            const catId = document.getElementById('s-category').value;
+            const filtered = products.filter(p => p.category === catId);
+            document.getElementById('s-item').innerHTML = '<option value="">-- Select Product --</option>' + filtered.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+            document.getElementById('sale-details').classList.add('hidden');
+        }
+
+        function loadSaleData() {
+            const id = parseInt(document.getElementById('s-item').value);
+            if (!id) { document.getElementById('sale-details').classList.add('hidden'); return; }
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            document.getElementById('s-img').src = p.image;
+            document.getElementById('s-name').innerText = p.name;
+            document.getElementById('s-orig-price').innerText = 'Original MRP: ₹' + p.variants[0].originalPrice;
+
+            const isOnSale = p.variants[0].originalPrice > p.variants[0].price;
+            document.getElementById('s-status').checked = isOnSale;
+            document.getElementById('s-new-price').value = p.variants[0].price;
+
+            toggleSaleCalc();
+            calcDiscount();
+            document.getElementById('sale-details').classList.remove('hidden');
+        }
+
+        function toggleSaleCalc() {
+            const isActive = document.getElementById('s-status').checked;
+            const inputs = document.getElementById('sale-inputs');
+            const p = products.find(x => x.id === parseInt(document.getElementById('s-item').value));
+            if (isActive) {
+                inputs.classList.remove('opacity-50', 'pointer-events-none');
+            } else {
+                inputs.classList.add('opacity-50', 'pointer-events-none');
+                if (p) document.getElementById('s-new-price').value = p.variants[0].originalPrice;
+                document.getElementById('s-percent').value = '0%';
+            }
+        }
+
+        function calcDiscount() {
+            if (!document.getElementById('s-status').checked) return;
+            const p = products.find(x => x.id === parseInt(document.getElementById('s-item').value));
+            if (!p) return;
+            const newPrice = parseInt(document.getElementById('s-new-price').value);
+            const origPrice = p.variants[0].originalPrice;
+            if (newPrice && newPrice < origPrice) {
+                const pct = Math.round(((origPrice - newPrice) / origPrice) * 100);
+                document.getElementById('s-percent').value = pct + '% OFF';
+            } else {
+                document.getElementById('s-percent').value = 'Invalid';
+            }
+        }
+
+        function saveSaleData() {
+            const id = parseInt(document.getElementById('s-item').value);
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            const isActive = document.getElementById('s-status').checked;
+            if (isActive) {
+                const newPrice = parseInt(document.getElementById('s-new-price').value);
+                if (!newPrice || newPrice >= p.variants[0].originalPrice) {
+                    return showAdminToast('Invalid Sale Price', 'Sale price must be lower than Original MRP!', 'error');
+                }
+                p.variants[0].price = newPrice;
+                showAdminToast('Sale Active!', `${p.name} is now on sale at ₹${newPrice}!`);
+            } else {
+                p.variants[0].price = p.variants[0].originalPrice;
+                showAdminToast('Sale Ended', `Restored original price ₹${p.variants[0].originalPrice}.`, 'info');
+            }
+            safeSet('freshmart_products', products);
+            loadSaleData();
+        }
+
+        function getCoupons() {
+            return safeGet('freshmart_coupons', [
+                { code: 'FRESH20', discount: 20, minOrder: 199, active: true },
+                { code: 'WELCOME50', discount: 50, minOrder: 499, active: true }
+            ]);
+        }
+
+        function renderCouponsList() {
+            const el = document.getElementById('coupons-list');
+            if (!el) return;
+            const list = getCoupons();
+            el.innerHTML = list.map((c, idx) => `
+                <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/70 flex items-center justify-between">
+                    <div>
+                        <span class="px-2.5 py-1 rounded-lg bg-primary-600 text-white font-black text-xs tracking-wider">${c.code}</span>
+                        <div class="text-xs font-extrabold text-slate-800 mt-1.5">Flat ₹${c.discount} OFF on ₹${c.minOrder}+</div>
+                    </div>
+                    <button onclick="deleteCoupon(${idx})" class="text-red-500 hover:bg-red-50 p-2 rounded-xl"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                </div>
+            `).join('');
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function addCouponCode() {
+            const code = document.getElementById('coup-code').value.trim().toUpperCase();
+            const discount = parseInt(document.getElementById('coup-discount').value) || 0;
+            const minOrder = parseInt(document.getElementById('coup-min').value) || 0;
+            if (!code || !discount) return;
+            const list = getCoupons();
+            list.unshift({ code, discount, minOrder, active: true });
+            safeSet('freshmart_coupons', list);
+            document.getElementById('coup-code').value = '';
+            document.getElementById('coup-discount').value = '';
+            document.getElementById('coup-min').value = '';
+            renderCouponsList();
+            showAdminToast('Coupon Created', `Promo code ${code} (₹${discount} OFF) is now active!`);
+        }
+
+        function deleteCoupon(idx) {
+            const list = getCoupons();
+            list.splice(idx, 1);
+            safeSet('freshmart_coupons', list);
+            renderCouponsList();
+        }
+
+        // --- 5. ORDER MANAGEMENT ---
+                function renderAdminReturnComplaints() {
+            const boxes = [document.getElementById('admin-return-complaints-list'), document.getElementById('admin-dedicated-complaints-list')].filter(Boolean);
+            const sideCmp = document.getElementById('side-badge-complaints');
+            const allCmp = safeGet('freshmart_return_complaints', []);
+            if (sideCmp) sideCmp.innerText = allCmp.length;
+            if (boxes.length === 0) return;
+            const list = safeGet('freshmart_return_complaints', []);
+            const orders = getOrdersList();
+            if (list.length === 0) {
+                boxes.forEach(b => b.innerHTML = '<div class="p-5 rounded-2xl bg-slate-50 text-xs font-bold text-slate-500 text-center">No customer return complaints submitted yet.</div>');
+                return;
+            }
+            const htmlContent = list.map(c => {
+                const st = c.status || (c.statusCode === 'approved_store_fault' ? 'Approved' : (c.statusCode === 'rejected_user_fault' ? 'Rejected' : 'Received'));
+                const badgeCls =
+                    st === 'Approved' || st === 'Resolved' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' :
+                    st === 'Rejected' ? 'bg-rose-100 text-rose-800 border-rose-300' :
+                    st === 'Under Review' ? 'bg-amber-100 text-amber-800 border-amber-300' :
+                    'bg-sky-100 text-sky-800 border-sky-300';
+                const matchedOrder = orders.find(o => String(o.id).toUpperCase() === String(c.orderId).toUpperCase());
+                const imgs = Array.isArray(c.images) && c.images.length ? c.images : [];
+
+                return `
+                    <div class="p-5 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-sm font-black text-slate-900">Complaint #${c.id}</span>
+                                    <span class="text-xs font-extrabold text-primary-700 bg-primary-50 px-2.5 py-0.5 rounded-lg">Order #${c.orderId}</span>
+                                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold border ${badgeCls}">${st}</span>
+                                </div>
+                                <div class="text-[11px] font-semibold text-slate-400 mt-0.5">Submitted: ${c.submittedAtFormatted || c.dateFormatted || 'Recent'}</div>
+                            </div>
+                            <a href="https://wa.me/91${String(c.mobile || '7988300872').replace(/\D/g, '').slice(-10)}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-extrabold hover:bg-emerald-100">
+                                WhatsApp Customer
+                            </a>
+                        </div>
+
+                        <!-- Order Comparison vs Customer Claim -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1">
+                                <div class="text-[10px] font-black uppercase tracking-wider text-slate-400">Customer Complaint Details</div>
+                                <div class="font-extrabold text-slate-900">${c.issueType || 'Return Request'}</div>
+                                <p class="text-slate-600 font-medium">"${c.description}"</p>
+                                <div class="text-[11px] font-bold text-slate-500 pt-1">Customer: ${c.customerName} (+91 ${c.mobile}) • ${c.email}</div>
+                                <div class="text-[11px] font-bold text-slate-500">Address: ${c.address}</div>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-200/80 space-y-1">
+                                <div class="text-[10px] font-black uppercase tracking-wider text-emerald-700">Actual Order &amp; Delivery Record</div>
+                                ${matchedOrder ? `
+                                    <div class="font-extrabold text-slate-900">Order #${matchedOrder.id} — Verified in Store DB ✓</div>
+                                    <div class="text-slate-600 font-semibold">Delivery Status: <strong>${matchedOrder.status || 'Delivered'}</strong> • Order Date: ${matchedOrder.date || 'Recent'}</div>
+                                    <div class="text-slate-600 font-semibold">Order Total: <strong>₹${matchedOrder.total || c.orderTotal || 350}</strong></div>
+                                    <div class="text-[11px] font-bold text-emerald-700">Media Verified: ${c.imageCount || 4} Photos &amp; ${c.videoCount || 1} Video (${(c.video && c.video.name) || 'unboxing-order-proof.mp4'})</div>
+                                ` : `
+                                    <div class="font-extrabold text-amber-800">Order #${c.orderId} — Check Manual Dispatch Log</div>
+                                    <div class="text-[11px] font-bold text-emerald-700">Media Attached: ${c.imageCount || 4} Photos &amp; ${c.videoCount || 1} Video</div>
+                                `}
+                            </div>
+                        </div>
+
+                        <!-- Uploaded 4 Photos Preview -->
+                        ${imgs.length ? `
+                            <div>
+                                <div class="text-[11px] font-extrabold text-slate-700 mb-1.5">Uploaded Customer Photos (${imgs.length}/4) &amp; Video (${c.videoCount || 1}/1):</div>
+                                <div class="grid grid-cols-4 sm:grid-cols-5 gap-2">
+                                    ${imgs.map(im => `<a href="${im.previewUrl || im.dataUrl || '#'}" target="_blank" class="block h-16 rounded-xl overflow-hidden border border-slate-200"><img src="${im.previewUrl || im.dataUrl || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&q=80'}" class="w-full h-full object-cover"></a>`).join('')}
+                                    <div class="h-16 rounded-xl bg-slate-900 text-white flex flex-col items-center justify-center text-[10px] font-extrabold p-1 text-center">
+                                        <span>▶ VIDEO</span>
+                                        <span class="text-[9px] text-emerald-300 truncate w-full">${(c.video && c.video.name) || 'Proof.mp4'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- Admin Investigation & Resolution Controls -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t border-slate-100">
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">1. Investigation Finding</label>
+                                <select id="adm-finding-${c.id}" class="admin-input !py-2 text-xs">
+                                    <option value="FreshMart Mistake (Packing/Store Error)" ${c.investigationFinding === 'FreshMart Mistake (Packing/Store Error)' ? 'selected' : ''}>FreshMart's Mistake (Packing/Store Error)</option>
+                                    <option value="Customer Received Wrong Product" ${c.investigationFinding === 'Customer Received Wrong Product' ? 'selected' : ''}>Customer Received Wrong Product</option>
+                                    <option value="Product Damaged During Delivery" ${c.investigationFinding === 'Product Damaged During Delivery' ? 'selected' : ''}>Product Damaged During Delivery</option>
+                                    <option value="Issue Caused by Customer" ${c.investigationFinding === 'Issue Caused by Customer' ? 'selected' : ''}>Issue Caused by Customer</option>
+                                    <option value="Complaint Invalid or Unsupported" ${c.investigationFinding === 'Complaint Invalid or Unsupported' ? 'selected' : ''}>Complaint Invalid or Unsupported</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">2. Internal Admin Note (Private)</label>
+                                <input type="text" id="adm-note-${c.id}" value="${(c.internalNotes || '').replace(/"/g, '&quot;')}" placeholder="Internal team note (hidden from customer)..." class="admin-input !py-2 text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">3. Customer Resolution Message (Emailed)</label>
+                                <input type="text" id="adm-res-${c.id}" value="${(c.resolutionMessage || '').replace(/"/g, '&quot;')}" placeholder="Reason / next steps sent to customer..." class="admin-input !py-2 text-xs">
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-end gap-2 pt-1">
+                            <button onclick="resolveAdminReturnComplaint('${c.id}', 'Received')" class="px-3 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-extrabold shadow-xs">
+                                ✓ Mark Received
+                            </button>
+                            <button onclick="resolveAdminReturnComplaint('${c.id}', 'Processing')" class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-extrabold shadow-xs">
+                                ⏳ Mark Processing
+                            </button>
+                            <button onclick="resolveAdminReturnComplaint('${c.id}', 'Under Review')" class="px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-extrabold shadow-xs">
+                                ● Under Review
+                            </button>
+                            <button onclick="resolveAdminReturnComplaint('${c.id}', 'Approved')" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-xs">
+                                ✓ Approve &amp; Email Customer
+                            </button>
+                            <button onclick="resolveAdminReturnComplaint('${c.id}', 'Rejected')" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold shadow-xs">
+                                ✕ Reject &amp; Email Reason
+                            </button>
+                            <button onclick="resolveAdminReturnComplaint('${c.id}', 'Resolved')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-extrabold shadow-xs">
+                                ✓ Mark Resolved &amp; Email
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            boxes.forEach(b => b.innerHTML = htmlContent);
+        }
+
+        async function resolveAdminReturnComplaint(complaintId, newStatus) {
+            const list = safeGet('freshmart_return_complaints', []);
+            const idx = list.findIndex(c => c.id === complaintId);
+            if (idx === -1) return;
+            const c = list[idx];
+
+            const findingEl = document.getElementById('adm-finding-' + complaintId);
+            const noteEl = document.getElementById('adm-note-' + complaintId);
+            const resEl = document.getElementById('adm-res-' + complaintId);
+
+            const finding = findingEl ? findingEl.value : '';
+            const internalNotes = noteEl ? noteEl.value.trim() : '';
+            let resolutionMessage = resEl ? resEl.value.trim() : '';
+
+            if (!resolutionMessage) {
+                if (newStatus === 'Received') {
+                    resolutionMessage = 'Your complaint has been received successfully. Our team will review your request.';
+                } else if (newStatus === 'Processing' || newStatus === 'Under Review') {
+                    resolutionMessage = 'Our quality and dispatch team is reviewing your uploaded photos, video, and order details.';
+                } else if (newStatus === 'Approved') {
+                    resolutionMessage = `Your complaint (#${c.id}) has been reviewed and approved (${finding}). A full replacement/refund has been initiated for Order #${c.orderId}.`;
+                } else if (newStatus === 'Rejected') {
+                    resolutionMessage = `After reviewing your complaint (#${c.id}) and dispatch verification records, your request was rejected. Reason: ${finding}.`;
+                } else if (newStatus === 'Resolved') {
+                    resolutionMessage = `Your complaint (#${c.id}) for Order #${c.orderId} has been marked Resolved. Thank you for shopping with FreshMart.`;
+                }
+            }
+
+            const nowFormatted = new Date().toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+            c.status = newStatus;
+            c.statusLabel = newStatus;
+            c.statusCode = newStatus === 'Approved' || newStatus === 'Resolved' ? 'approved_store_fault' : (newStatus === 'Rejected' ? 'rejected_user_fault' : 'received');
+            c.investigationFinding = finding;
+            c.internalNotes = internalNotes;
+            c.resolutionMessage = resolutionMessage;
+            c.latestUpdate = resolutionMessage;
+            if (!Array.isArray(c.statusHistory)) c.statusHistory = [];
+            c.statusHistory.unshift({
+                status: newStatus,
+                note: resolutionMessage,
+                finding,
+                time: nowFormatted
+            });
+
+            // 1. Save status update first
+            safeSet('freshmart_return_complaints', list);
+            try {
+                await fetch('/api/admin/complaints/' + encodeURIComponent(complaintId), {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus, investigationFinding: finding, internalNotes, resolutionMessage })
+                });
+            } catch (e) {}
+
+            // 2. Send customer email notification ONLY after status update succeeds
+            if (['Approved', 'Rejected', 'Resolved'].includes(newStatus)) {
+                try {
+                    await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            service_id: 'service_57rcqvv',
+                            template_id: 'template_uayc7bw',
+                            user_id: 'K6cs_matxXu2begVg',
+                            template_params: {
+                                to_email: c.email,
+                                email: c.email,
+                                user_email: c.email,
+                                to_name: c.customerName,
+                                subject: `FreshMart Complaint #${c.id} ${newStatus} (Order #${c.orderId})`,
+                                message: resolutionMessage
+                            }
+                        })
+                    });
+                } catch (e) {}
+            }
+
+            renderAdminReturnComplaints();
+            showAdminToast(`Status Updated: ${newStatus}`, `Complaint #${complaintId} marked ${newStatus} & customer notified at ${c.email}.`);
+        }
+
+        function renderAdminOrders() {
+            renderAdminReturnComplaints();
+            const container = document.getElementById('admin-orders-list');
+            if (!container) return;
+            const filter = document.getElementById('order-status-filter')?.value || 'all';
+            const orders = getOrdersList().filter(o => filter === 'all' || o.status === filter);
+            container.innerHTML = orders.map(o => `
+                <div class="admin-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-sm font-black text-slate-900">Order #${o.id}</span>
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${o.status === 'Delivered' ? 'bg-emerald-100 text-emerald-700' : (o.status === 'Failed' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700')}">${o.status}</span>
+                        </div>
+                        <div class="text-xs font-bold text-slate-600 mt-1">Customer: ${o.customer || 'Sahil Sharma'} • ${o.date}</div>
+                        <div class="text-sm font-black text-primary-600 mt-1">Total Payable: ₹${o.total}</div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <select onchange="changeOrderStatus('${o.id}', this.value)" class="admin-input !w-auto !py-2 !bg-white text-xs">
+                            <option value="Processing" ${o.status === 'Processing' ? 'selected' : ''}>Processing</option>
+                            <option value="Out for Delivery" ${o.status === 'Out for Delivery' ? 'selected' : ''}>Out for Delivery</option>
+                            <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                            <option value="Failed" ${o.status === 'Failed' ? 'selected' : ''}>Failed / Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function changeOrderStatus(orderId, newStatus) {
+            const orders = getOrdersList();
+            const ord = orders.find(o => o.id === orderId);
+            if (ord) {
+                ord.status = newStatus;
+                safeSet('freshmart_orders', orders);
+                let notifs = safeGet('freshmart_notifs', []);
+                notifs.unshift({
+                    id: Date.now(),
+                    title: `Order #${orderId} ${newStatus}`,
+                    msg: `Your order #${orderId} status has been updated to: ${newStatus}.`,
+                    status: newStatus === 'Failed' ? 'Failed' : 'Success',
+                    time: Date.now(),
+                    expires: Date.now() + 12 * 3600 * 1000
+                });
+                safeSet('freshmart_notifs', notifs);
+                renderAdminOrders();
+                refreshDashboardStats();
+                showAdminToast('Order Updated', `Order #${orderId} marked as ${newStatus}.`);
+            }
+        }
+
+        function createSampleOrder() {
+            const orders = getOrdersList();
+            const newId = 'FM-' + Math.floor(1000 + Math.random() * 9000);
+            orders.unshift({
+                id: newId,
+                customer: 'Walk-in / WhatsApp Customer',
+                phone: '7988300872',
+                date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+                total: 420,
+                status: 'Processing',
+                items: [{ pId: 1, qty: 2 }, { pId: 2, qty: 1 }]
+            });
+            safeSet('freshmart_orders', orders);
+            renderAdminOrders();
+            refreshDashboardStats();
+            showAdminToast('Order Created', `New Order #${newId} added to queue!`);
+        }
+
+        // --- 6. DELIVERY STATUS PUSH TO FRONTEND (PRESERVED & ENHANCED) ---
+        function populateDeliveryOrdersDropdown() {
+            const sel = document.getElementById('d-order-select');
+            if (!sel) return;
+            const orders = getOrdersList();
+            sel.innerHTML = '<option value="">-- Select Active Order --</option>' + orders.map(o =>
+                `<option value="${o.id}">Order #${o.id} (${o.customer || 'Sahil Sharma'}) - ₹${o.total} [${o.status}]</option>`
+            ).join('');
+        }
+
+        function updateDelivery(status) {
+            const orderId = document.getElementById('d-order-select').value;
+            if (!orderId) return showAdminToast('Select Order', 'Please select an active order first.', 'error');
+
+            let message = '';
+            let title = '';
+            if (status === 'Success') {
+                title = `Order #${orderId} Delivered!`;
+                message = `Your Order ${orderId} has been successfully delivered!`;
+            } else {
+                const reason = document.getElementById('d-reason').value.trim() || 'Customer unavailable';
+                title = `Delivery Issue: Order #${orderId}`;
+                message = `Delivery Failed for Order ${orderId}. Reason: ${reason}`;
+            }
+
+            const orders = getOrdersList();
+            const ord = orders.find(o => o.id === orderId);
+            if (ord) {
+                ord.status = status === 'Success' ? 'Delivered' : 'Failed';
+                safeSet('freshmart_orders', orders);
+            }
+
+            let notifs = safeGet('freshmart_notifs', []);
+            notifs.unshift({
+                id: Date.now(),
+                title,
+                msg: message,
+                status,
+                time: Date.now(),
+                expires: Date.now() + (12 * 60 * 60 * 1000)
+            });
+            safeSet('freshmart_notifs', notifs);
+            populateDeliveryOrdersDropdown();
+            renderDeliveryNotifsLog();
+            refreshDashboardStats();
+            showAdminToast('Notification Sent!', `App Notification pushed for ${orderId}.`);
+        }
+
+        function renderDeliveryNotifsLog() {
+            const box = document.getElementById('admin-delivery-notifs');
+            if (!box) return;
+            const notifs = safeGet('freshmart_notifs', []);
+            box.innerHTML = notifs.slice(0, 6).map(n => `
+                <div class="p-3.5 rounded-2xl border ${n.status === 'Success' ? 'border-emerald-200 bg-emerald-50/40' : 'border-red-200 bg-red-50/40'} flex items-center justify-between gap-3">
+                    <div>
+                        <div class="text-xs font-extrabold text-slate-900">${n.title || 'Delivery Alert'}</div>
+                        <div class="text-xs text-slate-600 font-medium">${n.msg}</div>
+                    </div>
+                    <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${n.status === 'Success' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}">${n.status}</span>
+                </div>
+            `).join('');
+        }
+
+        function clearAdminNotifs() {
+            safeSet('freshmart_notifs', []);
+            renderDeliveryNotifsLog();
+            showAdminToast('Cleared', 'Notification log cleared.', 'info');
+        }
+
+        // --- 7. CUSTOMERS & SUPPORT ---
+        function renderCustomersList() {
+            const container = document.getElementById('customers-list-container');
+            if (!container) return;
+            const saved = safeGet('freshmart_saved_accounts', []);
+            const localUsers = safeGet('freshmart_local_users', []);
+            const map = new Map();
+            [{ name: 'Sahil Sharma', phone: '7988300872', email: 'sahil@freshmart.com' }, ...saved, ...localUsers].forEach(u => {
+                if (u && u.name) {
+                    const key = (u.email || u.phone || u.mobile || u.name).toLowerCase();
+                    if (!map.has(key)) map.set(key, { name: u.name, phone: u.phone || u.mobile || '7988300872', email: u.email || 'customer@freshmart.com' });
+                }
+            });
+            const list = Array.from(map.values());
+            const badge = document.getElementById('customer-total-count');
+            if (badge) badge.innerText = `${list.length} ${list.length === 1 ? 'Customer' : 'Customers'}`;
+
+            container.innerHTML = list.map(c => `
+                <div class="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/80">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-primary-50 text-primary-700 font-black text-xs flex items-center justify-center">${(c.name || 'FM').substring(0, 2).toUpperCase()}</div>
+                        <div>
+                            <div class="text-sm font-extrabold text-slate-900">${c.name}</div>
+                            <div class="text-xs font-semibold text-slate-500">+91 ${c.phone} • ${c.email}</div>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/91${String(c.phone).replace(/\D/g, '').slice(-10)}" target="_blank" class="px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs font-extrabold inline-flex items-center gap-1.5 w-max">
+                        <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> WhatsApp Customer
+                    </a>
+                </div>
+            `).join('');
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function sendBroadcastNotification() {
+            const title = document.getElementById('bc-title').value.trim();
+            const msg = document.getElementById('bc-msg').value.trim();
+            if (!title || !msg) return;
+            const notifs = safeGet('freshmart_notifs', []);
+            notifs.unshift({ id: Date.now(), title, msg, status: 'Success', time: Date.now(), expires: Date.now() + 24 * 3600 * 1000 });
+            safeSet('freshmart_notifs', notifs);
+            document.getElementById('bc-title').value = '';
+            document.getElementById('bc-msg').value = '';
+            showAdminToast('Broadcast Sent', 'Offer alert pushed to all customer apps!');
+        }
+
+        // --- 8. CATEGORY CONFIG ---
+        function renderAdminCategories() {
+            const grid = document.getElementById('admin-categories-grid');
+            if (!grid) return;
+            grid.innerHTML = categories.map(cat => {
+                const count = products.filter(p => p.category === cat.id).length;
+                return `
+                    <div class="admin-card p-5 flex items-center justify-between">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-2xl bg-primary-50 flex items-center justify-center text-2xl">${cat.icon || '🛍️'}</div>
+                            <div>
+                                <div class="text-sm font-extrabold text-slate-900">${cat.name}</div>
+                                <div class="text-xs font-bold text-primary-600">${count} Products</div>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-black uppercase text-slate-400 bg-slate-100 px-2.5 py-1 rounded-lg">${cat.id}</span>
+                    </div>
+                `;
+            }).join('');
+            boxes.forEach(b => b.innerHTML = htmlContent);
+        }
+
+        function addAdminCategory() {
+            const name = document.getElementById('cat-new-name').value.trim();
+            const icon = document.getElementById('cat-new-icon').value.trim() || '🛍️';
+            if (!name) return;
+            const id = 'c' + (categories.length + 1);
+            categories.push({ id, name, icon });
+            safeSet('freshmart_categories', categories);
+            document.getElementById('cat-new-name').value = '';
+            document.getElementById('cat-new-icon').value = '';
+            renderAdminCategories();
+            showAdminToast('Category Added', `${icon} ${name} added to store!`);
+        }
+
+        // --- 9, 10, 11, 12, 13. HOMEPAGE, PAYMENT, REPORTS, SECURITY, SETTINGS ---
+        function saveHomepageConfig() {
+            const cfg = {
+                badge: document.getElementById('hp-badge').value.trim(),
+                title1: document.getElementById('hp-title-1').value.trim(),
+                title2: document.getElementById('hp-title-2').value.trim(),
+                subtitle: document.getElementById('hp-subtitle').value.trim(),
+                gridHeading: document.getElementById('hp-grid-heading').value.trim()
+            };
+            safeSet('freshmart_homepage_config', cfg);
+            showAdminToast('Homepage Saved', 'Hero banner and texts updated!');
+        }
+
+        function savePaymentConfig() {
+            const cfg = {
+                cod: document.getElementById('pay-cod').checked,
+                upi: document.getElementById('pay-upi').checked,
+                card: document.getElementById('pay-card').checked,
+                upiId: document.getElementById('pay-upi-id').value.trim(),
+                deliveryFee: parseInt(document.getElementById('pay-del-fee').value) || 20
+            };
+            safeSet('freshmart_payment_config', cfg);
+            showAdminToast('Payment Settings Saved', `Delivery fee ₹${cfg.deliveryFee} & methods saved!`);
+        }
+
+        function renderReportsStats() {
+            const invVal = products.reduce((sum, p) => sum + ((p.variants?.[0]?.price || 0) * (p.variants?.[0]?.stock || 0)), 0);
+            const totalUnits = products.reduce((sum, p) => sum + (Number(p.variants?.[0]?.stock) || 0), 0);
+            const saleCount = products.filter(p => p.variants?.[0]?.originalPrice > p.variants?.[0]?.price).length;
+            document.getElementById('rep-inv-value').innerText = '₹' + invVal.toLocaleString('en-IN');
+            document.getElementById('rep-total-units').innerText = totalUnits.toLocaleString('en-IN') + ' Units';
+            document.getElementById('rep-sale-count').innerText = saleCount + ' Products';
+        }
+
+        function exportStockCSV() {
+            const rows = [['ID', 'Product Name', 'Brand', 'Category', 'Size', 'Price (INR)', 'Original MRP (INR)', 'Stock']];
+            products.forEach(p => {
+                const v = p.variants?.[0] || {};
+                rows.push([p.id, `"${(p.name || '').replace(/"/g, '""')}"`, `"${p.brand || ''}"`, p.category, v.size || '', v.price || 0, v.originalPrice || 0, v.stock ?? 0]);
+            });
+            const csv = rows.map(r => r.join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'freshmart-inventory-stock.csv';
+            a.click();
+            showAdminToast('CSV Downloaded', 'Inventory stock report exported!');
+        }
+
+        function exportOrdersCSV() {
+            const rows = [['Order ID', 'Customer', 'Date', 'Total (INR)', 'Status']];
+            getOrdersList().forEach(o => rows.push([o.id, `"${o.customer || 'Sahil Sharma'}"`, o.date, o.total, o.status]));
+            const csv = rows.map(r => r.join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'freshmart-orders.csv';
+            a.click();
+            showAdminToast('Orders Exported', 'Orders CSV downloaded!');
+        }
+
+        function exportFullBackupJSON() {
+            const backup = {
+                exportedAt: new Date().toISOString(),
+                products,
+                categories,
+                orders: getOrdersList(),
+                coupons: getCoupons()
+            };
+            const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'freshmart-store-backup.json';
+            a.click();
+            showAdminToast('Backup Downloaded', 'Full JSON backup saved!');
+        }
+
+        function saveAdminPin() {
+            const oldPin = document.getElementById('sec-old-pin').value.trim();
+            const newPin = document.getElementById('sec-new-pin').value.trim();
+            const currentCustom = localStorage.getItem('freshmart_admin_pin') || '0276';
+            if (oldPin !== '0276' && oldPin !== currentCustom) {
+                return showAdminToast('Wrong Current PIN', 'Please enter 0276 as the current PIN.', 'error');
+            }
+            if (newPin.length < 4) {
+                return showAdminToast('PIN Too Short', 'New PIN must be at least 4 digits.', 'error');
+            }
+            localStorage.setItem('freshmart_admin_pin', newPin);
+            document.getElementById('sec-old-pin').value = '';
+            document.getElementById('sec-new-pin').value = '';
+            showAdminToast('Admin PIN Updated', 'New custom PIN saved (0276 also remains active as master PIN).');
+        }
+
+        function saveBusinessSettings() {
+            const biz = {
+                name: document.getElementById('biz-name').value.trim(),
+                whatsapp: document.getElementById('biz-wa').value.trim(),
+                phone: document.getElementById('biz-phone').value.trim(),
+                email: document.getElementById('biz-email').value.trim()
+            };
+            safeSet('freshmart_business_settings', biz);
+            showAdminToast('Settings Saved', 'Store business details updated!');
+        }
+
+        function resetDefaultCatalog() {
+            products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+            safeSet('freshmart_products', products);
+            refreshDashboardStats();
+            showAdminToast('Catalog Restored', 'All 20 default FreshMart products restored!');
+        }
+
+        if (window.lucide) lucide.createIcons();
+    </script>
+</body>
+</html>

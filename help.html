@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4faf6">
+  <meta name="description" content="Get help with FreshMart orders, accounts, delivery, refunds and shopping.">
+  <title>Help & Support | FreshMart</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --green: #12834a;
+      --green-dark: #075c35;
+      --green-light: #eaf7ef;
+      --navy: #172b24;
+      --text: #52645a;
+      --muted: #7b8981;
+      --border: #e2ebe5;
+      --bg: #f5f9f6;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 95px;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      font-size: 14px;
+      line-height: 1.85;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--green); text-decoration: none; }
+    a:hover { color: var(--green-dark); }
+
+    .container {
+      width: min(1120px, calc(100% - 36px));
+      margin: auto;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--navy);
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .brand img {
+      width: 39px;
+      height: 39px;
+      object-fit: contain;
+    }
+
+    .brand-name span { color: var(--green); }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 15px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--navy);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px #173c2710;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-dark);
+      color: white;
+    }
+
+    .hero {
+      padding: 62px 0 55px;
+      background:
+        radial-gradient(ellipse at 90% 15%, #bfe8cc80, transparent 35%),
+        linear-gradient(130deg, #eaf7ee, #fff 58%, #eff9f1);
+      border-bottom: 1px solid #e1eee5;
+    }
+
+    .hero-content { max-width: 790px; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border: 1px solid #d8ebde;
+      border-radius: 999px;
+      background: #ffffffd9;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 21px 0 15px;
+      color: var(--navy);
+      font-size: clamp(35px, 5vw, 54px);
+      line-height: 1.14;
+      letter-spacing: -2px;
+      font-weight: 800;
+    }
+
+    .hero h1 span { color: var(--green); }
+
+    .hero p {
+      max-width: 710px;
+      margin: 0;
+      color: #5c7063;
+      font-size: 15px;
+      line-height: 1.95;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 23px;
+    }
+
+    main { padding: 34px 0 65px; }
+
+    .section-title {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 24px;
+      line-height: 1.4;
+      letter-spacing: -.7px;
+    }
+
+    .section-description {
+      margin: 0 0 24px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .support-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .support-card {
+      padding: 23px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      box-shadow: 0 5px 20px #163b2405;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .support-card:hover {
+      transform: translateY(-3px);
+      border-color: #c7e3d0;
+      box-shadow: 0 12px 25px #163b2409;
+    }
+
+    .card-icon {
+      display: grid;
+      place-items: center;
+      width: 45px;
+      height: 45px;
+      margin-bottom: 16px;
+      border-radius: 13px;
+      background: var(--green-light);
+      color: var(--green);
+    }
+
+    .card-icon i { width: 22px; height: 22px; }
+
+    .support-card h3 {
+      margin: 0 0 9px;
+      color: var(--navy);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .support-card p {
+      margin: 0;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 15px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .content-section { margin-top: 38px; }
+
+    .faq-list { display: grid; gap: 10px; }
+
+    .faq-item {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      overflow: hidden;
+    }
+
+    .faq-item summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 17px 19px;
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker { display: none; }
+
+    .faq-item summary::after {
+      content: "+";
+      color: var(--green);
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .faq-item[open] summary::after { content: "−"; }
+
+    .faq-answer {
+      padding: 0 19px 18px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .faq-answer p { margin: 0; }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .contact-method {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      padding: 20px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+    }
+
+    .contact-method .card-icon {
+      flex: 0 0 43px;
+      width: 43px;
+      height: 43px;
+      margin: 0;
+    }
+
+    .contact-method h3 {
+      margin: 0 0 4px;
+      color: var(--navy);
+      font-size: 14px;
+    }
+
+    .contact-method p {
+      margin: 0;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .contact-method a {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      margin-top: 18px;
+      padding: 20px;
+      border: 1px solid #d9eadd;
+      border-radius: 15px;
+      background: #eef8f0;
+    }
+
+    .notice-icon {
+      display: grid;
+      place-items: center;
+      flex: 0 0 39px;
+      height: 39px;
+      border-radius: 11px;
+      background: #d9efdf;
+      color: var(--green);
+    }
+
+    .notice h3 {
+      margin: 0 0 6px;
+      color: var(--navy);
+      font-size: 15px;
+    }
+
+    .notice p {
+      margin: 0;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .footer {
+      padding: 26px 0;
+      border-top: 1px solid var(--border);
+      background: white;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .footer p { margin: 0; color: var(--muted); font-size: 12px; }
+
+    .footer-links { display: flex; flex-wrap: wrap; gap: 15px; }
+
+    .footer-links a { font-size: 12px; font-weight: 600; }
+
+    @media (max-width: 850px) {
+      .support-grid, .contact-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container { width: calc(100% - 28px); }
+      .header-inner { min-height: 64px; }
+      .brand { font-size: 20px; }
+      .brand img { width: 34px; height: 34px; }
+      .header-actions { gap: 6px; }
+      .header-actions .btn { padding: 9px 10px; font-size: 11px; }
+      .hero { padding: 43px 0 40px; }
+      .hero h1 { font-size: 37px; letter-spacing: -1.4px; }
+      .hero p { font-size: 13px; }
+      .hero-actions { flex-direction: column; }
+      .hero-actions .btn { width: 100%; }
+      .support-grid, .contact-grid { grid-template-columns: 1fr; gap: 12px; }
+      .support-card { padding: 20px; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  
+/* Mobile header navigation buttons visible */
+</style>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="FreshMart home">
+        <img src="images/logo.png" alt="FreshMart logo"
+             onerror="this.style.display='none'">
+        <span class="brand-name">Fresh<span>Mart</span></span>
+      </a>
+
+      <div class="header-actions">
+        <button class="btn" type="button" onclick="goBack()">
+          <i data-lucide="arrow-left" width="16"></i>
+          Back
+        </button>
+        <a class="btn btn-primary" href="index.html">
+          <i data-lucide="house" width="16"></i>
+          Home
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-content">
+      <div class="eyebrow">
+        <i data-lucide="headset" width="15"></i>
+        FreshMart Customer Care
+      </div>
+
+      <h1>How can we <span>help you?</span></h1>
+
+      <p>
+        Need assistance with an order, account, delivery or refund?
+        Explore our support options and frequently asked questions to find
+        the information you need for a smoother FreshMart shopping experience.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary"
+           href="https://wa.me/917988300872?text=Hello%20FreshMart%20Support%2C%20I%20need%20help."
+           target="_blank" rel="noopener noreferrer">
+          <i data-lucide="message-circle" width="16"></i>
+          Chat on WhatsApp
+        </a>
+        <a class="btn" href="mailto:FreshMart@gmail.com">
+          <i data-lucide="mail" width="16"></i>
+          Email Support
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+    <section aria-labelledby="topics-title">
+      <h2 class="section-title" id="topics-title">What do you need help with?</h2>
+      <p class="section-description">
+        Choose a topic to find useful information and the right support page.
+      </p>
+
+      <div class="support-grid">
+        <article class="support-card">
+          <div class="card-icon"><i data-lucide="shopping-bag"></i></div>
+          <h3>Orders & Shopping</h3>
+          <p>Find information about order details, product availability and shopping questions.</p>
+          <a class="card-link" href="index.html">Visit shop <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="support-card">
+          <div class="card-icon"><i data-lucide="truck"></i></div>
+          <h3>Delivery Help</h3>
+          <p>Review delivery information and learn what to do if your order has an issue.</p>
+          <a class="card-link" href="delivery.html">Delivery policy <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="support-card">
+          <div class="card-icon"><i data-lucide="wallet"></i></div>
+          <h3>Refunds</h3>
+          <p>Understand how to report damaged, incorrect or missing products and request a review.</p>
+          <a class="card-link" href="refund.html">Refund policy <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="support-card">
+          <div class="card-icon"><i data-lucide="calendar-x"></i></div>
+          <h3>Order Cancellation</h3>
+          <p>Review the cancellation policy and learn how to ask about your order.</p>
+          <a class="card-link" href="cancellation.html">Cancellation policy <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="support-card">
+          <div class="card-icon"><i data-lucide="user-round"></i></div>
+          <h3>Account & Login</h3>
+          <p>Get help with account access and account-related questions.</p>
+          <a class="card-link" href="account-security.html">Account Security Hub <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="support-card">
+          <div class="card-icon"><i data-lucide="shield-check"></i></div>
+          <h3>Security & Privacy</h3>
+          <p>Learn about account safety, privacy information and safe shopping practices.</p>
+          <a class="card-link" href="security.html">Security center <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section" aria-labelledby="faq-title">
+      <h2 class="section-title" id="faq-title">Frequently asked questions</h2>
+      <p class="section-description">
+        Quick answers to common FreshMart customer questions.
+      </p>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>How do I get help with an order?</summary>
+          <div class="faq-answer">
+            <p>
+              Contact support with your order number, registered contact details
+              and a short description of the issue. Never share your password or OTP.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How can I report a missing or damaged product?</summary>
+          <div class="faq-answer">
+            <p>
+              Contact support promptly after delivery. Mention the affected
+              product and provide clear photos if they help explain the issue.
+              See our <a href="refund.html">Refund Policy</a> for more information.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How do I ask about a refund?</summary>
+          <div class="faq-answer">
+            <p>
+              Share your order details with support so the request can be reviewed.
+              Any applicable resolution and processing time depend on the order,
+              payment method and relevant policy.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Can I cancel my order?</summary>
+          <div class="faq-answer">
+            <p>
+              Cancellation depends on the order status and applicable conditions.
+              Read the <a href="cancellation.html">Cancellation Policy</a> or
+              contact support for help with a specific order.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How can I keep my account safe?</summary>
+          <div class="faq-answer">
+            <p>
+              Use a strong password, keep verification codes private and avoid
+              suspicious links. Visit the <a href="security.html">Security Center</a>
+              for more tips.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How can I ask about my personal information?</summary>
+          <div class="faq-answer">
+            <p>
+              Contact support with your privacy question. You may need to verify
+              your identity for account-related requests. Read our
+              <a href="privacy.html">Privacy Policy</a>.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="content-section" aria-labelledby="contact-title">
+      <h2 class="section-title" id="contact-title">Contact FreshMart</h2>
+      <p class="section-description">
+        Choose a support channel that works for you.
+      </p>
+
+      <div class="contact-grid">
+        <article class="contact-method">
+          <div class="card-icon"><i data-lucide="mail"></i></div>
+          <div>
+            <h3>Email Support</h3>
+            <p>Send your question by email.</p>
+            <a href="mailto:FreshMart@gmail.com">FreshMart@gmail.com</a>
+          </div>
+        </article>
+
+        <article class="contact-method">
+          <div class="card-icon"><i data-lucide="phone"></i></div>
+          <div>
+            <h3>Phone Support</h3>
+            <p>Call for assistance.</p>
+            <a href="tel:+917988300872">+91 79883 00872</a>
+          </div>
+        </article>
+
+        <article class="contact-method">
+          <div class="card-icon"><i data-lucide="message-circle"></i></div>
+          <div>
+            <h3>WhatsApp</h3>
+            <p>Message FreshMart Support.</p>
+            <a href="https://wa.me/917988300872?text=Hello%20FreshMart%20Support%2C%20I%20need%20help."
+               target="_blank" rel="noopener noreferrer">Start a chat</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="notice">
+        <div class="notice-icon"><i data-lucide="shield-alert"></i></div>
+        <div>
+          <h3>Stay safe while contacting support</h3>
+          <p>
+            Never share your password, OTP, card PIN or banking credentials.
+            Provide only the order details needed to help resolve your issue.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" aria-labelledby="related-title">
+      <h2 class="section-title" id="related-title">Helpful policy pages</h2>
+      <p class="section-description">
+        Find more details about FreshMart's policies.
+      </p>
+
+      <div class="support-grid">
+        <article class="support-card">
+          <div class="card-icon"><i data-lucide="file-text"></i></div>
+          <h3>Terms & Conditions</h3>
+          <p>Review the terms that apply when using FreshMart.</p>
+          <a class="card-link" href="terms.html">Read terms <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="support-card">
+          <div class="card-icon"><i data-lucide="shield-check"></i></div>
+          <h3>Privacy Policy</h3>
+          <p>Understand personal information and privacy choices.</p>
+          <a class="card-link" href="privacy.html">Read privacy <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+
+        <article class="support-card">
+          <div class="card-icon"><i data-lucide="scale"></i></div>
+          <h3>Legal Center</h3>
+          <p>Explore FreshMart's customer policies in one place.</p>
+          <a class="card-link" href="legal.html">View legal center <i data-lucide="arrow-up-right" width="15"></i></a>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> FreshMart. All rights reserved.</p>
+
+      <nav class="footer-links" aria-label="Footer navigation" style="display:flex;flex-wrap:wrap;gap:14px">
+        <a href="index.html">Home</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="refund.html">Refund Policy</a>
+        <a href="delivery.html">Delivery Policy</a>
+        <a href="cancellation.html">Cancellation Policy</a>
+        <a href="cookie-policy.html">Cookie Policy</a>
+        <a href="cookie-settings.html">Cookie Settings</a>
+        <a href="account-security.html">Account Security</a>
+        <a href="help-support.html">Help &amp; Support</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function goBack() {
+      if (
+        document.referrer &&
+        new URL(document.referrer).origin === window.location.origin &&
+        window.history.length > 1
+      ) {
+        window.history.back();
+      } else {
+        window.location.href = "index.html";
+      }
+    }
+
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  </script>
+</body>
+</html>

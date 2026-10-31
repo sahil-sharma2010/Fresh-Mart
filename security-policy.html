@@ -1,0 +1,1253 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Security Policy | FreshMart</title>
+  <meta name="description" content="Learn how FreshMart handles account security, password changes, email recovery, mobile number updates, OTP verification and customer account protection.">
+
+  <style>
+    :root {
+      --fresh: #079b70;
+      --fresh-dark: #08775b;
+      --navy: #14213a;
+      --text: #536078;
+      --muted: #8490a4;
+      --mint: #eaf8f2;
+      --background: #f7faf8;
+      --white: #ffffff;
+      --border: #e5eee9;
+      --shadow: 0 12px 40px rgba(20, 33, 58, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 100px;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    a { color: inherit; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      min-height: 78px;
+      padding: 12px 24px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      font-size: 29px;
+      font-weight: 800;
+      letter-spacing: -1.4px;
+      line-height: 1.2;
+      text-decoration: none;
+    }
+
+    .brand-fresh { color: var(--fresh); }
+    .brand-mart { color: var(--navy); }
+
+    .brand-subtitle {
+      display: block;
+      margin-top: 3px;
+      color: #98a3b4;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 17px;
+      border: none;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: 0.2s ease;
+    }
+
+    .home-link {
+      color: var(--navy);
+      background: #f0f4f2;
+    }
+
+    .home-link:hover { background: #e2ece7; }
+
+    .back-button {
+      cursor: pointer;
+      color: white;
+      background: var(--fresh);
+    }
+
+    .back-button:hover { background: var(--fresh-dark); }
+
+    .page-container {
+      width: min(1160px, calc(100% - 40px));
+      margin: 36px auto 55px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 48px;
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      background: linear-gradient(135deg, #ffffff 0%, #edf9f3 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: -100px;
+      right: -65px;
+      width: 290px;
+      height: 290px;
+      border-radius: 50%;
+      background: rgba(7, 155, 112, 0.07);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 13px;
+      border-radius: 30px;
+      color: var(--fresh-dark);
+      background: #e0f5eb;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      position: relative;
+      z-index: 1;
+      margin: 18px 0 10px;
+      color: var(--navy);
+      font-size: clamp(32px, 5vw, 46px);
+      line-height: 1.2;
+      letter-spacing: -1.5px;
+    }
+
+    .hero p {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      font-size: 15px;
+    }
+
+    .hero-meta {
+      position: relative;
+      z-index: 1;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .content-layout {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      align-items: start;
+      gap: 26px;
+      margin-top: 28px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 100px;
+      padding: 23px 20px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin-bottom: 14px;
+      color: var(--navy);
+      font-size: 15px;
+    }
+
+    .toc a {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.5;
+      text-decoration: none;
+      transition: 0.2s ease;
+    }
+
+    .toc a:hover {
+      color: var(--fresh-dark);
+      background: var(--mint);
+    }
+
+    .policy-content {
+      min-width: 0;
+      padding: 32px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .policy-section {
+      padding: 0 0 25px;
+      margin-bottom: 25px;
+      border-bottom: 1px solid var(--border);
+      scroll-margin-top: 105px;
+    }
+
+    .policy-section:last-child {
+      padding-bottom: 0;
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 13px;
+    }
+
+    .section-number {
+      display: inline-flex;
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      color: var(--fresh-dark);
+      background: var(--mint);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .section-heading h2 {
+      padding-top: 3px;
+      color: var(--navy);
+      font-size: 19px;
+      line-height: 1.5;
+    }
+
+    .policy-section p {
+      margin: 0 0 12px;
+      font-size: 14px;
+    }
+
+    .policy-section ul,
+    .policy-section ol {
+      padding-left: 23px;
+      margin: 10px 0 12px;
+    }
+
+    .policy-section li {
+      margin: 7px 0;
+      padding-left: 3px;
+      font-size: 14px;
+    }
+
+    .policy-section a {
+      color: var(--fresh-dark);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .policy-section a:hover { color: var(--fresh); }
+
+    .info-box {
+      padding: 17px 19px;
+      margin: 16px 0;
+      border: 1px solid #d7eee3;
+      border-radius: 14px;
+      background: #f2fbf6;
+    }
+
+    .info-box p:last-child { margin-bottom: 0; }
+
+    .warning-box {
+      padding: 17px 19px;
+      margin: 16px 0;
+      border: 1px solid #f0e2bf;
+      border-radius: 14px;
+      background: #fffbef;
+    }
+
+    .warning-box p:last-child { margin-bottom: 0; }
+
+    /* Same FreshMart policies footer */
+
+    .fm-footer {
+      width: 100%;
+      margin-top: 45px;
+      padding: 34px 5% 0;
+      border: 1px solid var(--border);
+      border-radius: 24px 24px 0 0;
+      background: linear-gradient(135deg, #ffffff 0%, #f2faf6 100%);
+      color: var(--navy);
+    }
+
+    .fm-footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .fm-footer-heading { margin-bottom: 20px; }
+
+    .fm-footer-logo {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      line-height: 1.2;
+      text-decoration: none;
+    }
+
+    .fm-footer-logo .fresh { color: var(--fresh); }
+    .fm-footer-logo .mart { color: var(--navy); }
+
+    .fm-footer-heading h2 {
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .fm-policy-links {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: 28px;
+    }
+
+    .fm-policy-links a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      font-size: 13px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .fm-policy-links a span {
+      color: #718096;
+      font-size: 21px;
+      line-height: 1;
+    }
+
+    .fm-policy-links a:hover,
+    .fm-policy-links a:hover span {
+      color: var(--fresh-dark);
+    }
+
+    .fm-footer-bottom {
+      margin-top: 28px;
+      padding: 20px 0;
+      border-top: 1px solid #dfe9e4;
+    }
+
+    .fm-footer-bottom p {
+      margin: 0;
+      color: #657087;
+      font-size: 12px;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 24px;
+      bottom: 22px;
+      z-index: 90;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 17px;
+      border: 1px solid #d9eee4;
+      border-radius: 30px;
+      color: var(--fresh-dark);
+      background: #e9f7f0;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 5px 20px rgba(20, 33, 58, 0.08);
+    }
+
+    .back-to-top:hover { background: #d9f1e5; }
+
+    @media (max-width: 900px) {
+      .content-layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+
+      .toc-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 3px 10px;
+      }
+
+      .fm-policy-links {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      html { scroll-padding-top: 85px; }
+
+      .header-inner {
+        min-height: 68px;
+        padding: 10px 16px;
+        gap: 8px;
+      }
+
+      .brand { font-size: 25px; }
+
+      .brand-subtitle {
+        font-size: 8px;
+        letter-spacing: 1.5px;
+      }
+
+      .header-actions { gap: 7px; }
+
+      .header-link {
+        min-height: 37px;
+        padding: 8px 11px;
+        font-size: 11px;
+      }
+
+      .back-button { display: none; }
+
+      .page-container {
+        width: calc(100% - 24px);
+        margin: 20px auto 30px;
+      }
+
+      .hero {
+        padding: 29px 22px;
+        border-radius: 20px;
+      }
+
+      .hero h1 { font-size: 31px; }
+      .hero p { font-size: 13px; }
+
+      .content-layout {
+        gap: 16px;
+        margin-top: 17px;
+      }
+
+      .toc {
+        padding: 19px 15px;
+        border-radius: 16px;
+      }
+
+      .toc-list { grid-template-columns: 1fr; }
+
+      .policy-content {
+        padding: 23px 17px;
+        border-radius: 17px;
+      }
+
+      .section-heading { gap: 10px; }
+      .section-heading h2 { font-size: 17px; }
+
+      .policy-section p,
+      .policy-section li {
+        font-size: 13px;
+      }
+
+      .fm-footer {
+        margin-top: 28px;
+        padding: 26px 20px 0;
+        border-radius: 20px 20px 0 0;
+      }
+
+      .fm-footer-logo { font-size: 25px; }
+      .fm-policy-links { grid-template-columns: 1fr; }
+
+      .fm-policy-links a {
+        padding: 14px 0;
+        font-size: 13px;
+      }
+
+      .fm-footer-bottom { margin-top: 22px; }
+      .back-to-top { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+
+      *,
+      *::before,
+      *::after {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body id="top">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="FreshMart home">
+        <span>
+          <span class="brand-fresh">Fresh</span><span class="brand-mart">Mart</span>
+          <span class="brand-subtitle">DAILY NEEDS STORE</span>
+        </span>
+      </a>
+
+      <div class="header-actions">
+        <a class="header-link home-link" href="index.html">Home</a>
+        <button class="header-link back-button" id="backButton" type="button">
+          ← Back
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-container">
+
+    <section class="hero">
+      <span class="eyebrow">Account &amp; Website Protection</span>
+
+      <h1>Security Policy</h1>
+
+      <p>
+        FreshMart aims to protect customer accounts and information through
+        appropriate website security practices. This policy explains account
+        passwords, forgotten password recovery, registered email and mobile
+        number changes, verification, suspicious activity and safe account use.
+      </p>
+
+      <div class="hero-meta">
+        Effective date: 29 October 2026
+      </div>
+    </section>
+
+    <div class="content-layout">
+
+      <aside class="toc">
+        <h2>On This Page</h2>
+
+        <nav class="toc-list" aria-label="Security policy contents">
+          <a href="#overview">01. Security Overview</a>
+          <a href="#password">02. Password Requirements</a>
+          <a href="#change-password">03. Change Password</a>
+          <a href="#forgot-password">04. Forgot Password</a>
+          <a href="#email">05. Change Email Address</a>
+          <a href="#mobile">06. Change Mobile Number</a>
+          <a href="#otp">07. OTP Verification</a>
+          <a href="#login">08. Login and Account Access</a>
+          <a href="#suspicious">09. Suspicious Activity</a>
+          <a href="#logout">10. Logout and Sessions</a>
+          <a href="#recovery">11. Account Recovery</a>
+          <a href="#data">12. Data and Payment Security</a>
+          <a href="#website">13. Website Security</a>
+          <a href="#limitations">14. Security Limitations</a>
+          <a href="#support">15. Security Support</a>
+        </nav>
+      </aside>
+
+      <article class="policy-content">
+
+        <section class="policy-section" id="overview">
+          <div class="section-heading">
+            <span class="section-number">01</span>
+            <h2>Security Policy Overview</h2>
+          </div>
+
+          <p>
+            This Security Policy describes the account protection and
+            website-security practices relevant to FreshMart customers.
+            It covers passwords, account recovery, verification and the
+            responsible handling of security-related reports.
+          </p>
+
+          <p>
+            The actual security features available to customers depend on
+            the functionality implemented on the FreshMart website and
+            its connected services.
+          </p>
+
+          <div class="info-box">
+            <p>
+              <strong>Security reminder:</strong> Never share your password,
+              login verification code or password-reset link with another
+              person. FreshMart customers should use only the official
+              website and verified support channels.
+            </p>
+          </div>
+
+          <p>
+            For information about how customer information is collected
+            and handled, read our
+            <a href="privacy.html">Privacy Policy</a>.
+          </p>
+        </section>
+
+        <section class="policy-section" id="password">
+          <div class="section-heading">
+            <span class="section-number">02</span>
+            <h2>Password Requirements and Safety</h2>
+          </div>
+
+          <p>
+            A strong password helps protect a FreshMart account against
+            unauthorized access. Customers should create a password that
+            is difficult for another person to guess.
+          </p>
+
+          <p>Recommended password practices include:</p>
+
+          <ul>
+            <li>Use a long password, preferably at least 12 characters.</li>
+            <li>Combine letters, numbers and symbols where supported.</li>
+            <li>Avoid common words, predictable patterns and easily guessed information.</li>
+            <li>Do not reuse your FreshMart password on other websites.</li>
+            <li>Do not share your password with friends, strangers or unofficial support accounts.</li>
+            <li>Change your password if you believe someone else may know it.</li>
+          </ul>
+
+          <p>
+            If a password manager is used, keep it protected with a strong
+            master password and any available additional authentication.
+          </p>
+
+          <p>
+            FreshMart should never ask customers to send their current
+            password through email, chat or a support message.
+          </p>
+        </section>
+
+        <section class="policy-section" id="change-password">
+          <div class="section-heading">
+            <span class="section-number">03</span>
+            <h2>How to Change Your Password</h2>
+          </div>
+
+          <p>
+            Customers should use the account settings or password-change
+            option provided on the official FreshMart website, where available.
+          </p>
+
+          <p>General password-change steps:</p>
+
+          <ol>
+            <li>Open the official FreshMart website.</li>
+            <li>Sign in to your account.</li>
+            <li>Open Account Settings, Profile or Security Settings, if available.</li>
+            <li>Select the Change Password option.</li>
+            <li>Complete any current-password or verification step requested by the system.</li>
+            <li>Enter and confirm your new password.</li>
+            <li>Save the change and follow any confirmation instructions displayed.</li>
+          </ol>
+
+          <div class="info-box">
+            <p>
+              <strong>After changing your password:</strong> If you suspect
+              someone else had access to your account, review your account
+              activity and sign out of other sessions if that option exists.
+            </p>
+          </div>
+
+          <p>
+            These instructions describe a typical process. The exact menu
+            names and available options depend on the features implemented
+            on FreshMart.
+          </p>
+        </section>
+
+        <section class="policy-section" id="forgot-password">
+          <div class="section-heading">
+            <span class="section-number">04</span>
+            <h2>Forgot Password and Email Recovery</h2>
+          </div>
+
+          <p>
+            If you forget your password, use the Forgot Password or Reset
+            Password option on the official FreshMart login page, if available.
+          </p>
+
+          <p>General password-recovery steps:</p>
+
+          <ol>
+            <li>Open the FreshMart login page.</li>
+            <li>Select Forgot Password or the equivalent recovery option.</li>
+            <li>Enter the registered email address or other identifier requested.</li>
+            <li>Check the registered email inbox for recovery instructions, if email recovery is enabled.</li>
+            <li>Check the spam or junk folder if the message does not appear.</li>
+            <li>Open the genuine reset link and follow the instructions to create a new password.</li>
+            <li>Return to the login page and sign in with the new password.</li>
+          </ol>
+
+          <div class="warning-box">
+            <p>
+              <strong>Stay safe:</strong> Do not forward password-reset links
+              or share verification codes. If you did not request a reset,
+              do not use an unexpected link; review your account security
+              and contact official support if necessary.
+            </p>
+          </div>
+
+          <p>
+            Password-reset links should be handled securely and may expire.
+            If a link has expired, request a new one through the official
+            recovery process.
+          </p>
+
+          <p>
+            Email-based recovery will work only if the website has a
+            properly configured password-reset system and email delivery.
+          </p>
+        </section>
+
+        <section class="policy-section" id="email">
+          <div class="section-heading">
+            <span class="section-number">05</span>
+            <h2>Changing Your Registered Email Address</h2>
+          </div>
+
+          <p>
+            A registered email address may be used for account communication,
+            password recovery, order updates or verification, depending on
+            the services enabled on FreshMart.
+          </p>
+
+          <p>
+            If an email-change option is available, customers should use
+            the account settings provided on the official website.
+          </p>
+
+          <ol>
+            <li>Sign in to your FreshMart account.</li>
+            <li>Open Profile or Account Settings, if available.</li>
+            <li>Select the email address change option.</li>
+            <li>Enter the new email address carefully.</li>
+            <li>Complete any verification requested by the website.</li>
+            <li>Check the new inbox for a confirmation message, if email verification is enabled.</li>
+            <li>Confirm the change using the genuine instructions provided.</li>
+          </ol>
+
+          <p>
+            Customers should use an email account they control and can access.
+            A change may require additional verification to reduce the risk
+            of unauthorized account takeover.
+          </p>
+
+          <p>
+            If you no longer have access to your registered email address,
+            use the official support or account-recovery process. FreshMart
+            may need to verify the request before updating account details.
+          </p>
+
+          <p>
+            Do not send email passwords or email-account recovery codes
+            to FreshMart support.
+          </p>
+        </section>
+
+        <section class="policy-section" id="mobile">
+          <div class="section-heading">
+            <span class="section-number">06</span>
+            <h2>Changing Your Registered Mobile Number</h2>
+          </div>
+
+          <p>
+            If FreshMart supports mobile-number updates, customers should
+            use the account settings or official account-recovery process.
+          </p>
+
+          <p>General mobile-number change steps:</p>
+
+          <ol>
+            <li>Sign in to the official FreshMart website.</li>
+            <li>Open Profile or Account Settings, if available.</li>
+            <li>Choose the mobile-number update option.</li>
+            <li>Enter the new number in the format requested.</li>
+            <li>Complete the verification step offered by the website.</li>
+            <li>Confirm that the updated number is displayed correctly, if the site provides this information.</li>
+          </ol>
+
+          <div class="info-box">
+            <p>
+              <strong>Lost or changed number:</strong> If you cannot receive
+              a verification code on your old number, use the official
+              recovery process. Do not attempt to access another person's
+              number or account.
+            </p>
+          </div>
+
+          <p>
+            FreshMart may need to verify ownership of the account before
+            changing a registered number. Verification requirements should
+            be reasonable and handled securely.
+          </p>
+
+          <p>
+            A mobile-number change feature is not automatically available
+            just because it is described in this policy. It must be
+            implemented in the account system.
+          </p>
+        </section>
+
+        <section class="policy-section" id="otp">
+          <div class="section-heading">
+            <span class="section-number">07</span>
+            <h2>OTP and Verification Code Security</h2>
+          </div>
+
+          <p>
+            A one-time password (OTP) or verification code may be used
+            to confirm an action or verify access to an account, email
+            address or mobile number where supported.
+          </p>
+
+          <ul>
+            <li>Enter a verification code only on the genuine website or app that requested it.</li>
+            <li>Never share an OTP with another person.</li>
+            <li>Do not share codes with callers claiming to be delivery agents, support staff or administrators.</li>
+            <li>Request a new code only through the official verification process.</li>
+            <li>If a code expires, follow the website's instructions to request another one.</li>
+            <li>Report repeated unexpected verification messages if you suspect misuse.</li>
+          </ul>
+
+          <p>
+            Customers should not assume that every FreshMart account action
+            uses OTP verification. Available verification methods depend
+            on the website's actual implementation.
+          </p>
+
+          <div class="warning-box">
+            <p>
+              FreshMart should never ask a customer to reveal an OTP so that
+              staff can sign in to the customer's account on their behalf.
+            </p>
+          </div>
+        </section>
+
+        <section class="policy-section" id="login">
+          <div class="section-heading">
+            <span class="section-number">08</span>
+            <h2>Login and Account Access Security</h2>
+          </div>
+
+          <p>
+            Customers should access their accounts through the official
+            FreshMart website and keep their login information confidential.
+          </p>
+
+          <ul>
+            <li>Check that you are using the correct website address before signing in.</li>
+            <li>Avoid entering passwords on suspicious links received through messages or emails.</li>
+            <li>Use a trusted device and keep its browser and operating system updated.</li>
+            <li>Do not save passwords on public or shared computers.</li>
+            <li>Sign out after using a shared device.</li>
+            <li>Do not allow unknown people to use your signed-in account.</li>
+          </ul>
+
+          <p>
+            If you believe someone has accessed your account without
+            permission, change your password using the official process
+            and contact support if further assistance is needed.
+          </p>
+
+          <p>
+            Account protections such as multi-factor authentication,
+            login alerts or automatic session expiry should be described
+            as available only when they are actually implemented.
+          </p>
+        </section>
+
+        <section class="policy-section" id="suspicious">
+          <div class="section-heading">
+            <span class="section-number">09</span>
+            <h2>Suspicious Activity and Unauthorized Access</h2>
+          </div>
+
+          <p>
+            Customers should report unusual account activity as soon as
+            reasonably possible. Examples may include:
+          </p>
+
+          <ul>
+            <li>Unexpected password-reset messages.</li>
+            <li>Changes to account information that you did not make.</li>
+            <li>Orders or transactions you do not recognize.</li>
+            <li>Unexpected verification codes or repeated login attempts.</li>
+            <li>Messages requesting passwords, OTPs or sensitive payment details.</li>
+            <li>Suspicious links or people impersonating FreshMart support.</li>
+          </ul>
+
+          <p>If you suspect unauthorized account access:</p>
+
+          <ol>
+            <li>Do not click suspicious links or share verification codes.</li>
+            <li>Change your password through the official website if you can still access your account.</li>
+            <li>Review recent orders and account information where those features are available.</li>
+            <li>Contact FreshMart through its published support channel.</li>
+            <li>If a payment account may also be affected, contact the relevant bank or payment provider directly.</li>
+          </ol>
+
+          <p>
+            FreshMart should assess reported incidents and take reasonable
+            steps appropriate to the nature of the issue and the capabilities
+            of its systems.
+          </p>
+        </section>
+
+        <section class="policy-section" id="logout">
+          <div class="section-heading">
+            <span class="section-number">10</span>
+            <h2>Logout, Devices and Active Sessions</h2>
+          </div>
+
+          <p>
+            Customers should sign out after using a shared computer or
+            a device that other people can access.
+          </p>
+
+          <p>
+            If FreshMart provides a list of active sessions or signed-in
+            devices, customers should review it when they suspect unusual
+            activity and end sessions they do not recognize.
+          </p>
+
+          <ul>
+            <li>Use the website's Logout option when finishing a shared session.</li>
+            <li>Close shared browser windows after signing out.</li>
+            <li>Avoid saving passwords on public computers.</li>
+            <li>Protect personal devices with a screen lock where available.</li>
+            <li>Keep your browser and device security updates current.</li>
+          </ul>
+
+          <p>
+            Clearing browser data or closing a tab does not necessarily
+            guarantee that every account session has ended.
+          </p>
+
+          <p>
+            Remote logout, session management and device lists are available
+            only if supported by the FreshMart account system.
+          </p>
+        </section>
+
+        <section class="policy-section" id="recovery">
+          <div class="section-heading">
+            <span class="section-number">11</span>
+            <h2>Account Recovery and Verification</h2>
+          </div>
+
+          <p>
+            If you lose access to your account, use the official password
+            recovery or support process available on FreshMart.
+          </p>
+
+          <p>
+            Depending on the situation and available functionality, recovery
+            may involve confirming access to a registered email address,
+            verifying a mobile number or completing another reasonable
+            account-ownership check.
+          </p>
+
+          <p>
+            If you no longer control your registered email or phone number,
+            explain this through the official support channel. Do not submit
+            passwords or OTPs as proof of identity.
+          </p>
+
+          <p>
+            FreshMart may be unable to complete a change immediately if
+            additional verification is needed to protect the account.
+          </p>
+
+          <p>
+            Recovery instructions should be shared through appropriate
+            channels and should not expose an existing password or
+            unnecessary customer information.
+          </p>
+        </section>
+
+        <section class="policy-section" id="data">
+          <div class="section-heading">
+            <span class="section-number">12</span>
+            <h2>Customer Data and Payment Security</h2>
+          </div>
+
+          <p>
+            FreshMart aims to handle account information and order-related
+            data responsibly. Access to such information should be limited
+            according to the website's operational needs and applicable law.
+          </p>
+
+          <p>
+            Customers should use the payment methods made available through
+            the website and review payment details before confirming a
+            transaction.
+          </p>
+
+          <ul>
+            <li>Never send a card PIN, banking password or OTP through support messages.</li>
+            <li>Do not make payments to an unfamiliar account based on an unsolicited message.</li>
+            <li>Check order totals and payment details before confirming a purchase.</li>
+            <li>Contact your bank or payment provider directly if you notice an unauthorized transaction.</li>
+            <li>Use official support options to report suspicious FreshMart payment requests.</li>
+          </ul>
+
+          <p>
+            Payment security depends in part on the payment provider and
+            the payment methods integrated with FreshMart. No payment
+            security certification or encryption standard is claimed here
+            unless it has been independently verified.
+          </p>
+
+          <p>
+            Read our <a href="privacy.html">Privacy Policy</a> for more
+            information about customer information handling.
+          </p>
+        </section>
+
+        <section class="policy-section" id="website">
+          <div class="section-heading">
+            <span class="section-number">13</span>
+            <h2>Website Security and Safe Usage</h2>
+          </div>
+
+          <p>
+            Customers should use the FreshMart website lawfully and should
+            not attempt to interfere with its operation or access information
+            belonging to other users.
+          </p>
+
+          <p>Prohibited activities include:</p>
+
+          <ul>
+            <li>Attempting to access another person's account without permission.</li>
+            <li>Trying to bypass authentication or verification controls.</li>
+            <li>Submitting malicious code or attempting to disrupt the website.</li>
+            <li>Misusing account recovery or verification features.</li>
+            <li>Using another person's account or payment details without authorization.</li>
+            <li>Attempting to access restricted administrative functions without permission.</li>
+          </ul>
+
+          <p>
+            Suspected website vulnerabilities or security problems should
+            be reported through the official support channel. Do not exploit
+            a weakness or access another customer's information to prove it.
+          </p>
+
+          <p>
+            FreshMart may review reported issues and take reasonable steps
+            to investigate and address them.
+          </p>
+        </section>
+
+        <section class="policy-section" id="limitations">
+          <div class="section-heading">
+            <span class="section-number">14</span>
+            <h2>Security Limitations and Policy Updates</h2>
+          </div>
+
+          <p>
+            FreshMart aims to use appropriate safeguards, but no website,
+            device, network or online service can be guaranteed to be
+            completely free from security risks.
+          </p>
+
+          <p>
+            Security features vary according to the actual website
+            configuration, third-party services and technical functionality
+            available at a given time.
+          </p>
+
+          <p>
+            This policy does not guarantee that every account has password
+            reset by email, OTP verification, mobile-number updates, login
+            alerts, active-session management or multi-factor authentication.
+            Those features must be implemented and configured before
+            customers can use them.
+          </p>
+
+          <p>
+            FreshMart may revise this policy as its services, security
+            practices or applicable requirements change. Updated terms
+            will be published on this page.
+          </p>
+
+          <p>
+            Nothing in this policy is intended to remove rights or
+            responsibilities that apply under law.
+          </p>
+        </section>
+
+        <section class="policy-section" id="support">
+          <div class="section-heading">
+            <span class="section-number">15</span>
+            <h2>Security Questions and Customer Support</h2>
+          </div>
+
+          <div class="info-box">
+            <p>
+              If you suspect unauthorized account access, cannot recover
+              your account or notice a suspicious FreshMart message, use
+              the contact details or support options published on the website.
+            </p>
+
+            <p>
+              Include a short description of the issue and your order
+              reference, if relevant. Never include your password, OTP,
+              banking PIN or payment-account password.
+            </p>
+
+            <p>
+              <a href="help-support.html">Visit Help &amp; Support</a>
+            </p>
+          </div>
+
+          <p>
+            For questions about customer information, review the
+            <a href="privacy.html">Privacy Policy</a>.
+          </p>
+
+          <p>
+            For general website rules, review
+            <a href="terms.html">Terms &amp; Conditions</a>.
+          </p>
+
+          <p>
+            For payment or order-related concerns, you may also consult
+            the <a href="refund.html">Return &amp; Refund Policy</a>.
+          </p>
+        </section>
+
+      </article>
+    </div>
+  </main>
+
+  <!-- FreshMart policies-only footer -->
+  <footer class="fm-footer">
+    <div class="fm-footer-inner">
+
+      <div class="fm-footer-heading">
+        <a class="fm-footer-logo" href="index.html" aria-label="FreshMart home">
+          <span class="fresh">Fresh</span><span class="mart">Mart</span>
+        </a>
+
+        <h2>Policies &amp; Legal Information</h2>
+      </div>
+
+      <nav class="fm-policy-links" aria-label="Policies and legal information">
+        <a href="delivery.html">
+          Delivery Policy <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="refund.html">
+          Return &amp; Refund Policy <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="cancellation.html">
+          Cancellation Policy <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="privacy.html">
+          Privacy Policy <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="terms.html">
+          Terms &amp; Conditions <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="security-policy.html" aria-current="page">
+          Security Policy <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="legal.html">
+          Legal Notice <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="cookie-policy.html">
+          Cookie Policy <span aria-hidden="true">›</span>
+        </a>
+
+        <a href="cookie-settings.html">
+          Cookie Settings <span aria-hidden="true">›</span>
+        </a>
+      </nav>
+
+      <div class="fm-footer-bottom">
+        <p>
+          © <span id="fm-year"></span> FreshMart. All rights reserved.
+        </p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Desktop only -->
+  <a class="back-to-top" href="#top">
+    <span aria-hidden="true">↑</span> Back to top
+  </a>
+
+  <script>
+    // Automatically update the copyright year.
+    document.getElementById("fm-year").textContent =
+      new Date().getFullYear();
+
+    // Desktop Back button.
+    document.getElementById("backButton").addEventListener("click", function () {
+      if (window.history.length > 1 && document.referrer) {
+        window.history.back();
+      } else {
+        window.location.href = "index.html";
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Account Security | FreshMart Account Security</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    if (typeof tailwind !== 'undefined') {
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: '#ecfdf5',
+                100: '#d1fae5',
+                500: '#10b981',
+                600: '#059669',
+                700: '#047857'
+              }
+            }
+          }
+        }
+      };
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    body {
+      position: relative;
+            display: flex;
+      flex-direction: column;
+      z-index: 1;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url("images/background.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.065;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body > * {
+      position: relative;
+      z-index: 1;
+    }
+    .sec-card {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border: 1px solid #e2e8f0;
+      border-radius: 1.5rem;
+      box-shadow: 0 12px 32px -10px rgba(15, 23, 42, 0.06);
+    }
+    .sec-input {
+      width: 100%;
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.875rem;
+      padding: 0.8rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #0f172a;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    }
+    .sec-input:focus {
+      background-color: #ffffff;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.14);
+    }
+    .sec-btn-primary {
+      width: 100%;
+      background-color: #059669;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.875rem;
+      padding: 0.875rem 1.25rem;
+      border-radius: 0.875rem;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 8px 20px -6px rgba(5, 150, 105, 0.35);
+      transition: background-color 0.2s ease, transform 0.18s ease, opacity 0.2s ease;
+    }
+    .sec-btn-primary:hover:not(:disabled) {
+      background-color: #047857;
+      transform: translateY(-1px);
+    }
+    .sec-btn-primary:active:not(:disabled) {
+      transform: scale(0.985);
+    }
+    .sec-btn-primary:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+    .security-footer {
+      margin-top: 24px;
+      padding: 1.75rem 1rem 1.5rem;
+      border-top: 1px solid #e2e8f0;
+      background: rgba(255, 255, 255, 0.9);
+      text-align: center;
+    }
+    .security-footer-title {
+      font-size: 0.8125rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .security-footer-sub {
+      margin: 0.2rem 0 0;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #64748b;
+    }
+  
+/* Mobile header navigation buttons visible */
+</style>
+</head>
+
+  <!-- Consistent FreshMart Header with Back & Home Buttons -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 shadow-sm">
+    <div class="max-w-[960px] mx-auto px-4 h-16 flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-2.5 flex-shrink-0">
+        <img src="images/logo.png" alt="FreshMart Logo" class="h-9 w-9 object-contain rounded-full shadow-sm border border-gray-100" onerror="this.onerror=null; this.style.display='none'">
+        <div>
+          <span class="text-xl font-extrabold text-primary-600 tracking-tight block leading-none">Fresh<span class="text-slate-900">Mart</span></span>
+          <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mt-0.5">Account Security</span>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="goBackSecurityPage('index.html')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-extrabold transition shadow-sm" title="Back">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span>Back</span>
+        </button>
+        <a href="index.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-primary-50 hover:text-primary-700 hover:border-primary-200 text-slate-700 text-xs font-extrabold transition shadow-sm" title="Home">
+          <i data-lucide="home" class="w-4 h-4"></i>
+          <span>Home</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 w-full max-w-[680px] mx-auto px-4 py-7 md:py-10">
+    <!-- Page Header Banner -->
+    <div class="sec-card p-5 md:p-6 mb-5">
+      <div class="flex items-start gap-3.5">
+        <div class="w-11 h-11 rounded-2xl bg-primary-50 border border-primary-100 text-primary-600 flex items-center justify-center flex-shrink-0">
+          <i data-lucide="shield-check" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h1 class="text-lg md:text-xl font-black text-slate-900 tracking-tight">Account Security</h1>
+          <p class="text-xs md:text-sm text-slate-500 font-medium mt-1 leading-relaxed">
+            Manage your password, recovery options, registered email address, mobile number, and security standards.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 Separate Clickable Security Option Cards -->
+    <div class="space-y-3" role="navigation" aria-label="Account Security Options">
+      <!-- 1. Change Password -->
+      <a href="change-password.html" class="security-option-card">
+        <div class="flex items-center gap-3.5 min-w-0">
+          <div class="w-11 h-11 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="key-round" class="w-5 h-5 text-primary-600"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="text-sm md:text-[15px] font-extrabold text-slate-900">Change Password</div>
+            <div class="text-xs text-slate-500 font-medium truncate">Verify your current password and set a new password</div>
+          </div>
+        </div>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
+      </a>
+
+      <!-- 2. Forgot Password -->
+      <a href="forgot-password.html" class="security-option-card">
+        <div class="flex items-center gap-3.5 min-w-0">
+          <div class="w-11 h-11 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="lock-keyhole" class="w-5 h-5 text-primary-600"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="text-sm md:text-[15px] font-extrabold text-slate-900">Forgot Password</div>
+            <div class="text-xs text-slate-500 font-medium truncate">Recover your account via registered email OTP verification</div>
+          </div>
+        </div>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
+      </a>
+
+      <!-- 3. Change Email Address -->
+      <a href="change-email.html" class="security-option-card">
+        <div class="flex items-center gap-3.5 min-w-0">
+          <div class="w-11 h-11 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="mail-check" class="w-5 h-5 text-primary-600"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="text-sm md:text-[15px] font-extrabold text-slate-900">Change Email Address</div>
+            <div class="text-xs text-slate-500 font-medium truncate">Verify your old email with OTP and update to a new email</div>
+          </div>
+        </div>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
+      </a>
+
+      <!-- 4. Change Mobile Number -->
+      <a href="change-mobile.html" class="security-option-card">
+        <div class="flex items-center gap-3.5 min-w-0">
+          <div class="w-11 h-11 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="smartphone" class="w-5 h-5 text-primary-600"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="text-sm md:text-[15px] font-extrabold text-slate-900">Change Mobile Number</div>
+            <div class="text-xs text-slate-500 font-medium truncate">Verify via registered email OTP to update your mobile number</div>
+          </div>
+        </div>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
+      </a>
+
+      <!-- 5. Security Policy & Guidelines -->
+      <a href="security-policy.html" class="security-option-card">
+        <div class="flex items-center gap-3.5 min-w-0">
+          <div class="w-11 h-11 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="shield" class="w-5 h-5 text-primary-600"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="text-sm md:text-[15px] font-extrabold text-slate-900">Security Policy &amp; Guidelines</div>
+            <div class="text-xs text-slate-500 font-medium truncate">Password safety, OTP protection and account safety rules</div>
+          </div>
+        </div>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
+      </a>
+    </div>
+  </main>
+
+  <footer class="security-footer">
+    <div class="security-footer-title">FreshMart Security</div>
+    <div class="flex flex-wrap justify-center gap-3 my-2 text-xs font-bold text-primary-600">
+      <a href="index.html" class="hover:underline">Home</a>
+      <a href="change-password.html" class="hover:underline">Change Password</a>
+      <a href="forgot-password.html" class="hover:underline">Forgot Password</a>
+      <a href="change-email.html" class="hover:underline">Change Email</a>
+      <a href="change-mobile.html" class="hover:underline">Change Mobile</a>
+      <a href="security-policy.html" class="hover:underline">Security Policy</a>
+      <a href="help-support.html" class="hover:underline">Help &amp; Support</a>
+    </div>
+    <p class="security-footer-sub">Your trust, privacy and account safety matter to us.</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    function goBackSecurityPage(fallbackUrl) {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = fallbackUrl || 'security.html';
+      }
+    }
+    function toggleSecPass(inputId, btn) {
+      var el = document.getElementById(inputId);
+      if (!el) return;
+      if (el.type === 'password') {
+        el.type = 'text';
+        btn.innerHTML = '<i data-lucide="eye-off" class="w-4 h-4"></i>';
+      } else {
+        el.type = 'password';
+        btn.innerHTML = '<i data-lucide="eye" class="w-4 h-4"></i>';
+      }
+      if (window.lucide) window.lucide.createIcons();
+    }
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+</body>
+</html>
