@@ -201,7 +201,7 @@ footer, .security-minimal-footer {
     <!-- 5 Separate Clickable Security Option Cards -->
     <div class="space-y-3" role="navigation" aria-label="Account Security Options">
       <!-- 1. Change Password -->
-      <a href="change-password.html" class="security-option-card">
+      <a href="Change-Password.html" class="security-option-card">
         <div class="flex items-center gap-3.5 min-w-0">
           <div class="w-11 h-11 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
             <i data-lucide="key-round" class="w-5 h-5 text-primary-600"></i>
@@ -229,7 +229,7 @@ footer, .security-minimal-footer {
       </a>
 
       <!-- 3. Change Email Address -->
-      <a href="change-email.html" class="security-option-card">
+      <a href="Change-Email.html" class="security-option-card">
         <div class="flex items-center gap-3.5 min-w-0">
           <div class="w-11 h-11 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
             <i data-lucide="mail-check" class="w-5 h-5 text-primary-600"></i>
@@ -243,7 +243,7 @@ footer, .security-minimal-footer {
       </a>
 
       <!-- 4. Change Mobile Number -->
-      <a href="change-mobile.html" class="security-option-card">
+      <a href="Change-Mobile.html" class="security-option-card">
         <div class="flex items-center gap-3.5 min-w-0">
           <div class="w-11 h-11 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
             <i data-lucide="smartphone" class="w-5 h-5 text-primary-600"></i>
@@ -272,39 +272,7 @@ footer, .security-minimal-footer {
     </div>
   </main>
 
-  <footer class="security-footer">
-    <div class="security-footer-title">FreshMart Security</div>
-    <div class="flex flex-wrap justify-center gap-3 my-2 text-xs font-bold text-primary-600">
-      <a href="index.html" class="hover:underline">Home</a>
-      <a href="change-password.html" class="hover:underline">Change Password</a>
-      <a href="forgot-password.html" class="hover:underline">Forgot Password</a>
-      <a href="change-email.html" class="hover:underline">Change Email</a>
-      <a href="change-mobile.html" class="hover:underline">Change Mobile</a>
-      <a href="security-policy.html" class="hover:underline">Security Policy</a>
-      <a href="help-support.html" class="hover:underline">Help &amp; Support</a>
-    </div>
-    <p class="security-footer-sub">Your trust, privacy and account safety matter to us.</p>
-  </footer>
-
-    <!-- Mobile Bottom Bar & Gesture Support (No Top Back/Home Buttons on Mobile) -->
-  <nav class="mob-sec-bottom-bar" aria-label="Mobile Bottom Navigation">
-    <a href="index.html">
-      <i data-lucide="home" style="width:18px;height:18px;"></i>
-      <span>Home</span>
-    </a>
-    <a href="index.html#categories">
-      <i data-lucide="grid" style="width:18px;height:18px;"></i>
-      <span>Categories</span>
-    </a>
-    <a href="account-security.html" class="active">
-      <i data-lucide="shield-check" style="width:18px;height:18px;"></i>
-      <span>Security</span>
-    </a>
-    <button type="button" onclick="goBackSecurityPage('account-security.html')">
-      <i data-lucide="corner-up-left" style="width:18px;height:18px;"></i>
-      <span>Step Back</span>
-    </button>
-  </nav>
+  <footer class="security-footer"><div class="security-footer-title">FreshMart Account Security</div></footer>
 
   <script src="script.js"></script>
   <script>
@@ -336,7 +304,7 @@ footer, .security-minimal-footer {
         const dx = e.changedTouches[0].screenX - sx;
         const dy = Math.abs(e.changedTouches[0].screenY - sy);
         if (dx > 75 && dx > dy * 1.4) {
-          goBackSecurityPage('account-security.html');
+          goBackSecurityPage('Account_security.html');
         }
       }, { passive: true });
     })();
@@ -353,7 +321,7 @@ footer, .security-minimal-footer {
         const dx = e.changedTouches[0].screenX - sx;
         const dy = Math.abs(e.changedTouches[0].screenY - sy);
         if (dx > 75 && dx > dy * 1.4) {
-          goBackSecurityPage('account-security.html');
+          goBackSecurityPage('Account_security.html');
         }
       }, { passive: true });
     })();
