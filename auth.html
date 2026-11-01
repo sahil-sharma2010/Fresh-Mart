@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#073e2b">
+  <title>Secure Access | FreshMart</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <script>
+    if (typeof tailwind !== "undefined") {
+      tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#edf8f0',
+              100: '#d9efdf',
+              500: '#168653',
+              600: '#0b6b43',
+              700: '#084d32'
+            }
+          }
+        }
+      }
+    };
+    }
+  </script>
+
+  <style>
+    :root {
+      --green: #0b6b43;
+      --deep: #073e2b;
+      --lime: #d6fa83;
+      --ink: #17251e;
+      --muted: #718078;
+      --line: #e5ece7;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-height: 100%; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--ink);
+      background: #f4f7f3;
+    }
+
+    button, input { font-family: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .auth-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1.04fr) minmax(420px, .96fr);
+      overflow: hidden;
+    }
+
+    /* Left-side FreshMart brand experience */
+    .visual-panel {
+      position: relative;
+      isolation: isolate;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100vh;
+      padding: 35px clamp(25px, 4vw, 65px) 27px;
+      overflow: hidden;
+      color: white;
+      background:
+        radial-gradient(ellipse at 80% 18%, rgba(214,250,131,.13), transparent 36%),
+        linear-gradient(145deg, #0b6b43 0%, #084b32 52%, #052e20 100%);
+    }
+
+    .visual-panel::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 570px;
+      height: 570px;
+      right: -260px;
+      top: -210px;
+      border: 1px solid rgba(214,250,131,.20);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 38px rgba(214,250,131,.035),
+        0 0 0 82px rgba(214,250,131,.025);
+    }
+
+    .visual-panel::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 390px;
+      height: 390px;
+      left: -250px;
+      bottom: -180px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 50%;
+      box-shadow: 0 0 0 38px rgba(255,255,255,.025);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      width: fit-content;
+      color: white;
+      text-decoration: none;
+    }
+
+    .brand-logo {
+      width: 47px;
+      height: 47px;
+      object-fit: contain;
+      border-radius: 13px;
+      background: white;
+      padding: 3px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.12);
+    }
+
+    .brand-name {
+      display: block;
+      font-size: 22px;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: -.8px;
+    }
+
+    .brand-caption {
+      display: block;
+      margin-top: 3px;
+      color: #c4e1cd;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+    }
+
+    .visual-content {
+      position: relative;
+      z-index: 1;
+      max-width: 570px;
+      margin: 42px 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid rgba(214,250,131,.25);
+      border-radius: 30px;
+      color: var(--lime);
+      background: rgba(214,250,131,.07);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    .visual-content h1 {
+      margin: 25px 0 17px;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(39px, 4.2vw, 65px);
+      font-weight: 700;
+      line-height: 1.09;
+      letter-spacing: -1.6px;
+    }
+
+    .visual-content h1 span {
+      color: var(--lime);
+      font-style: italic;
+    }
+
+    .visual-description {
+      max-width: 410px;
+      margin: 0;
+      color: #d0e3d7;
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    /* 3D grocery-inspired illustration built in CSS */
+    .scene {
+      position: relative;
+      width: min(100%, 410px);
+      height: 270px;
+      margin: 28px auto 0;
+      perspective: 900px;
+    }
+
+    .scene-glow {
+      position: absolute;
+      width: 280px;
+      height: 180px;
+      left: 50%;
+      top: 40px;
+      transform: translateX(-50%);
+      background: rgba(214,250,131,.13);
+      filter: blur(48px);
+      border-radius: 50%;
+    }
+
+    .scene-platform {
+      position: absolute;
+      width: 285px;
+      height: 94px;
+      left: 50%;
+      bottom: 19px;
+      transform: translateX(-50%) rotateX(58deg) rotateZ(-12deg);
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 26px;
+      background: linear-gradient(135deg, rgba(255,255,255,.17), rgba(255,255,255,.025));
+      box-shadow: 0 26px 45px rgba(0,0,0,.18);
+    }
+
+    .produce-card {
+      position: absolute;
+      left: 50%;
+      top: 31px;
+      width: 177px;
+      height: 192px;
+      transform: translateX(-50%) rotateY(-9deg) rotateX(3deg);
+      border: 1px solid rgba(255,255,255,.5);
+      border-radius: 25px;
+      background: linear-gradient(145deg, #f5ffe5, #d8f6a4);
+      box-shadow:
+        16px 22px 0 rgba(0,0,0,.08),
+        0 35px 60px rgba(0,0,0,.20),
+        inset 0 1px 0 white;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+      color: var(--deep);
+    }
+
+    .produce-icon {
+      width: 81px;
+      height: 81px;
+      display: grid;
+      place-items: center;
+      border-radius: 25px;
+      background: linear-gradient(145deg, #e7f9c7, #ffffff);
+      box-shadow: 7px 9px 18px rgba(29,77,29,.12), inset 0 1px 1px white;
+      transform: rotate(-7deg);
+    }
+
+    .produce-card strong {
+      margin-top: 15px;
+      font-size: 18px;
+      letter-spacing: -.6px;
+    }
+
+    .produce-card small {
+      margin-top: 3px;
+      color: #53724d;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1.6px;
+    }
+
+    .float-tile {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,.32);
+      border-radius: 18px;
+      box-shadow: 0 18px 35px rgba(0,0,0,.2);
+      backdrop-filter: blur(12px);
+    }
+
+    .float-tile.one {
+      left: 15px;
+      top: 71px;
+      width: 61px;
+      height: 61px;
+      color: #fff2b4;
+      background: linear-gradient(145deg, rgba(255,255,255,.22), rgba(255,255,255,.06));
+      transform: rotate(-12deg);
+    }
+
+    .float-tile.two {
+      right: 13px;
+      top: 93px;
+      width: 67px;
+      height: 67px;
+      color: var(--deep);
+      background: linear-gradient(145deg, #fff, #d9f4b2);
+      transform: rotate(11deg);
+    }
+
+    .float-tile.three {
+      right: 49px;
+      bottom: 9px;
+      width: 49px;
+      height: 49px;
+      color: var(--lime);
+      background: rgba(255,255,255,.1);
+      transform: rotate(-9deg);
+    }
+
+    .visual-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: #bad6c4;
+      font-size: 10px;
+    }
+
+    .visual-footer span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Right-side authentication panel */
+    .form-panel {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 35px clamp(20px, 4vw, 65px);
+      background:
+        radial-gradient(ellipse at 100% 0%, rgba(214,250,131,.12), transparent 35%),
+        #f7f9f6;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #e5ece7;
+      border-radius: 14px;
+      color: #506057;
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 6px 18px rgba(25,50,30,.06);
+      transition: .2s ease;
+      cursor: pointer;
+    }
+
+    .back-button:hover {
+      transform: translateX(-2px);
+      color: var(--green);
+      border-color: #b8d6c2;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 430px;
+      padding: 33px;
+      border: 1px solid rgba(255,255,255,.95);
+      border-radius: 28px;
+      background: rgba(255,255,255,.91);
+      box-shadow:
+        0 25px 65px rgba(28,61,39,.09),
+        0 4px 13px rgba(28,61,39,.035),
+        inset 0 1px 0 white;
+      backdrop-filter: blur(18px);
+    }
+
+    .mobile-brand {
+      display: none;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 26px;
+    }
+
+    .mobile-brand img {
+      width: 39px;
+      height: 39px;
+      object-fit: contain;
+      border-radius: 11px;
+    }
+
+    .mobile-brand strong {
+      display: block;
+      color: var(--green);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .mobile-brand small {
+      display: block;
+      color: #839087;
+      font-size: 9px;
+      letter-spacing: 1px;
+    }
+
+    .form-heading {
+      margin-bottom: 25px;
+    }
+
+    .form-heading .mini-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.7px;
+      text-transform: uppercase;
+    }
+
+    .form-heading h2 {
+      margin: 0;
+      color: #16271d;
+      font-size: 29px;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: -1.2px;
+    }
+
+    .form-heading p {
+      margin: 8px 0 0;
+      color: #849087;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .auth-tabs {
+      position: relative;
+      display: flex;
+      gap: 4px;
+      padding: 5px;
+      margin-bottom: 25px;
+      border: 1px solid #e8eee8;
+      border-radius: 15px;
+      background: #f0f4ef;
+    }
+
+    .tab-indicator {
+      position: absolute;
+      top: 5px;
+      bottom: 5px;
+      left: 5px;
+      width: calc(50% - 7px);
+      border: 1px solid #e9eee9;
+      border-radius: 11px;
+      background: white;
+      box-shadow: 0 3px 9px rgba(24,55,31,.07);
+      transition: transform .28s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .auth-tab {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      padding: 11px 7px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: #78847b;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: color .2s;
+    }
+
+    .auth-tab.active { color: var(--green); }
+
+    .field { margin-bottom: 17px; }
+
+    .field-label {
+      display: block;
+      margin: 0 0 8px 2px;
+      color: #65736a;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .input-wrap { position: relative; }
+
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #8a988e;
+      pointer-events: none;
+    }
+
+    .auth-input {
+      width: 100%;
+      min-height: 51px;
+      padding: 13px 43px 13px 44px;
+      border: 1px solid #e1e9e1;
+      border-radius: 14px;
+      outline: none;
+      background: #f8faf7;
+      color: #17251e;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: inset 0 2px 4px rgba(19,54,30,.018);
+      transition: border-color .2s, background .2s, box-shadow .2s;
+    }
+
+    .auth-input::placeholder {
+      color: #a4afa7;
+      font-weight: 500;
+    }
+
+    .auth-input:focus {
+      border-color: #65b687;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(11,107,67,.075);
+    }
+
+    .password-toggle {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: #89968d;
+      cursor: pointer;
+    }
+
+    .password-toggle:hover {
+      background: #eaf4ec;
+      color: var(--green);
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+    }
+
+    .field-row .auth-input {
+      padding-left: 13px;
+      padding-right: 12px;
+    }
+
+    .form-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 3px 0 20px;
+    }
+
+    .remember-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #647168;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .remember-label input,
+    .terms-consent input {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      accent-color: var(--green);
+      cursor: pointer;
+    }
+
+    .text-action {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .text-action:hover { text-decoration: underline; }
+
+    .primary-action {
+      position: relative;
+      width: 100%;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 14px 17px;
+      overflow: hidden;
+      border: 1px solid #0b6b43;
+      border-radius: 14px;
+      background: linear-gradient(110deg, #0b6b43, #128653);
+      color: white;
+      box-shadow: 0 9px 20px rgba(11,107,67,.19), inset 0 1px 0 rgba(255,255,255,.18);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .3px;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s, filter .2s;
+    }
+
+    .primary-action::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -65%;
+      width: 40%;
+      transform: skewX(-22deg);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+      transition: left .6s ease;
+    }
+
+    .primary-action:hover::before { left: 130%; }
+
+    .primary-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 13px 26px rgba(11,107,67,.25);
+      filter: saturate(1.08);
+    }
+
+    .primary-action:active { transform: translateY(0); }
+
+    .dark-action {
+      background: linear-gradient(110deg, #1a2820, #31483a);
+      border-color: #1a2820;
+      box-shadow: 0 9px 20px rgba(25,42,30,.14);
+    }
+
+    .hidden { display: none !important; }
+
+    .otp-box {
+      padding: 17px;
+      border: 1px solid #e4ece5;
+      border-radius: 16px;
+      background: #f7faf6;
+    }
+
+    .otp-input {
+      width: 100%;
+      min-height: 55px;
+      padding: 10px;
+      border: 1px solid #dce8de;
+      border-radius: 12px;
+      background: white;
+      color: var(--green);
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: 12px;
+      text-align: center;
+      outline: none;
+    }
+
+    .otp-input:focus {
+      border-color: #65b687;
+      box-shadow: 0 0 0 4px rgba(11,107,67,.075);
+    }
+
+    .otp-note {
+      color: #6c7b70;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .terms-consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 11px 3px 13px;
+      color: #68766c;
+      font-size: 11px;
+      line-height: 1.6;
+      cursor: pointer;
+    }
+
+    .terms-consent input { margin-top: 2px; }
+
+    .verified-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px;
+      margin-bottom: 17px;
+      border: 1px solid #d3ead9;
+      border-radius: 12px;
+      background: #eff9f1;
+      color: #17663d;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .secure-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 22px;
+      color: #8b978e;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .secure-note i { color: var(--green); }
+
+    .copyright {
+      position: absolute;
+      bottom: 14px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #a3ada5;
+      font-size: 9px;
+      letter-spacing: .5px;
+    }
+
+    /* Existing alert modal compatibility */
+    .premium-popup-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(5,27,17,.58);
+      backdrop-filter: blur(10px);
+    }
+
+    .premium-popup-box {
+      width: 100%;
+      max-width: 360px;
+      padding: 30px 25px;
+      text-align: center;
+      border: 1px solid white;
+      border-radius: 26px;
+      background: white;
+      box-shadow: 0 25px 80px rgba(0,0,0,.22);
+    }
+
+    .popup-icon {
+      width: 59px;
+      height: 59px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 16px;
+      border-radius: 19px;
+      background: #eaf7ef;
+      color: var(--green);
+    }
+
+    .popup-button {
+      width: 100%;
+      min-height: 46px;
+      margin-top: 21px;
+      border: 0;
+      border-radius: 13px;
+      background: var(--deep);
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    @media (max-width: 950px) {
+      .auth-shell { grid-template-columns: minmax(0, .9fr) minmax(400px, 1.1fr); }
+      .visual-panel { padding: 28px 25px 23px; }
+      .visual-content h1 { font-size: 47px; }
+      .scene { transform: scale(.9); transform-origin: center top; margin-bottom: -22px; }
+      .form-panel { padding: 30px 25px; }
+      .auth-card { padding: 27px; }
+    }
+
+    @media (max-width: 720px) {
+      .auth-shell { display: block; min-height: 100vh; }
+      .visual-panel { display: none; }
+
+      .form-panel {
+        min-height: 100vh;
+        padding: 78px 17px 54px;
+        align-items: flex-start;
+        background:
+          radial-gradient(ellipse at 90% 0%, rgba(214,250,131,.19), transparent 38%),
+          #f5f8f3;
+      }
+
+      .back-button { top: 17px; left: 17px; }
+      .auth-card { max-width: 430px; margin: auto; padding: 25px 22px; border-radius: 24px; }
+      .mobile-brand { display: flex; }
+      .form-heading h2 { font-size: 27px; }
+      .copyright { bottom: 13px; }
+    }
+
+    @media (max-width: 380px) {
+      .form-panel { padding: 70px 12px 48px; }
+      .auth-card { padding: 21px 16px; }
+      .field-row { gap: 8px; }
+      .field-row .auth-input { font-size: 11px; }
+      .form-options { align-items: flex-start; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="auth-shell">
+
+    <!-- Premium FreshMart brand panel -->
+    <section class="visual-panel" aria-label="FreshMart introduction">
+      <a class="brand" href="index.html" aria-label="FreshMart home">
+        <img class="brand-logo" src="images/logo.png" alt="FreshMart logo">
+        <span>
+          <span class="brand-name">FreshMart</span>
+          <span class="brand-caption">FRESHNESS FOR EVERY DAY</span>
+        </span>
+      </a>
+
+      <div class="visual-content">
+        <span class="eyebrow">
+          <i data-lucide="sparkles" size="14"></i>
+          A FRESH WAY TO SHOP
+        </span>
+
+        <h1>Good food.<br>Good mood.<br><span>Good to go.</span></h1>
+
+        <p class="visual-description">
+          Your everyday grocery journey starts here. Sign in to continue
+          exploring FreshMart and enjoy a simple, convenient shopping experience.
+        </p>
+
+        <div class="scene" aria-hidden="true">
+          <div class="scene-glow"></div>
+          <div class="scene-platform"></div>
+
+          <div class="float-tile one">
+            <i data-lucide="leaf" size="28"></i>
+          </div>
+
+          <div class="produce-card">
+            <div class="produce-icon">
+              <i data-lucide="shopping-basket" size="42"></i>
+            </div>
+            <strong>Fresh choices.</strong>
+            <small>EVERYDAY ESSENTIALS</small>
+          </div>
+
+          <div class="float-tile two">
+            <i data-lucide="check-circle-2" size="29"></i>
+          </div>
+
+          <div class="float-tile three">
+            <i data-lucide="sparkles" size="23"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="visual-footer">
+        <span><i data-lucide="shield-check" size="14"></i> Shop with care</span>
+        <span>© 2026 FreshMart</span>
+      </div>
+    </section>
+
+    <!-- Authentication panel -->
+    <section class="form-panel" aria-label="Login and registration">
+      <button
+        type="button"
+        class="back-button"
+        onclick="window.location.href='index.html'"
+        aria-label="Back to home"
+        title="Back to home">
+        <i data-lucide="arrow-left" size="19"></i>
+      </button>
+
+      <div class="auth-card">
+
+        <a class="mobile-brand" href="index.html">
+          <img src="images/logo.png" alt="FreshMart logo">
+          <span>
+            <strong>FreshMart</strong>
+            <small>FRESHNESS FOR EVERY DAY</small>
+          </span>
+        </a>
+
+        <div class="form-heading">
+          <span class="mini-label">YOUR FRESH START</span>
+          <h2 id="auth-heading">Welcome back.</h2>
+          <p id="auth-subheading">Sign in to continue your shopping journey.</p>
+        </div>
+
+        <!-- Tabs retain original IDs -->
+        <div class="auth-tabs">
+          <div id="tab-indicator" class="tab-indicator"></div>
+
+          <button
+            type="button"
+            onclick="switchAuthTab('login')"
+            id="tab-login"
+            class="auth-tab active">
+            Sign In
+          </button>
+
+          <button
+            type="button"
+            onclick="switchAuthTab('signup')"
+            id="tab-signup"
+            class="auth-tab">
+            Create Account
+          </button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form
+          id="form-login"
+          class="block"
+          onsubmit="event.preventDefault(); handleLogin();">
+
+          <div class="field">
+            <label class="field-label" for="login-id">Email or mobile number</label>
+            <div class="input-wrap">
+              <i class="input-icon" data-lucide="user-round" size="17"></i>
+              <input
+                type="text"
+                id="login-id"
+                name="username"
+                autocomplete="username"
+                required
+                class="auth-input"
+                placeholder="Enter email or mobile">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="login-pass">Password</label>
+            <div class="input-wrap">
+              <i class="input-icon" data-lucide="lock-keyhole" size="17"></i>
+              <input
+                type="password"
+                id="login-pass"
+                name="password"
+                autocomplete="current-password"
+                required
+                class="auth-input"
+                placeholder="Enter your password">
+
+              <button
+                type="button"
+                onclick="togglePassword('login-pass')"
+                class="password-toggle"
+                aria-label="Show or hide password">
+                <i data-lucide="eye" size="17"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="remember-label">
+              <input type="checkbox" id="login-remember" name="remember">
+              Remember me
+            </label>
+
+            <button
+              type="button"
+              onclick="handleForgotPassword()"
+              class="text-action">
+              Forgot password?
+            </button>
+          </div>
+
+          <button type="submit" id="btn-login" class="primary-action">
+            <span>Sign In Securely</span>
+            <i data-lucide="arrow-right" size="17"></i>
+          </button>
+        </form>
+
+        <!-- SIGNUP FORM -->
+        <form
+          id="form-signup"
+          class="hidden"
+          onsubmit="event.preventDefault();">
+
+          <div id="signup-step-1">
+            <div class="field">
+              <label class="field-label" for="reg-name">Full name</label>
+              <div class="input-wrap">
+                <i class="input-icon" data-lucide="user-round" size="17"></i>
+                <input
+                  type="text"
+                  id="reg-name"
+                  name="name"
+                  autocomplete="name"
+                  required
+                  class="auth-input"
+                  placeholder="Your full name">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="reg-mobile">Mobile</label>
+                <input
+                  type="tel"
+                  id="reg-mobile"
+                  name="mobile"
+                  autocomplete="tel"
+                  required
+                  maxlength="10"
+                  pattern="[0-9]{10}"
+                  class="auth-input"
+                  placeholder="10 digits">
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="reg-email">Email address</label>
+                <input
+                  type="email"
+                  id="reg-email"
+                  name="email"
+                  autocomplete="email"
+                  oninput="checkEmailFormat()"
+                  required
+                  class="auth-input"
+                  placeholder="you@email.com">
+              </div>
+            </div>
+          </div>
+
+          <div id="signup-action-section" class="hidden mt-3">
+            <button
+              type="button"
+              id="btn-init-register"
+              onclick="initiateRegistration()"
+              class="primary-action dark-action">
+              <i data-lucide="mail" size="17"></i>
+              Send verification OTP
+            </button>
+          </div>
+
+          <!-- OTP verification -->
+          <div id="signup-otp-section" class="hidden mt-3 otp-box">
+            <div class="text-center mb-3">
+              <div class="mx-auto mb-2 grid place-items-center rounded-2xl"
+                   style="width:43px;height:43px;background:#e5f4e8;color:#0b6b43">
+                <i data-lucide="mail-check" size="21"></i>
+              </div>
+              <p class="otp-note">Enter the verification code sent to your email.</p>
+            </div>
+
+            <input
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              id="reg-otp"
+              maxlength="6"
+              autocomplete="one-time-code"
+              oninput="autoVerifyOTP(this.value)"
+              class="otp-input"
+              placeholder="••••••"
+              aria-label="Email verification code">
+
+            <div class="text-center mt-4">
+              <button
+                type="button"
+                onclick="cancelRegistration()"
+                class="text-action"
+                style="color:#c04444">
+                Cancel / Edit Email
+              </button>
+            </div>
+          </div>
+
+          <!-- Final signup step -->
+          <div id="signup-final-section" class="hidden mt-3">
+            <div class="verified-badge">
+              <i data-lucide="badge-check" size="17"></i>
+              Email successfully verified
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="reg-pass">Password</label>
+                <div class="input-wrap">
+                  <input
+                    type="password"
+                    id="reg-pass"
+                    name="new-password"
+                    autocomplete="new-password"
+                    required
+                    minlength="8"
+                    class="auth-input"
+                    style="padding-left:13px;padding-right:35px"
+                    placeholder="Min 8 chars">
+
+                  <button
+                    type="button"
+                    onclick="togglePassword('reg-pass')"
+                    class="password-toggle"
+                    aria-label="Show or hide new password">
+                    <i data-lucide="eye" size="17"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="reg-pass-confirm">Confirm</label>
+                <input
+                  type="password"
+                  id="reg-pass-confirm"
+                  name="confirm-password"
+                  autocomplete="new-password"
+                  required
+                  minlength="8"
+                  class="auth-input"
+                  placeholder="Repeat password">
+              </div>
+            </div>
+
+            <label class="terms-consent" for="reg-terms">
+              <input type="checkbox" id="reg-terms" required>
+              <span>
+                I have read and agree to FreshMart's <a href="terms.html" style="color:#0b6b43;font-weight:700;text-decoration:underline;">Terms &amp; Conditions</a> and <a href="privacy.html" style="color:#0b6b43;font-weight:700;text-decoration:underline;">Privacy Policy</a>.
+              </span>
+            </label>
+
+            <button
+              type="button"
+              id="btn-final-register"
+              onclick="handleRegisterFinal()"
+              class="primary-action">
+              <span>Create My Account</span>
+              <i data-lucide="arrow-right" size="17"></i>
+            </button>
+          </div>
+        </form>
+
+        <div class="secure-note">
+          <i data-lucide="shield-check" size="14"></i>
+          <span>Keep your password and OTP private</span>
+        </div>
+      </div>
+
+      <div class="copyright">
+        © 2026 FreshMart. All rights reserved.
+      </div>
+    </section>
+  </main>
+
+  <!-- Existing alert modal IDs preserved -->
+  <div
+    id="premium-alert-popup"
+    class="premium-popup-overlay hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="alert-title"
+    aria-describedby="alert-message">
+
+    <div class="premium-popup-box">
+      <div id="alert-icon-container" class="popup-icon">
+        <i data-lucide="check-circle" id="alert-icon" size="29"></i>
+      </div>
+
+      <h3 id="alert-title" class="text-xl font-extrabold mb-2">
+        Success
+      </h3>
+
+      <p id="alert-message" class="text-sm text-gray-500"></p>
+
+      <button
+        type="button"
+        onclick="closePremiumAlert()"
+        class="popup-button">
+        Continue
+      </button>
+    </div>
+  </div>
+
+  <!-- Keep your existing authentication logic -->
+  <script src="script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.lucide) window.lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
