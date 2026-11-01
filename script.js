@@ -2514,7 +2514,7 @@ window.goBackSecurityPage = function(fallbackUrl) {
     if (window.history.length > 1 && document.referrer) {
         window.history.back();
     } else {
-        window.location.href = fallbackUrl || 'account-security.html';
+        window.location.href = fallbackUrl || 'Account_security.html';
     }
 };
 
@@ -2523,10 +2523,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!window.FRESHMART_SINGLE_FILE_PREVIEW && window.location.hash) {
         const h = window.location.hash.toLowerCase();
         const hashRedirectMap = {
-            '#change-password': 'change-password.html',
+            '#change-password': 'Change-Password.html',
             '#forgot-password': 'forgot-password.html',
-            '#change-email': 'change-email.html',
-            '#change-mobile': 'change-mobile.html',
+            '#change-email': 'Change-Email.html',
+            '#change-mobile': 'Change-Mobile.html',
             '#security-policy': 'security-policy.html',
             '#cookie-policy': 'cookie-policy.html'
         };
